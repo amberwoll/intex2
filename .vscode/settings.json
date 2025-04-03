@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/4e787cbb-a030-41bf-9ee5-12ee9e62f12b/resourceGroups/appsvc_windows_eastus/providers/Microsoft.Web/sites/Intex-2-1-Backend",
+  "appService.deploySubpath": "backend/intex2/publish"
+}
