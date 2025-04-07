@@ -1,67 +1,12 @@
-"use client";
-import React from "react";
-import { StarRating } from "./StarRating";
-import { MovieThumbnails } from "./MovieThumbnails";
+'use client';
+import React from 'react';
 
 export const MovieHero: React.FC = () => {
-  const thumbnails = [
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/3a5669d3ed58099b8c71c61ae89a3314013d4bbf",
-      altText: "Film poster 1",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/30adfafa7b1242c8629b70f58add58d710dc5011",
-      altText: "Film poster 2",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/dec604ea976cc3387c3af473e752dc1c0716f72b",
-      altText: "Film poster 3",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/c45f39192d3b30ff8e6a47515c47fb7562b7e2ae",
-      altText: "Film poster 4",
-    },
-  ];
-
   return (
     <section className="hero-section">
       <div className="hero-content">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/f5eb3e8c211632bdcb4db94abecb2be85e3e9824"
-          alt="The Witcher"
-          className="hero-logo"
-        />
-        <div className="movie-details">
-          <h1 className="movie-title">The Witcher</h1>
-          <p className="movie-description">
-            Geralt of Rivia, a mutated monster-hunter for hire, journeys toward
-            his destiny in a turbulent world where people often prove more
-            wicked than beasts
-          </p>
-          <div className="rating-wrapper">
-            <StarRating rating={4} />
-            <div className="imdb-rating">
-              <div className="imdb-logo-wrapper">
-                <div className="imdb-background" />
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/c12757160b80bdd41cd69aa6e834d9786bcf1900"
-                  alt="IMDB"
-                  className="imdb-logo"
-                />
-              </div>
-              <span className="rating-score">8.1</span>
-            </div>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/31f778501a8b519d606a22d4fb1960a191d79f69"
-              alt="Netflix"
-              className="netflix-logo"
-            />
-          </div>
-        </div>
+        <div className="top-pick-banner">This Month's Top Pick</div>
+        <h1 className="movie-title">The Witcher</h1>
         <div className="action-buttons">
           <button className="watch-button">
             <svg
@@ -100,137 +45,67 @@ export const MovieHero: React.FC = () => {
           </button>
         </div>
       </div>
-      <MovieThumbnails thumbnails={thumbnails} />
 
-      <style react-jsx>{`
+      <style>{`
         .hero-section {
-          position: relative;
-          padding-left: 134px;
-          padding-top: 154px;
+          padding: 120px 40px 40px 40px;
+          background-color: #000;
+          color: #ebfaff;
         }
         .hero-content {
-          margin-top: 6px;
+          max-width: 900px;
         }
-        .hero-logo {
-          width: 650px;
-          height: 311px;
-        }
-        .movie-title {
+        .top-pick-banner {
+          background-color: rgba(0, 0, 0, 0.6);
           color: #ebfaff;
           font-family: "Lato", sans-serif;
-          font-size: 48px;
+          font-size: 20px;
           font-weight: 700;
-          margin-bottom: 10px;
+          padding: 8px 16px;
+          border-radius: 24px;
+          margin-bottom: 16px;
+          width: fit-content;
         }
-        .movie-description {
-          max-width: 429px;
-          color: #fff;
+        .movie-title {
           font-family: "Lato", sans-serif;
-          font-size: 16px;
-          font-weight: 500;
-          margin-bottom: 10px;
-        }
-        .rating-wrapper {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-        .imdb-rating {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-        .imdb-logo-wrapper {
-          width: 38px;
-          height: 17px;
-          position: relative;
-        }
-        .imdb-background {
-          width: 100%;
-          height: 100%;
-          border-radius: 4px;
-          background-color: #d9d9d9;
-        }
-        .imdb-logo {
-          width: 92px;
-          height: 30px;
-          position: absolute;
-          left: -2px;
-          top: -5px;
-        }
-        .rating-score {
-          color: #fff;
-          font-family: "Lato", sans-serif;
-          font-size: 16px;
-          font-weight: 500;
-        }
-        .netflix-logo {
-          width: 54px;
-          height: 14px;
+          font-size: 72px;
+          font-weight: 900;
+          text-align: left;
+          margin-bottom: 32px;
         }
         .action-buttons {
           display: flex;
-          gap: 11px;
-          margin-top: 20px;
+          gap: 16px;
         }
-        .watch-button {
+        .watch-button,
+        .info-button {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 24px;
+          padding: 12px 28px;
           border-radius: 28px;
           font-family: "Lato", sans-serif;
-          font-size: 16px;
-          font-weight: 500;
+          font-size: 18px;
+          font-weight: 600;
           cursor: pointer;
+        }
+        .watch-button {
           color: #ebfaff;
           background-color: #228ee5;
           border: none;
         }
         .info-button {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 10px 24px;
-          border-radius: 28px;
-          font-family: "Lato", sans-serif;
-          font-size: 16px;
-          font-weight: 500;
-          cursor: pointer;
-          border: 1px solid #228ee5;
           color: #ebfaff;
           background: transparent;
+          border: 2px solid #228ee5;
         }
-        @media (max-width: 991px) {
-          .hero-section {
-            padding-left: 60px;
-          }
-          .hero-logo {
-            width: 500px;
-            height: auto;
-          }
-          .movie-description {
-            max-width: 380px;
-          }
-        }
-        @media (max-width: 640px) {
-          .hero-section {
-            padding-left: 20px;
-            padding-top: 100px;
-          }
-          .hero-logo {
-            width: 300px;
-          }
+        @media (max-width: 768px) {
           .movie-title {
-            font-size: 36px;
-          }
-          .movie-description {
-            font-size: 14px;
-            max-width: 300px;
+            font-size: 48px;
           }
           .action-buttons {
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
           }
           .watch-button,
           .info-button {
