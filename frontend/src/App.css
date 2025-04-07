@@ -1,49 +1,37 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Prevent horizontal overflow but allow content to resize */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll but still allow vertical */
 }
 
+/* Ensure the root container fits the screen */
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0; /* Remove padding */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align the content at the top */
+  min-height: 100vh; /* Ensure the root container takes the full viewport height */
+}
+
+/* Container for app content */
 .app-container {
   width: 100%;
   max-width: 600px;
-  height: 400px;
+  height: auto; /* Adjust height dynamically */
   margin: 0 auto;
+  padding: 0 20px; /* Optional: Padding inside container */
 }
 
+/* Flexibly adjust logo size */
 .logo {
-  height: 6em;
+  height: auto; /* Make the logo height flexible */
+  max-width: 100%; /* Ensure the logo doesn’t exceed the width of the screen */
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

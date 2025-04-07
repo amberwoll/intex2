@@ -7,17 +7,12 @@ import MovieDetail from './pages/MovieDetail';
 import Privacy from './pages/Privacy';
 import ManageMovies from './pages/ManageMovies';
 import './App.css';
-import { MainLayout } from './components/MoviePage/MainLayout';
-import TrendsSection from './components/MoviePage/TrendsSection';
+import SharedLayout from './components/UniversalLayout/SharedLayout'; // Import SharedLayout
 
 function App() {
   return (
     <Router>
-      <div>
-        {/* Layout and components you want on every page */}
-        <MainLayout />
-        <TrendsSection />
-
+      <SharedLayout>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create-account" element={<CreateAccount />} />
@@ -27,7 +22,7 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/manage-movies" element={<ManageMovies />} />
         </Routes>
-      </div>
+      </SharedLayout>
     </Router>
   );
 }
