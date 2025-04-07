@@ -1,10 +1,13 @@
-import './App.css';
+import "./App.css";
+import { MainLayout } from "./components/MoviePage/MainLayout";
+import TrendsSection from "./components/MoviePage/TrendsSection";
 
 function App() {
   return (
-    <>
-      <h1>Test</h1>
-    </>
+    <div>
+      <MainLayout />
+      <TrendsSection />
+    </div>
   );
 }
 

@@ -5,6 +5,13 @@
   text-align: center;
 }
 
+.app-container {
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  margin: 0 auto;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
