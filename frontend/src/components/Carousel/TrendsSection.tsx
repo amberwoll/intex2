@@ -1,87 +1,60 @@
-'use client';
 import React from 'react';
-import TrendCard from './TrendCard';
 
-const TrendsSection = () => {
-  const trendImages = [
-    'https://cdn.builder.io/api/v1/image/assets/TEMP/4eb6fba6f589b16353b563aa80cd01bb82ce7208',
-    'https://cdn.builder.io/api/v1/image/assets/TEMP/3236c2ec5ed66130fa2c62885bfc0992b0773942',
-    'https://cdn.builder.io/api/v1/image/assets/TEMP/ce6a0dba6838f8724f2b691ca2a2a90e532b8e70',
-    'https://cdn.builder.io/api/v1/image/assets/TEMP/c21c7597f1d3affceefbfa388bc5a3fb3760d73b',
-    'https://cdn.builder.io/api/v1/image/assets/TEMP/a414dcf3dbc873f20019405bb2f7cedfb92c6754',
-    'https://cdn.builder.io/api/v1/image/assets/TEMP/11a8739d577624bfa1487944081f017c5ae896be',
-  ];
-
+const TrendCard = ({ imageUrl, rank }: { imageUrl: string; rank?: number }) => {
   return (
-    <section
-      className="trends-section"
-      role="region"
-      aria-label="Trending Content"
-    >
-      <h2 className="trends-title">Today's Top 10 Most Watched</h2>
-      <div className="trends-scroll-container">
-        <div className="trends-grid">
-          {trendImages.map((imageUrl, index) => (
-            <TrendCard key={index} imageUrl={imageUrl} rank={index + 1} />
-          ))}
-        </div>
-      </div>
+    <div className="trend-card">
+      {rank !== undefined ? <div className="rank-badge">{rank}</div> : null}
+      <img src={imageUrl} alt="Trending" className="card-img" />
 
       <style>{`
-        .trends-section {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-start;
-          gap: 22px;
+        .trend-card {
+          position: relative;
+          width: 120px; /* Reduced width */
+          flex-shrink: 0;
+        }
+
+        .card-img {
           width: 100%;
-          background-color: #000000;
-          padding: 40px 48px;
+          height: auto;
+          border-radius: 10px; /* Slightly more rounded */
+          display: block;
         }
 
-        .trends-title {
-          color: #ebfaff;
-          font-size: 48px;
-          font-family: Lato;
-          font-weight: 700;
-        }
-
-        .trends-scroll-container {
-          width: 100%;
-          overflow-x: auto;
-        }
-
-        .trends-grid {
+        .rank-badge {
+          position: absolute;
+          top: -6px;  /* Reduced space */
+          left: -6px; /* Reduced space */
+          background-color: rgba(0, 0, 0, 0.85);
+          color: #1f3a68; /* Dark Blue */
+          font-size: 30px; /* Smaller font size */
+          font-weight: 900;
+          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          border-radius: 50%;
+          width: 40px; /* Smaller badge size */
+          height: 40px; /* Smaller badge size */
           display: flex;
           align-items: center;
-          gap: 32px;
-          min-width: max-content;
-        }
-
-        @media (max-width: 991px) {
-          .trends-section {
-            padding-left: 24px;
-            padding-right: 24px;
-          }
-
-          .trends-title {
-            font-size: 40px;
-          }
+          justify-content: center;
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+          z-index: 2;
         }
 
         @media (max-width: 640px) {
-          .trends-section {
-            padding-left: 16px;
-            padding-right: 16px;
+          .trend-card {
+            width: 90px; /* Even smaller width for mobile */
           }
 
-          .trends-title {
-            font-size: 32px;
+          .rank-badge {
+            font-size: 22px; /* Slightly smaller font size for mobile */
+            width: 36px;
+            height: 36px;
+            top: -4px; /* Reduced space */
+            left: -4px; /* Reduced space */
           }
         }
       `}</style>
-    </section>
+    </div>
   );
 };
 
-export default TrendsSection;
+export default TrendCard;
