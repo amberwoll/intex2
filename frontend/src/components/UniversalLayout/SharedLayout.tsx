@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationBar } from '../MoviePage/NavigationBar'; // Adjusted the path
+import { NavigationBar } from './NavigationBar'; // Adjusted the path
 import { Footer } from '../MoviePage/Footer'; // Adjusted the path
 
 interface SharedLayoutProps {
