@@ -19,7 +19,7 @@ function App() {
           <Route path="/create-account" element={<SignupPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/movies" element={<Movies />} />
-          <Route path="/movies/:id" element={<MovieDetail />} />
+          <Route path="/movies/id" element={<MovieDetail />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/manage-movies" element={<ManageMovies />} />
         </Routes>
