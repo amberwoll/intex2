@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
         </Link>
       </div>
 
-      <style jsx>{`
+      <style>{`
         /* Footer styling */
         .footer-wrapper {
           width: 100%;
