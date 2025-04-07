@@ -3,30 +3,9 @@ import * as React from "react";
 
 const SignupPage: React.FC = () => {
   return (
-    <main className="login-container">
-      <nav className="back-button" aria-label="Navigation">
-        <button className="back-button-icon" aria-label="Go back">
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="back-arrow"
-          >
-            <path
-              d="M11.8606 22.2372L3.42738 13.7954M3.42738 13.7954L11.8691 5.36219M3.42738 13.7954L23.6774 13.8057"
-              stroke="#EBFAFF"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      </nav>
-
+    <main className="signup-container">
       <div className="content-wrapper">
-        <section className="login-section" aria-label="Signup form">
+        <section className="signup-section" aria-label="Signup form">
           <header className="welcome-header">
             <h1 className="welcome-title">Create Account</h1>
           </header>
@@ -41,19 +20,105 @@ const SignupPage: React.FC = () => {
             </div>
           </nav>
 
-          <form className="login-form" aria-label="Signup form">
-            {['User', 'Password', 'Age', 'Gender', 'Phone', 'City', 'State', 'Zip'].map((field, i) => (
-              <div className="form-field" key={i}>
+          <form className="signup-form" aria-label="Signup form">
+            <div className="form-grid">
+              <div className="form-field">
                 <input
-                  type={field === 'Password' ? 'password' : 'text'}
-                  placeholder={field}
+                  type="text"
+                  placeholder="User"
                   className="input-field"
-                  aria-label={field}
+                  aria-label="User"
                 />
               </div>
-            ))}
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  className="input-field"
+                  aria-label="Name"
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="input-field"
+                  aria-label="Password"
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="input-field"
+                  aria-label="Email"
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="number"
+                  placeholder="Age"
+                  className="input-field"
+                  aria-label="Age"
+                />
+              </div>
+              <div className="form-field">
+                <select className="input-field" aria-label="Gender" defaultValue="">
+                  <option value="" disabled>
+                    Gender
+                  </option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="Phone"
+                  className="input-field"
+                  aria-label="Phone"
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="City"
+                  className="input-field"
+                  aria-label="City"
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="State"
+                  className="input-field"
+                  aria-label="State"
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="Zip"
+                  className="input-field"
+                  aria-label="Zip"
+                />
+              </div>
+            </div>
 
-            <button type="submit" className="login-button">
+            <div className="checkbox-section">
+              <p className="disclaimer">
+                We are collecting this info to ensure we are giving you unique value compared to other streaming services.
+              </p>
+              <div className="checkbox-grid">
+                {['Netflix', 'Hulu', 'Disney+', 'Prime Video', 'HBO Max', 'Apple TV+'].map((service) => (
+                  <label key={service} className="checkbox-label">
+                    <input type="checkbox" name="streamingServices" value={service} /> {service}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <button type="submit" className="signup-button">
               SIGN UP
             </button>
           </form>
@@ -69,41 +134,27 @@ const SignupPage: React.FC = () => {
       </div>
 
       <style react-jsx>{`
-        .login-container {
-          width: 100vw;
+        .signup-container {
           height: 100vh;
+          width: 100vw;
           background: linear-gradient(249deg, #030a1b 68.64%, #9747ff 206.69%);
-          position: relative;
           font-family: "Lato", sans-serif;
           overflow: hidden;
-        }
-
-        .back-button {
-          position: absolute;
-          top: 13px;
-          left: 21px;
-          z-index: 10;
-        }
-
-        .back-arrow {
-          width: 27px;
-          height: 27px;
-          transform: rotate(90deg);
+          position: relative;
         }
 
         .content-wrapper {
           display: flex;
-          min-height: 100vh;
+          height: 100vh;
           padding: 20px;
           position: relative;
         }
 
-        .login-section {
-          padding: 87px 28px;
+        .signup-section {
+          padding: 40px 20px;
+          max-width: 1000px;
           width: 100%;
-          max-width: 500px;
-          margin: 0 auto;
-          position: relative;
+          margin: auto;
           z-index: 2;
           display: flex;
           flex-direction: column;
@@ -111,14 +162,13 @@ const SignupPage: React.FC = () => {
         }
 
         .welcome-header {
-          width: 100%;
           text-align: center;
-          margin-bottom: 26px;
+          margin-bottom: 20px;
         }
 
         .welcome-title {
           color: #ebfaff;
-          font-size: 72px;
+          font-size: 48px;
           font-weight: 700;
           margin: 0;
         }
@@ -126,8 +176,8 @@ const SignupPage: React.FC = () => {
         .auth-tabs {
           display: flex;
           justify-content: center;
-          gap: 108px;
-          margin-bottom: 85px;
+          gap: 60px;
+          margin-bottom: 40px;
         }
 
         .tab-item {
@@ -137,7 +187,7 @@ const SignupPage: React.FC = () => {
 
         .tab-text {
           color: #ebfaff;
-          font-size: 24px;
+          font-size: 20px;
           font-weight: 700;
         }
 
@@ -151,36 +201,70 @@ const SignupPage: React.FC = () => {
           background-color: #228ee5;
         }
 
-        .login-form {
+        .signup-form {
           width: 100%;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 30px 40px;
+          margin-bottom: 32px;
         }
 
         .form-field {
           position: relative;
-          margin-bottom: 32px;
+          width: 100%;
         }
 
         .input-field {
           width: 100%;
-          padding: 22px 20px;
+          padding: 16px;
           background: transparent;
           border: 1px solid #ebfaff;
           border-radius: 12px;
           color: #ebfaff;
-          font-size: 18px;
+          font-size: 16px;
+          box-sizing: border-box;
         }
 
-        .login-button {
+        .signup-button {
           width: 160px;
           height: 48px;
           border: 1px solid #fff;
           border-radius: 12px;
           color: #ebfaff;
           font-size: 16px;
-          margin: 0 auto;
+          margin: 32px auto 0;
           cursor: pointer;
           background-color: #228ee5;
           display: block;
+        }
+
+        .checkbox-section {
+          margin-top: 16px;
+          color: #ebfaff;
+          width: 100%;
+        }
+
+        .disclaimer {
+          margin-bottom: 16px;
+          font-size: 14px;
+          text-align: center;
+        }
+
+        .checkbox-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 12px;
+          justify-items: center;
+        }
+
+        .checkbox-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
         }
 
         .background-wrapper {
@@ -199,40 +283,26 @@ const SignupPage: React.FC = () => {
           object-fit: cover;
         }
 
-        @media (max-width: 991px) {
-          .login-container {
-            max-width: 991px;
-          }
-
-          .content-wrapper {
-            flex-direction: column;
-          }
-
-          .login-section {
-            width: 100%;
-            padding: 40px 20px;
-          }
-        }
-
         @media (max-width: 640px) {
-          .login-container {
-            max-width: 640px;
-          }
-
           .welcome-title {
-            font-size: 48px;
+            font-size: 36px;
           }
 
           .auth-tabs {
-            gap: 60px;
+            gap: 40px;
           }
 
-          .tab-text {
-            font-size: 20px;
+          .form-grid {
+            grid-template-columns: 1fr;
           }
 
-          .login-button {
+          .signup-button {
             width: 100%;
+          }
+
+          .checkbox-grid {
+            grid-template-columns: 1fr;
+            justify-items: start;
           }
 
           .background-wrapper {
