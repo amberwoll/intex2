@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { NavigationBar } from "./NavigationBar";
-import { MovieHero } from "./MovieHero";
+'use client';
+import React from 'react';
+import { NavigationBar } from '../UniversalLayout/NavigationBar';
+import { MovieHero } from './MovieHero';
 
 export const MainLayout: React.FC = () => {
   return (
