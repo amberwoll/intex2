@@ -44,7 +44,7 @@ export const NavigationBar: React.FC = () => {
         </div>
       </nav>
 
-      <style jsx>{`
+      <style react-jsx>{`
         /* Body padding to prevent content cut-off */
         body {
           padding-top: 60px; /* Adjust this value to match the height of the navbar */
