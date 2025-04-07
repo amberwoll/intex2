@@ -2,7 +2,7 @@
 import React from 'react';
 import TrendCard from './TrendCard';
 
-const TrendsSection = () => {
+const MovieRecs = () => {
   const trendImages = [
     'https://cdn.builder.io/api/v1/image/assets/TEMP/4eb6fba6f589b16353b563aa80cd01bb82ce7208',
     'https://cdn.builder.io/api/v1/image/assets/TEMP/3236c2ec5ed66130fa2c62885bfc0992b0773942',
@@ -18,11 +18,11 @@ const TrendsSection = () => {
       role="region"
       aria-label="Trending Content"
     >
-      <h2 className="trends-title">Today's Top 10 Most Watched</h2>
+      <h2 className="trends-title">Because you loved ____</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {trendImages.map((imageUrl, index) => (
-            <TrendCard key={index} imageUrl={imageUrl} rank={index + 1} />
+            <TrendCard key={index} imageUrl={imageUrl} />
           ))}
         </div>
       </div>
@@ -84,4 +84,4 @@ const TrendsSection = () => {
   );
 };
 
-export default TrendsSection;
+export default MovieRecs;
