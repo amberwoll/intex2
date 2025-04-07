@@ -8,6 +8,7 @@ import Privacy from './pages/Privacy';
 import ManageMovies from './pages/ManageMovies';
 import './App.css';
 import SharedLayout from './components/UniversalLayout/SharedLayout'; // Import SharedLayout
+import SignupPage from './components/SignupPage/SignupPage';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <SharedLayout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/create-account" element={<SignupPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/movies/:id" element={<MovieDetail />} />

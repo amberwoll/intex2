@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationBar } from './NavigationBar'; // Adjusted the path
-import { Footer } from './Footer'; // Adjusted the path
+import { Footer } from '../MoviePage/Footer'; // Adjusted the path
 
 interface SharedLayoutProps {
   children: React.ReactNode;
