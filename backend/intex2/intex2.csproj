@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
-      <IncludeAssets>runti4me; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.13" />
@@ -25,5 +25,18 @@
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
+
+  <ItemGroup>
+  <Content Include="Movies.db">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
+  <Content Include="recommendations.db">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Identity.sqlite">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+
 
 </Project>

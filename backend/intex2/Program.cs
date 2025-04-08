@@ -59,7 +59,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 // --- Add the custom CSP middleware here ---
 app.Use(async (context, next) =>
