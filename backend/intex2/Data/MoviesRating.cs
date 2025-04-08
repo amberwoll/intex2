@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using intex2.Data;
 
-namespace intex2.Data;
-
-public partial class MoviesRating
+public class MoviesRating
 {
-    public int? UserId { get; set; }
+    [Key]
+    public int Id { get; set; }
 
-    public string? ShowId { get; set; }
+    public string ShowId { get; set; } = null!;  // still referencing ShowId string
+    public int UserId { get; set; }
+    public double Rating { get; set; }
 
-    public int? Rating { get; set; }
+    public MoviesUser User { get; set; } = null!;
+    public MoviesTitle Title { get; set; } = null!;
 }

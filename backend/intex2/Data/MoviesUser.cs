@@ -8,7 +8,7 @@ public partial class MoviesUser
 {
     [Key]
     [Required]
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     public string? Name { get; set; }
 

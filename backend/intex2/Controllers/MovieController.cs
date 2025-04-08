@@ -19,14 +19,16 @@ namespace intex2.Controllers
             _movieContext = temp;
         }
 
+
         [HttpGet("AllMovies")]
         public IActionResult GetMovies(int pageHowMany = 10, int pageNum = 1, string sortOrder = "none", [FromQuery] List<string>? movieCats = null)
         {
             var moviesQuery = _movieContext.MoviesTitles.AsQueryable();
 
+
             if (movieCats != null && movieCats.Any())
             {
-                // filtering logic if needed
+                // Filtering logic for categories can be added here
             }
 
             var totalMovies = moviesQuery.Count();
@@ -51,6 +53,7 @@ namespace intex2.Controllers
                 .GetProperties()
                 .Where(p => p.PropertyType == typeof(int?) || p.PropertyType == typeof(int))
                 .Where(p => p.Name != nameof(MoviesTitle.ReleaseYear))
+                .Where(p => p.Name != nameof(MoviesTitle.ReleaseYear))
                 .Select(p => p.Name)
                 .ToList();
 
@@ -60,6 +63,12 @@ namespace intex2.Controllers
         [HttpPost("AddMovie")]
         public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
         {
+            if (string.IsNullOrEmpty(newMovie.ShowId))
+            {
+                var nextId = (_movieContext.MoviesTitles.Max(m => (int?)m.Id) ?? 0) + 1;
+                newMovie.ShowId = $"s{nextId}";
+            }
+
             _movieContext.MoviesTitles.Add(newMovie);
             _movieContext.SaveChanges();
             return Ok(newMovie);
@@ -68,73 +77,33 @@ namespace intex2.Controllers
         [HttpPut("UpdateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
-            var existingMovie = _movieContext.MoviesTitles.Find(showId);
+            var existingMovie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
 
             if (existingMovie == null)
             {
                 return NotFound($"Movie with ShowId '{showId}' not found.");
             }
 
-            // Manually copy over all relevant fields
-            existingMovie.Type = updatedMovie.Type;
-            existingMovie.Title = updatedMovie.Title;
-            existingMovie.Director = updatedMovie.Director;
-            existingMovie.Cast = updatedMovie.Cast;
-            existingMovie.Country = updatedMovie.Country;
-            existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
-            existingMovie.Rating = updatedMovie.Rating;
-            existingMovie.Duration = updatedMovie.Duration;
-            existingMovie.Description = updatedMovie.Description;
+            updatedMovie.Id = existingMovie.Id;
+            updatedMovie.ShowId = existingMovie.ShowId;
 
-            // Category fields
-            existingMovie.Action = updatedMovie.Action;
-            existingMovie.Adventure = updatedMovie.Adventure;
-            existingMovie.AnimeSeriesInternationalTvShows = updatedMovie.AnimeSeriesInternationalTvShows;
-            existingMovie.BritishTvShowsDocuseriesInternationalTvShows = updatedMovie.BritishTvShowsDocuseriesInternationalTvShows;
-            existingMovie.Children = updatedMovie.Children;
-            existingMovie.Comedies = updatedMovie.Comedies;
-            existingMovie.ComediesDramasInternationalMovies = updatedMovie.ComediesDramasInternationalMovies;
-            existingMovie.ComediesInternationalMovies = updatedMovie.ComediesInternationalMovies;
-            existingMovie.ComediesRomanticMovies = updatedMovie.ComediesRomanticMovies;
-            existingMovie.CrimeTvShowsDocuseries = updatedMovie.CrimeTvShowsDocuseries;
-            existingMovie.Documentaries = updatedMovie.Documentaries;
-            existingMovie.DocumentariesInternationalMovies = updatedMovie.DocumentariesInternationalMovies;
-            existingMovie.Docuseries = updatedMovie.Docuseries;
-            existingMovie.Dramas = updatedMovie.Dramas;
-            existingMovie.DramasInternationalMovies = updatedMovie.DramasInternationalMovies;
-            existingMovie.DramasRomanticMovies = updatedMovie.DramasRomanticMovies;
-            existingMovie.FamilyMovies = updatedMovie.FamilyMovies;
-            existingMovie.Fantasy = updatedMovie.Fantasy;
-            existingMovie.HorrorMovies = updatedMovie.HorrorMovies;
-            existingMovie.InternationalMoviesThrillers = updatedMovie.InternationalMoviesThrillers;
-            existingMovie.InternationalTvShowsRomanticTvShowsTvDramas = updatedMovie.InternationalTvShowsRomanticTvShowsTvDramas;
-            existingMovie.KidsTv = updatedMovie.KidsTv;
-            existingMovie.LanguageTvShows = updatedMovie.LanguageTvShows;
-            existingMovie.Musicals = updatedMovie.Musicals;
-            existingMovie.NatureTv = updatedMovie.NatureTv;
-            existingMovie.RealityTv = updatedMovie.RealityTv;
-            existingMovie.Spirituality = updatedMovie.Spirituality;
-            existingMovie.TvAction = updatedMovie.TvAction;
-            existingMovie.TvComedies = updatedMovie.TvComedies;
-            existingMovie.TvDramas = updatedMovie.TvDramas;
-            existingMovie.TalkShowsTvComedies = updatedMovie.TalkShowsTvComedies;
-            existingMovie.Thrillers = updatedMovie.Thrillers;
-
-            _movieContext.MoviesTitles.Update(existingMovie);
+            _movieContext.Entry(existingMovie).CurrentValues.SetValues(updatedMovie);
             _movieContext.SaveChanges();
 
-            return Ok(existingMovie);
+            return Ok(updatedMovie);
         }
 
         [HttpDelete("DeleteMovie/{showId}")]
         public IActionResult DeleteMovie(string showId)
         {
-            var movie = _movieContext.MoviesTitles.Find(showId);
+            var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
+
             if (movie == null)
                 return NotFound(new { message = "Movie not found." });
 
             _movieContext.MoviesTitles.Remove(movie);
             _movieContext.SaveChanges();
+
 
             return NoContent();
         }
@@ -152,5 +121,7 @@ public IActionResult GetMovieTitlesByShowIds([FromBody] List<string> showIds)
     return Ok(titles);
 }
 
+        }
     }
-}
+  
+    

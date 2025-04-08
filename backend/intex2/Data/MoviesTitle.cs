@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace intex2.Data;
 
 public partial class MoviesTitle
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; } // Auto-incremented ID
+
     [Required]
-    public string? ShowId { get; set; }
+    public string ShowId { get; set; } = string.Empty;
+
+    [NotMapped]
+    public string DisplayShowId => $"s{Id}";
+
+
 
     public string? Type { get; set; }
 
