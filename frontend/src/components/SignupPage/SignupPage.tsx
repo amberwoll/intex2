@@ -1,20 +1,147 @@
 'use client';
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SignupPage: React.FC = () => {
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
-  // Handle button click for Login
-const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    age: '',
+    gender: '',
+    phone: '',
+    city: '',
+    state: '',
+    zip: '',
+    streamingServices: [] as string[],
+  });
+
+  const [error, setError] = useState('');
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
+      const { checked } = e.target;
+
+      setFormData((prev) => {
+        const newServices = checked
+          ? [...prev.streamingServices, value]
+          : prev.streamingServices.filter((s) => s !== value);
+        return { ...prev, streamingServices: newServices };
+      });
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleLoginClick = () => {
     navigate('/login');
-  }
+  };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault(); // Prevent the default form submission
-    // You can handle the form submission here
-    console.log('Form submitted');
-    navigate('/login'); // Navigate back to the signup page after submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const {
+      email,
+      password,
+      confirmPassword,
+      name,
+      age,
+      gender,
+      phone,
+      city,
+      state,
+      zip,
+      streamingServices,
+    } = formData;
+
+    if (
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !name ||
+      !age ||
+      !gender ||
+      !phone ||
+      !city ||
+      !state ||
+      !zip
+    ) {
+      return setError('Please fill in all fields.');
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return setError('Please enter a valid email address.');
+    }
+
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match.');
+    }
+
+    try {
+      // STEP 1: Register with Identity
+      const registerResponse = await fetch('https://localhost:5500/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          confirmPassword, // ← REQUIRED for the default Identity /register route
+        }),
+      });
+
+      if (!registerResponse.ok) {
+        return setError(
+          'Failed to register user. Email might already be taken.'
+        );
+      }
+
+      // STEP 2: Add user details to MoviesUser
+      const addDetailsResponse = await fetch(
+        'https://localhost:5500/MoviesUser/AddUserDetails',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            age: parseInt(age, 10) || null,
+            gender,
+            city,
+            state,
+            zip: parseInt(zip, 10) || null,
+            privilegeLevel: 0,
+            netflix: streamingServices.includes('Netflix') ? 1 : 0,
+            hulu: streamingServices.includes('Hulu') ? 1 : 0,
+            disney: streamingServices.includes('Disney+') ? 1 : 0,
+            amazonPrime: streamingServices.includes('Prime Video') ? 1 : 0,
+            max: streamingServices.includes('HBO Max') ? 1 : 0,
+            appleTv: streamingServices.includes('Apple TV+') ? 1 : 0,
+            peacock: streamingServices.includes('Peacock') ? 1 : 0, // ← optional
+            paramount: streamingServices.includes('Paramount+') ? 1 : 0, // ← optional
+          }),
+        }
+      );
+
+      if (!addDetailsResponse.ok) {
+        return setError('User registered but details failed to save.');
+      }
+
+      // Success
+      setError('');
+      alert('Registration successful! Redirecting to login...');
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+      setError('Network error. Please try again later.');
+    }
   };
 
   return (
@@ -26,8 +153,8 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
           </header>
 
           <nav className="auth-tabs" aria-label="Authentication options">
-            <div className="tab-item">
-              <span className="tab-text" onClick={() => handleLoginClick(navigate)}>LOGIN</span>
+            <div className="tab-item" onClick={handleLoginClick}>
+              <span className="tab-text">LOGIN</span>
             </div>
             <div className="tab-item active">
               <span className="tab-text">SIGNUP</span>
@@ -35,95 +162,110 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
             </div>
           </nav>
 
-          <form
-            className="signup-form"
-            onSubmit={handleSubmit}
-            aria-label="Signup form"
-          >
+          <form className="signup-form" onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-field">
                 <input
                   type="text"
-                  placeholder="User"
-                  className="input-field"
-                  aria-label="User"
-                />
-              </div>
-              <div className="form-field">
-                <input
-                  type="text"
                   placeholder="Name"
+                  name="name"
                   className="input-field"
-                  aria-label="Name"
+                  value={formData.name}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <input
                   type="password"
                   placeholder="Password"
+                  name="password"
                   className="input-field"
-                  aria-label="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  className="input-field"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <input
                   type="email"
                   placeholder="Email"
+                  name="email"
                   className="input-field"
-                  aria-label="Email"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <input
                   type="number"
                   placeholder="Age"
+                  name="age"
                   className="input-field"
-                  aria-label="Age"
+                  value={formData.age}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <select
+                  name="gender"
                   className="input-field"
-                  aria-label="Gender"
-                  defaultValue=""
+                  value={formData.gender}
+                  onChange={handleChange}
                 >
                   <option value="" disabled>
                     Gender
                   </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
+                  <option>Male</option>
+                  <option>Female</option>
                 </select>
               </div>
               <div className="form-field">
                 <input
                   type="text"
                   placeholder="Phone"
+                  name="phone"
                   className="input-field"
-                  aria-label="Phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <input
                   type="text"
                   placeholder="City"
+                  name="city"
                   className="input-field"
-                  aria-label="City"
+                  value={formData.city}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <input
                   type="text"
                   placeholder="State"
+                  name="state"
                   className="input-field"
-                  aria-label="State"
+                  value={formData.state}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-field">
                 <input
                   type="text"
                   placeholder="Zip"
+                  name="zip"
                   className="input-field"
-                  aria-label="Zip"
+                  value={formData.zip}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -147,7 +289,9 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
                       type="checkbox"
                       name="streamingServices"
                       value={service}
-                    />{' '}
+                      checked={formData.streamingServices.includes(service)}
+                      onChange={handleChange}
+                    />
                     {service}
                   </label>
                 ))}
@@ -157,11 +301,15 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
             <button type="submit" className="signup-button">
               SIGN UP
             </button>
+
+            {error && (
+              <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>
+            )}
           </form>
         </section>
       </div>
 
-      <style react-jsx>{`
+      <style>{`
         .signup-container {
           height: 100vh;
           width: 100vw;
@@ -170,14 +318,12 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
           overflow: hidden;
           position: relative;
         }
-
         .content-wrapper {
           display: flex;
           height: 100vh;
           padding: 20px;
           position: relative;
         }
-
         .signup-section {
           padding: 40px 20px;
           max-width: 1000px;
@@ -188,37 +334,31 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
           flex-direction: column;
           align-items: center;
         }
-
         .welcome-header {
           text-align: center;
           margin-bottom: 20px;
         }
-
         .welcome-title {
           color: #ebfaff;
           font-size: 48px;
           font-weight: 700;
           margin: 0;
         }
-
         .auth-tabs {
           display: flex;
           justify-content: center;
           gap: 60px;
           margin-bottom: 40px;
         }
-
         .tab-item {
           position: relative;
           cursor: pointer;
         }
-
         .tab-text {
           color: #ebfaff;
           font-size: 20px;
           font-weight: 700;
         }
-
         .active-indicator {
           width: 100%;
           height: 4px;
@@ -228,23 +368,19 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
           position: absolute;
           background-color: #228ee5;
         }
-
         .signup-form {
           width: 100%;
         }
-
         .form-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 30px 40px;
           margin-bottom: 32px;
         }
-
         .form-field {
           position: relative;
           width: 100%;
         }
-
         .input-field {
           width: 100%;
           padding: 16px;
@@ -255,7 +391,6 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
           font-size: 16px;
           box-sizing: border-box;
         }
-
         .signup-button {
           width: 160px;
           height: 48px;
@@ -268,73 +403,44 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
           background-color: #228ee5;
           display: block;
         }
-
         .checkbox-section {
           margin-top: 16px;
           color: #ebfaff;
           width: 100%;
         }
-
         .disclaimer {
           margin-bottom: 16px;
           font-size: 14px;
           text-align: center;
         }
-
         .checkbox-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
           gap: 12px;
           justify-items: center;
         }
-
         .checkbox-label {
           display: flex;
           align-items: center;
           gap: 8px;
           font-size: 14px;
         }
-
-        .background-wrapper {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          opacity: 0.3;
-          z-index: 1;
-        }
-
-        .background-image {
-          height: 100%;
-          width: 100%;
-          object-fit: cover;
-        }
-
         @media (max-width: 640px) {
           .welcome-title {
             font-size: 36px;
           }
-
           .auth-tabs {
             gap: 40px;
           }
-
           .form-grid {
             grid-template-columns: 1fr;
           }
-
           .signup-button {
             width: 100%;
           }
-
           .checkbox-grid {
             grid-template-columns: 1fr;
             justify-items: start;
-          }
-
-          .background-wrapper {
-            display: none;
           }
         }
       `}</style>
