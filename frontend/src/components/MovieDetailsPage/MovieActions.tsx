@@ -1,56 +1,72 @@
-"use client";
-import React from "react";
+'use client';
+import React, { useState } from 'react';
 
 export const MovieActions: React.FC = () => {
+  const [rating, setRating] = useState<number>(0);
+
+  const handleStarClick = (index: number) => {
+    setRating(index + 1); // Set the rating to the index of the clicked star (1-5)
+  };
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    // Prevent the click event from firing when double-click happens
+    e.preventDefault();
+    setRating(0); // Clear the rating on double-click
+  };
+
+  const renderStars = () => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <button
+          key={i}
+          className="star-button"
+          aria-label={`Rate movie ${i + 1} stars`}
+          onClick={() => handleStarClick(i)}
+          onDoubleClick={handleDoubleClick} // Clears the rating on double-click
+        >
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `
+              <svg width="56" height="56" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M16 24.2591L12.4773 26.3273L13.2087 21.3154L10.1014 18.6897L14.3185 18.3421L16 14.0001L17.6815 18.3421L21.8986 18.6897L18.7913 21.3154L19.5227 26.3273L16 24.2591Z" 
+                  fill="${i < rating ? '#FFD700' : '#4A4A4A'}"
+                />
+              </svg>
+              `,
+            }}
+          />
+        </button>
+      );
+    }
+    return stars;
+  };
+
   return (
     <div className="actions-container">
-      <button className="action-button bookmark" aria-label="Bookmark movie">
-        <div
-          dangerouslySetInnerHTML={{
-            __html:
-              '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.4578 4.42988C24.9252 4.60018 26 5.86533 26 7.34265V28L16 23L6 28V7.34265C6 5.86533 7.07477 4.60018 8.54224 4.42988C10.9887 4.14595 13.4773 4 16 4C18.5227 4 21.0113 4.14595 23.4578 4.42988Z" stroke="#EBFAFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
-          }}
-        />
-      </button>
-      <div className="rating-buttons">
-        <button className="action-button like" aria-label="Like movie">
-          <div
-            dangerouslySetInnerHTML={{
-              __html:
-                '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.24204 24.0071C8.53324 24.7494 9.26135 25.1667 10.0047 25.1667H11.0382C11.6277 25.1667 12.2133 25.2619 12.7726 25.4488L16.9154 26.833C17.5768 27.054 18.2695 27.1667 18.9667 27.1667H24.3087C25.2601 27.1667 26.2096 26.7843 26.8331 26.0081C29.1062 23.179 30.467 19.5814 30.467 15.6667C30.467 15.0701 30.4354 14.4808 30.3737 13.9004C30.1975 12.2413 28.7189 11.1667 27.144 11.1667H22.9861C22.7894 11.1667 22.6129 11.0551 22.5017 10.8514C22.3882 10.6435 22.3717 10.385 22.4731 10.1713C23.1211 8.80563 23.4836 7.27786 23.4836 5.66669C23.4836 3.73481 21.9208 2.16669 19.9907 2.16669C19.1624 2.16669 18.493 2.83938 18.493 3.66669V4.51119C18.493 5.21106 18.3598 5.90447 18.1005 6.55422C17.7529 7.4254 17.0228 8.1099 16.1312 8.58589C14.5876 9.40989 13.2376 10.5493 12.1666 11.9181C11.7859 12.4047 11.3005 12.7856 10.7674 12.9925C10.4376 13.1205 10.0416 13.3171 9.75725 13.6794C8.35542 15.4652 7.51902 17.7188 7.51902 20.1667C7.51902 21.5212 7.77517 22.817 8.24204 24.0071ZM2.6739 14.1199C1.93748 15.993 1.5332 18.0331 1.5332 20.1667C1.5332 21.8433 1.78286 23.4624 2.24731 24.9882C2.66651 26.3654 3.98388 27.1667 5.3492 27.1667H6.55672C7.56708 27.1667 8.10609 26.0702 7.70173 25.2488C6.94768 23.717 6.52375 21.9922 6.52375 20.1667C6.52375 17.983 7.13041 15.9429 8.18366 14.2048C8.6816 13.3831 8.16438 12.1667 7.09071 12.1667H5.69034C4.41143 12.1667 3.1664 12.8672 2.6739 14.1199Z" stroke="#EBFAFF"></path></svg>',
-            }}
-          />
-        </button>
-        <button className="action-button dislike" aria-label="Dislike movie">
-          <div
-            dangerouslySetInnerHTML={{
-              __html:
-                '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.24429 7.05841L9.39245 6.83332L9.66193 6.83332L11.038 6.83332C11.6275 6.83332 12.2131 6.73805 12.7724 6.55119L16.9152 5.16699C17.5766 4.94599 18.2693 4.83331 18.9665 4.83331L24.3085 4.83331C25.2599 4.83331 26.2094 5.21573 26.8329 5.99185C29.106 8.82103 30.4668 12.4186 30.4668 16.3333C30.4668 16.9298 30.4352 17.5192 30.3735 18.0996C30.1973 19.7587 28.7187 20.8333 27.1438 20.8333L22.9859 20.8333C22.7892 20.8333 22.6127 20.9449 22.5015 21.1486C22.388 21.3565 22.3714 21.615 22.4728 21.8287C23.1209 23.1944 23.4833 24.7221 23.4833 26.3333C23.4833 28.2652 21.9206 29.8333 19.9904 29.8333C19.1622 29.8333 18.4928 29.1606 18.4928 28.3333V27.4888C18.4928 26.7889 18.3596 26.0955 18.1003 25.4458C17.7526 24.5746 17.0226 23.8901 16.1309 23.4141C14.5873 22.5901 13.2374 21.4507 12.1664 20.0819C11.5738 19.3245 10.7396 18.8333 9.85788 18.8333L9.66194 18.8333L9.39245 18.8333L9.24429 18.6082C8.15358 16.9512 7.51881 14.9657 7.51881 12.8333C7.5188 10.7009 8.15357 8.71548 9.24429 7.05841ZM2.67369 18.8801C1.93727 17.007 1.53299 14.9669 1.53299 12.8333C1.53299 11.1567 1.78265 9.53757 2.24709 8.01177C2.6663 6.6346 3.98366 5.83332 5.34898 5.83332L6.5565 5.83332C7.56686 5.83332 8.10587 6.92978 7.70152 7.75121C6.94746 9.28304 6.52353 11.0078 6.52353 12.8333C6.52353 15.017 7.1302 17.0571 8.18345 18.7952C8.68139 19.6169 8.16417 20.8333 7.0905 20.8333H5.69013C4.41122 20.8333 3.16619 20.1328 2.67369 18.8801Z" stroke="#EBFAFF"></path></svg>',
-            }}
-          />
-        </button>
-      </div>
+      <div className="rating-buttons">{renderStars()}</div>
 
       <style react-jsx>{`
         .actions-container {
           display: flex;
-          gap: 32px;
+          gap: 16px; /* Reduced space between stars */
           margin-bottom: 40px;
         }
-        .action-button {
+        .star-button {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 64px;
-          height: 64px;
-          border-radius: 32px;
-          border: 1px solid #228ee5;
-          background-color: #030a1b;
+          width: 72px; /* Increased size */
+          height: 72px; /* Increased size */
+          border-radius: 36px;
+          background-color: transparent;
+          border: none;
           cursor: pointer;
         }
         .rating-buttons {
           display: flex;
-          gap: 24px;
+          gap: 8px; /* Reduced gap between stars */
         }
       `}</style>
     </div>
