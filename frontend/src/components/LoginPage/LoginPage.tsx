@@ -1,30 +1,23 @@
 'use client';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
+// Handle button click for Create Account
+const handleSignupClick = (navigate: ReturnType<typeof useNavigate>) => {
+  navigate('/create-account');
+}
+
+// Handle button click for Create Account
+const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
+  navigate('/movies');
+}
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  
   return (
     <main className="login-container">
-      <nav className="back-button" aria-label="Navigation">
-        <button className="back-button-icon" aria-label="Go back">
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="back-arrow"
-          >
-            <path
-              d="M11.8606 22.2372L3.42738 13.7954M3.42738 13.7954L11.8691 5.36219M3.42738 13.7954L23.6774 13.8057"
-              stroke="#EBFAFF"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      </nav>
-
       <div className="content-wrapper">
         <section className="login-section" aria-label="Login form">
           <header className="welcome-header">
@@ -36,7 +29,7 @@ const LoginPage: React.FC = () => {
               <span className="tab-text">LOGIN</span>
               <div className="active-indicator" aria-hidden="true" />
             </div>
-            <div className="tab-item">
+            <div className="tab-item" onClick={() => handleSignupClick(navigate)}>
               <span className="tab-text">SIGNUP</span>
             </div>
           </nav>
@@ -120,7 +113,7 @@ const LoginPage: React.FC = () => {
               Forgot Password?
             </button>
 
-            <button type="submit" className="login-button">
+            <button type="submit" className="login-button" onClick={() => handleLoginClick(navigate)}>
               LOGIN
             </button>
           </form>
