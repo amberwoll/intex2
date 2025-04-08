@@ -1,3 +1,7 @@
+using intex2.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,33 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddDbContext<MoviesContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MovieConnection")));
+
+
+builder.Services.AddDbContext<RecommendationsContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("RecommendationConnection")));
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => {
+            policy.WithOrigins("http://localhost:3000", "https://proud-stone-09439391e.6.azurestaticapps.net")
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 
@@ -15,7 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x => x.WithOrigins("http://localhost:3000"));
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
@@ -29,5 +60,7 @@ app.Use(async (context, next) =>
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapIdentityApi<IdentityUser>();
 
 app.Run();

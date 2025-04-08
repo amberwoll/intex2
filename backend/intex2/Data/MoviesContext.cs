@@ -96,6 +96,7 @@ public partial class MoviesContext : DbContext
             entity.Property(e => e.State).HasColumnName("state");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Zip).HasColumnName("zip");
+            entity.Property(e => e.PrivilegeLevel).HasColumnName("privilege_level");
         });
 
         OnModelCreatingPartial(modelBuilder);
