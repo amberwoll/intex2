@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { MovieActions } from "./MovieActions";
-import { MovieControls } from "./MovieControls";
+'use client';
+import React from 'react';
+import { MovieActions } from './MovieActions';
+import { MovieControls } from './MovieControls';
 
 export const MovieHero: React.FC = () => {
   return (
@@ -11,7 +11,6 @@ export const MovieHero: React.FC = () => {
         alt="John Wick 4 movie poster"
         className="hero-image"
       />
-      <div className="overlay" />
       <div className="content-wrapper">
         <div className="hero-content">
           <h1 className="title">John Wick 4</h1>
@@ -40,6 +39,7 @@ export const MovieHero: React.FC = () => {
           height: 100%;
           background-color: rgba(3, 10, 27, 0.5);
           transform: rotate(-16.53deg);
+          z-index: 1; /* Overlay behind the content */
         }
         .content-wrapper {
           position: absolute;
@@ -48,10 +48,11 @@ export const MovieHero: React.FC = () => {
           right: 0;
           padding-left: 40px;
           padding-right: 40px;
+          z-index: 2; /* Content above the overlay */
         }
         .hero-content {
           position: absolute;
-          bottom: 206px;
+          bottom: 80px; /* Push content higher */
           left: 104px;
         }
         .title {

@@ -1,32 +1,32 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
 export const MovieSuggestions: React.FC = () => {
   const suggestions = [
     {
       id: 1,
       image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/1c3687f3bf58df63bc889d3e6187219df2985eaa",
+        'https://cdn.builder.io/api/v1/image/assets/TEMP/1c3687f3bf58df63bc889d3e6187219df2985eaa',
     },
     {
       id: 2,
       image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/8a0e634fd7886c51f4616c0d32cd6dd559dc94b7",
+        'https://cdn.builder.io/api/v1/image/assets/TEMP/8a0e634fd7886c51f4616c0d32cd6dd559dc94b7',
     },
     {
       id: 3,
       image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/2ec45a161b40b492dabcc363b2667b7013d78d30",
+        'https://cdn.builder.io/api/v1/image/assets/TEMP/2ec45a161b40b492dabcc363b2667b7013d78d30',
     },
     {
       id: 4,
       image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/b7f8b85806c48d5ec16393884c27dd9c4b914b48",
+        'https://cdn.builder.io/api/v1/image/assets/TEMP/b7f8b85806c48d5ec16393884c27dd9c4b914b48',
     },
     {
       id: 5,
       image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/e3baa5f73ba6e50e65e6c5ee39667479e9c5c83c",
+        'https://cdn.builder.io/api/v1/image/assets/TEMP/e3baa5f73ba6e50e65e6c5ee39667479e9c5c83c',
     },
   ];
 
@@ -39,9 +39,6 @@ export const MovieSuggestions: React.FC = () => {
             alt={`Movie suggestion ${suggestion.id}`}
             className="suggestion-image"
           />
-          <div className="overlay">
-            <div className="indicator" />
-          </div>
         </div>
       ))}
 

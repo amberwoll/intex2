@@ -1,6 +1,6 @@
 // components/Modal.tsx
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
 interface ModalProps {
   onClose: () => void;
@@ -11,7 +11,13 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose} aria-label="Close modal">✕</button>
+        <button
+          className="close-button"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          ✕
+        </button>
         {children}
       </div>
 
