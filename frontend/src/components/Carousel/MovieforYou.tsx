@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+// import React from 'react';
 import TrendCard from './TrendCard';
 
 const MoviesforYou = () => {

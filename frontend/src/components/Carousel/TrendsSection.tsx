@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 
 const TrendCard = ({ imageUrl, rank }: { imageUrl: string; rank?: number }) => {
   return (
