@@ -2862,11 +2862,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/amberwoll/RiderProjects/intex2/backend/intex2/intex2.csproj",
+      "projectUniqueName": "/Users/amberwoll/Documents/GitHub/intex2/backend/intex2/intex2.csproj",
       "projectName": "intex2",
-      "projectPath": "/Users/amberwoll/RiderProjects/intex2/backend/intex2/intex2.csproj",
+      "projectPath": "/Users/amberwoll/Documents/GitHub/intex2/backend/intex2/intex2.csproj",
       "packagesPath": "/Users/amberwoll/.nuget/packages/",
-      "outputPath": "/Users/amberwoll/RiderProjects/intex2/backend/intex2/obj/",
+      "outputPath": "/Users/amberwoll/Documents/GitHub/intex2/backend/intex2/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/amberwoll/.nuget/NuGet/NuGet.Config"
