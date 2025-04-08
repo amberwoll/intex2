@@ -5,17 +5,16 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 // Handle button click for Create Account
 const handleSignupClick = (navigate: ReturnType<typeof useNavigate>) => {
   navigate('/create-account');
-}
+};
 
 // Handle button click for Create Account
 const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
   navigate('/movies');
-}
+};
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate function
 
-  
   return (
     <main className="login-container">
       <div className="content-wrapper">
@@ -29,7 +28,10 @@ const LoginPage: React.FC = () => {
               <span className="tab-text">LOGIN</span>
               <div className="active-indicator" aria-hidden="true" />
             </div>
-            <div className="tab-item" onClick={() => handleSignupClick(navigate)}>
+            <div
+              className="tab-item"
+              onClick={() => handleSignupClick(navigate)}
+            >
               <span className="tab-text">SIGNUP</span>
             </div>
           </nav>
@@ -113,7 +115,11 @@ const LoginPage: React.FC = () => {
               Forgot Password?
             </button>
 
-            <button type="submit" className="login-button" onClick={() => handleLoginClick(navigate)}>
+            <button
+              type="submit"
+              className="login-button"
+              onClick={() => handleLoginClick(navigate)}
+            >
               LOGIN
             </button>
           </form>
