@@ -32,12 +32,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+<<<<<<< HEAD
+    options.AddPolicy("AllowAll", builder =>
     {
-        policy.AllowAnyOrigin()
-            // .AllowCredentials()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
     });
 });
 
@@ -50,12 +50,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// CSP
+
+// // --- Add the custom CSP middleware here ---
 // app.Use(async (context, next) =>
 // {
 //     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:");

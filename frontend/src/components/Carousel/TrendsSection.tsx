@@ -4,7 +4,9 @@ const TrendCard = ({ imageUrl, rank }: { imageUrl: string; rank?: number }) => {
   return (
     <div className="trend-card">
       {rank !== undefined ? <div className="rank-badge">{rank}</div> : null}
-      <img src={imageUrl} alt="Trending" className="card-img" />
+      {imageUrl ? (
+        <img src={imageUrl} alt="Trending" className="card-img" />
+      ) : null}
 
       <style>{`
         .trend-card {

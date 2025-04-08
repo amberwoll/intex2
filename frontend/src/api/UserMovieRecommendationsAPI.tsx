@@ -1,30 +1,6 @@
-// UserMovieRecommendationsAPI.ts
-
 import { userMovieRecommendation } from '../types/userMovieRecommendation';
 
-interface FetchUserMovieRecommendationsResponse {
-  recommendations: userMovieRecommendation[];
-  // additional pagination or metadata properties can be added if needed
-}
-
-// Base API URL for your backend
-const API_URL =
-  'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net';
-
-export const fetchUserMovieRecommendations =
-  async (): Promise<FetchUserMovieRecommendationsResponse> => {
-    try {
-      const response = await fetch(`${API_URL}/UserMovieRecommendations`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch user movie recommendations');
-      }
-      const data = await response.json();
-      return { recommendations: data };
-    } catch (error) {
-      console.error('Error fetching user movie recommendations:', error);
-      throw error;
-    }
-  };
+const API_URL = 'https://localhost:5500';
 
 export const fetchUserMovieRecommendationById = async (
   id: string
