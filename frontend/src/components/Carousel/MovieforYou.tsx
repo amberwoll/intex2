@@ -1,3 +1,4 @@
+// MoviesforYou.tsx
 'use client';
 import { useEffect, useState } from 'react';
 import TrendCard from './TrendCard';
@@ -5,7 +6,14 @@ import { fetchUserMovieRecommendationById } from '../../api/UserMovieRecommendat
 
 const MoviesforYou = () => {
   const [movieImagePaths, setMovieImagePaths] = useState<string[]>([]);
+  const [movieList, setMovieList] = useState<{ title: string }[]>([]);
   const userId = '1';
+
+  const sanitizeFileName = (title: string) =>
+    title
+      .replace(/[:*?"<>|\\/.'’]/g, '') // now includes period, apostrophes, and smart quotes
+      .replace(/\s+/g, ' ') // normalize whitespace
+      .trim();
 
   useEffect(() => {
     const fetchRecommendationsAndTitles = async () => {
@@ -17,7 +25,7 @@ const MoviesforYou = () => {
           .map(([_, value]) => value);
 
         const titleResponse = await fetch(
-          'https://localhost:5500/Movie/GetMovieTitlesByShowIds', // ✅ Update this if you're using a different port
+          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -33,12 +41,13 @@ const MoviesforYou = () => {
           .map(
             (movie: { title: string }) =>
               new URL(
-                `/src/assets/img/Movie Posters/${movie.title}.jpg`,
+                `/src/assets/img/Movie Posters/${sanitizeFileName(movie.title)}.jpg`,
                 import.meta.url
               ).href
           );
 
         setMovieImagePaths(paths);
+        setMovieList(movieList);
       } catch (error) {
         console.error('Error loading recommendations:', error);
       }
@@ -56,9 +65,13 @@ const MoviesforYou = () => {
       <h2 className="trends-title">Today's Top Movie Picks for You</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
-          {movieImagePaths.map((imageUrl, index) =>
-            imageUrl ? <TrendCard key={index} imageUrl={imageUrl} /> : null
-          )}
+          {movieList.map((movie, index) => (
+            <TrendCard
+              key={index}
+              imageUrl={movieImagePaths[index] ?? ''}
+              title={movie.title}
+            />
+          ))}
         </div>
       </div>
     </section>

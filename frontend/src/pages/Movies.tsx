@@ -4,8 +4,8 @@ import { MovieHero } from '../components/MoviePage/MovieHero'; // Adjusted the p
 import TrendSection from '../components/Carousel/TrendsSection';
 import { NavigationBar } from '../components/UniversalLayout/NavigationBar'; // Adjusted the path
 import TvRecs from '../components/Carousel/TvforYou';
-import MovieRecs from '../components/Carousel/MovieforYou';
 import MovieforYou from '../components/Carousel/MovieforYou';
+import MovieRecs from '../components/Carousel/SimilarMovies';
 
 export const Movies: React.FC = () => {
   return (
@@ -19,8 +19,8 @@ export const Movies: React.FC = () => {
 
       <TrendSection imageUrl={''} />
       <TvRecs />
-      <MovieRecs />
       <MovieforYou />
+      <MovieRecs />
 
       <style>{`
         .layout {

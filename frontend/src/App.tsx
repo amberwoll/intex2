@@ -9,7 +9,6 @@ import ManageMovies from './pages/ManageMovies';
 import './App.css';
 // Import SharedLayout
 
-
 function App() {
   return (
     <Router>
@@ -18,7 +17,7 @@ function App() {
         <Route path="/create-account" element={<SignupPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/movies" element={<Movies />} />
-        <Route path="/movie" element={<MovieDetail />} />
+        <Route path="/movies/:showId" element={<MovieDetail />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/manage-movies" element={<ManageMovies />} />
       </Routes>

@@ -7,9 +7,7 @@ interface FetchUserTvRecommendationsResponse {
   // additional metadata (if needed)
 }
 
-// Base API URL for your backend
-const API_URL =
-  'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net';
+const API_URL = 'https://localhost:5500';
 
 export const fetchUserTvRecommendations =
   async (): Promise<FetchUserTvRecommendationsResponse> => {
