@@ -16,11 +16,7 @@ export const NavigationBar: React.FC = () => {
   return (
     <header className="header-wrapper">
       <nav className="navbar">
-      <img
-  src="/logo/cinelogo.png"
-  alt="Cine Niche Logo"
-  className="logo"
-/>
+        <img src="/logo/cinelogo.png" alt="Cine Niche Logo" className="logo" />
 
         <div className="nav-right">
           <ul className="menu-list">
@@ -44,7 +40,7 @@ export const NavigationBar: React.FC = () => {
         </div>
       </nav>
 
-      <style react-jsx>{`
+      <style>{`
         /* Body padding to prevent content cut-off */
         body {
           padding-top: 60px; /* Adjust this value to match the height of the navbar */

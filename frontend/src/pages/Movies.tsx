@@ -22,7 +22,7 @@ export const Movies: React.FC = () => {
       <MovieRecs />
       <MovieforYou />
 
-      <style react-jsx>{`
+      <style>{`
         .layout {
           width: 100%;
           height: 762px;

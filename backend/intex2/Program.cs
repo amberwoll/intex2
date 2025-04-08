@@ -39,14 +39,14 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUser
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy => {
-            policy.WithOrigins("http://localhost:3000", "https://proud-stone-09439391e.6.azurestaticapps.net")
-            .AllowCredentials()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,19 +56,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 
-// --- Add the custom CSP middleware here ---
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:");
-    await next();
-});
+// // --- Add the custom CSP middleware here ---
+// app.Use(async (context, next) =>
+// {
+//     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:");
+//     await next();
+// });
 
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
