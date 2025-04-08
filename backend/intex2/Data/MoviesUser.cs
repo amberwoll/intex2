@@ -41,4 +41,6 @@ public partial class MoviesUser
     public string? State { get; set; }
 
     public int? Zip { get; set; }
+
+    public int PrivilegeLevel { get; set; } = 0;
 }
