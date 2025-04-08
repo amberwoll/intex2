@@ -4,7 +4,7 @@
 import { moviesTitle } from '../types/moviesTitle';
 
 interface FetchMoviesResponse {
-  Movies: moviesTitle[];
+  movies: moviesTitle[];
   totalMovies: number; // <-- Match the API's response
 }
 
@@ -22,19 +22,24 @@ export const fetchMovies = async (
       .join('&');
 
     const response = await fetch(
-      `${API_URL}/AllMovies?pageHowMany=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}${selectedCategories.length ? `&${categoryParams}` : ''}`
+      `${API_URL}/AllMovies?pageHowMany=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}&${categoryParams}`
     );
 
     if (!response.ok) {
       throw new Error('Failed to fetch movies');
     }
 
-    return await response.json();
+    const result = await response.json();
+    return {
+      movies: result.movies, 
+      totalMovies: result.totalMovies ?? result.movies.length,
+    };
   } catch (error) {
-    console.error('Error fetching movie', error);
+    console.error('Error fetching movies', error);
     throw error;
   }
 };
+
 
 export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
   // of type movie

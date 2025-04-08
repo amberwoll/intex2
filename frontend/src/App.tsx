@@ -4,10 +4,11 @@ import Login from './pages/Login';
 import { Movies } from './pages/Movies';
 import MovieDetail from './pages/MovieDetail';
 import Privacy from './pages/Privacy';
-// import ManageMovies from './pages/ManageMovies';
+import SignupPage from './components/SignupPage/SignupPage';
+import ManageMovies from './pages/ManageMovies';
 import './App.css';
 // Import SharedLayout
-import SignupPage from './components/SignupPage/SignupPage';
+
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/movies" element={<Movies />} />
         <Route path="/movie" element={<MovieDetail />} />
         <Route path="/privacy" element={<Privacy />} />
-        {/* <Route path="/manage-movies" element={<ManageMovies />} /> */}
+        <Route path="/manage-movies" element={<ManageMovies />} />
       </Routes>
     </Router>
   );

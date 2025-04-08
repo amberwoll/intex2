@@ -49,8 +49,8 @@ namespace intex2.Controllers
 
             return Ok(new
             {
-                Movies = movieList,
-                TotalMovies = totalMovies
+                movies = movieList,
+                totalMovies = totalMovies
             });
         }
 

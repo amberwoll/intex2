@@ -1,11 +1,11 @@
-// import Table from "../components/ManageMovies/Table";
+import Table from "../components/ManageMovies/Table";
 
 const ManageMovies = () => {
-  //   return (
-  //     <>
-  //       <Table />
-  //     </>
-  //   );
+    return (
+      <>
+        <Table />
+      </>
+    );
 };
 
 export default ManageMovies;
