@@ -1,21 +1,21 @@
 // const url =
 //   'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/';
 
-import { book } from '../types/book';
+import { moviesTitle } from '../types/moviesTitle';
 
-interface FetchBooksResponse {
-  books: book[];
-  totalBooks: number; // <-- Match the API's response
+interface FetchMoviesResponse {
+  Movies: moviesTitle[];
+  totalMovies: number; // <-- Match the API's response
 }
 
-const API_URL = `https://mission13-ac-backend-f5dsf5b8f5a6hwg5.eastus-01.azurewebsites.net/Book`;
+const API_URL = `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/`;
 
-export const fetchBooks = async (
+export const fetchMovies = async (
   pageSize: number,
   pageNum: number,
   sortOrder: string,
   selectedCategories: string[]
-): Promise<FetchBooksResponse> => {
+): Promise<FetchMoviesResponse> => {
   try {
     const categoryParams = selectedCategories
       .map((cat) => `bookCats=${encodeURIComponent(cat)}`)
