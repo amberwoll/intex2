@@ -1,5 +1,11 @@
+import Table from "../components/ManageMovies/Table";
+
 const ManageMovies = () => {
-  return <h1>Admin - Manage Movies Page</h1>;
+  return (
+    <>
+      <Table />
+    </>
+  );
 };
 
 export default ManageMovies;
