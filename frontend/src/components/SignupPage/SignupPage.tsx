@@ -5,11 +5,16 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const SignupPage: React.FC = () => {
   const navigate = useNavigate(); // Initialize the navigate function
 
+  // Handle button click for Login
+const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
+    navigate('/login');
+  }
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault(); // Prevent the default form submission
     // You can handle the form submission here
     console.log('Form submitted');
-    navigate('/signup'); // Navigate back to the signup page after submission
+    navigate('/login'); // Navigate back to the signup page after submission
   };
 
   return (
@@ -22,7 +27,7 @@ const SignupPage: React.FC = () => {
 
           <nav className="auth-tabs" aria-label="Authentication options">
             <div className="tab-item">
-              <span className="tab-text">LOGIN</span>
+              <span className="tab-text" onClick={() => handleLoginClick(navigate)}>LOGIN</span>
             </div>
             <div className="tab-item active">
               <span className="tab-text">SIGNUP</span>
@@ -154,14 +159,6 @@ const SignupPage: React.FC = () => {
             </button>
           </form>
         </section>
-
-        <div className="background-wrapper" aria-hidden="true">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/64695fe3963cca30d781a469a70a792e374a17d3"
-            alt="Signup background"
-            className="background-image"
-          />
-        </div>
       </div>
 
       <style react-jsx>{`
