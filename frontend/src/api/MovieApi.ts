@@ -10,28 +10,15 @@ interface FetchMoviesResponse {
 
 const API_URL = `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie`;
 
-export const fetchMovies = async (
-  pageSize: number,
-  pageNum: number,
-  sortOrder: string,
-  selectedCategories: string[]
-): Promise<FetchMoviesResponse> => {
+
+
+export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {
-    const categoryParams = selectedCategories
-      .map((cat) => `movieCats=${encodeURIComponent(cat)}`)
-      .join('&');
-
-    const response = await fetch(
-      `${API_URL}/AllMovies?pageHowMany=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}&${categoryParams}`
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch movies');
-    }
-
+    const response = await fetch(`${API_URL}/AllMovies?pageHowMany=10000&pageNum=1`);
+    if (!response.ok) throw new Error('Failed to fetch movies');
     const result = await response.json();
     return {
-      movies: result.movies, 
+      movies: result.movies,
       totalMovies: result.totalMovies ?? result.movies.length,
     };
   } catch (error) {
@@ -41,7 +28,10 @@ export const fetchMovies = async (
 };
 
 
-export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
+
+
+
+export const addMovie = async (newMovie: Omit<moviesTitle, "showId">): Promise<moviesTitle> => {
   // of type movie
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
@@ -82,17 +72,19 @@ export const updateMovie = async (
   }
 };
 
-export const deleteMovie = async (showId: number): Promise<void> => {
+export const deleteMovie = async (showId: string): Promise<void> => {
   try {
-    const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
+    const response = await fetch(`${API_URL}/DeleteMovie/${encodeURIComponent(showId)}`, {
       method: 'DELETE',
     });
 
     if (!response.ok) {
-      throw new Error('Failed to delete movie');
+      const errorText = await response.text();
+      throw new Error(`Failed to delete movie: ${response.status} - ${errorText}`);
     }
   } catch (error) {
     console.error('Error deleting movies:', error);
     throw error;
   }
 };
+

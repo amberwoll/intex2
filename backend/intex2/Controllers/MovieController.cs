@@ -21,30 +21,39 @@ namespace intex2.Controllers
 
 
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies(int pageHowMany = 10, int pageNum = 1, string sortOrder = "none", [FromQuery] List<string>? movieCats = null)
-        {
-            var moviesQuery = _movieContext.MoviesTitles.AsQueryable();
+public IActionResult GetMovies([FromQuery] int pageHowMany, [FromQuery] int pageNum, [FromQuery] string sortOrder = "none", [FromQuery] List<string>? movieCats = null)
+{
+    var moviesQuery = _movieContext.MoviesTitles.AsQueryable();
+
+    if (movieCats != null && movieCats.Any())
+    {
+        // Optional filtering here
+    }
+
+    var totalMovies = moviesQuery.Count();
+
+    if (sortOrder.ToLower() == "asc")
+    {
+        moviesQuery = moviesQuery.OrderBy(m => m.Title);
+    }
+    else if (sortOrder.ToLower() == "desc")
+    {
+        moviesQuery = moviesQuery.OrderByDescending(m => m.Title);
+    }
+
+    var movieList = moviesQuery
+        .Skip((pageNum - 1) * pageHowMany)
+        .Take(pageHowMany)
+        .ToList();
+
+    return Ok(new
+    {
+        movies = movieList,
+        totalMovies = totalMovies
+    });
+}
 
 
-            if (movieCats != null && movieCats.Any())
-            {
-                // Filtering logic for categories can be added here
-            }
-
-            var totalMovies = moviesQuery.Count();
-
-            if (sortOrder.ToLower() == "asc")
-                moviesQuery = moviesQuery.OrderBy(m => m.Title);
-            else if (sortOrder.ToLower() == "desc")
-                moviesQuery = moviesQuery.OrderByDescending(m => m.Title);
-
-            var movieList = moviesQuery
-                .Skip((pageNum - 1) * pageHowMany)
-                .Take(pageHowMany)
-                .ToList();
-
-            return Ok(new { Movies = movieList, TotalMovies = totalMovies });
-        }
 
         [HttpGet("GetMovieTypes")]
         public IActionResult GetMovieTypes()
@@ -63,16 +72,16 @@ namespace intex2.Controllers
         [HttpPost("AddMovie")]
         public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
         {
-            if (string.IsNullOrEmpty(newMovie.ShowId))
+            if (string.IsNullOrWhiteSpace(newMovie.ShowId))
             {
-                var nextId = (_movieContext.MoviesTitles.Max(m => (int?)m.Id) ?? 0) + 1;
-                newMovie.ShowId = $"s{nextId}";
+                newMovie.ShowId = Guid.NewGuid().ToString();
             }
 
             _movieContext.MoviesTitles.Add(newMovie);
             _movieContext.SaveChanges();
             return Ok(newMovie);
         }
+
 
         [HttpPut("UpdateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
@@ -98,8 +107,11 @@ namespace intex2.Controllers
         {
             var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
 
-            if (movie == null)
-                return NotFound(new { message = "Movie not found." });
+                if (movie == null)
+            {
+            return NotFound(new { message = $"Movie with ID '{showId}' not found." });
+            }
+
 
             _movieContext.MoviesTitles.Remove(movie);
             _movieContext.SaveChanges();

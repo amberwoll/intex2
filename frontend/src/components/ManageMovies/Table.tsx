@@ -1,90 +1,130 @@
 "use client";
 import { useEffect, useState } from "react";
 import { moviesTitle } from "../../types/moviesTitle";
-import {  fetchMovies } from "../../api/MovieApi";
+import { fetchAllMovies, deleteMovie } from "../../api/MovieApi";
 import NewMovieForm from "./NewMovieForm";
+import Pagination from "../Pagination";
 
-export const DarkModeDataTable = () => {
-  const [data, setData] = useState<moviesTitle[]>([]);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [showForm, setShowForm] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+const DarkModeDataTable = () => {
+  const [allMovies, setAllMovies] = useState<moviesTitle[]>([]);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        const response = await fetchMovies(itemsPerPage, currentPage, "asc", []);
-        setData(response.movies); // match the property name in the API response
-      } catch (error) {
-        console.error("Error loading movies:", error);
+        setLoading(true);
+        const data = await fetchAllMovies();
+        setAllMovies(data.movies);
+      } catch (err) {
+        console.error("Error loading movies:", err);
+        setError("Failed to load movies.");
+      } finally {
+        setLoading(false);
       }
     };
-
     loadMovies();
-  }, [currentPage]);
+  }, []);
 
-  const handleDelete = (index: number) => {
-    const globalIndex = (currentPage - 1) * itemsPerPage + index;
-    setData(data.filter((_, i) => i !== globalIndex));
-    if (editingIndex === globalIndex) {
-      setEditingIndex(null);
+  const handleDelete = async () => {
+    if (!selectedShowId) return;
+    try {
+      await deleteMovie(selectedShowId);
+      setAllMovies((prev) => prev.filter((m) => m.showId !== selectedShowId));
+      setShowConfirm(false);
+      setSelectedShowId(null);
+    } catch (err) {
+      console.error("Error deleting movie:", err);
+      setError("Failed to delete movie.");
     }
   };
 
-  const handleEdit = (index: number) => {
-    const globalIndex = (currentPage - 1) * itemsPerPage + index;
-    setEditingIndex(globalIndex);
-    setShowForm(true);
-  };
-
-  const paginatedData = data.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  // Filter and paginate
+  const filteredMovies = allMovies.filter((movie) =>
+    movie.title?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const totalPages = Math.ceil(filteredMovies.length / pageSize);
+  const paginatedMovies = filteredMovies.slice(
+    (pageNum - 1) * pageSize,
+    pageNum * pageSize
   );
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  if (loading) return <div>Loading Movies...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="datatable-container">
       <div className="header-bar">
         <h2>Manage Movie Library</h2>
         <div className="header-actions">
-          <button className="utility-button">Search</button>
-          <button className="utility-button">Filter</button>
+          <input
+            type="text"
+            placeholder="Search by Title..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPageNum(1); // Reset to page 1 on search
+            }}
+            className="search-input"
+          />
+          
           <button className="utility-button" onClick={() => setShowForm(!showForm)}>
             {showForm ? "Close Form" : "Add Movie"}
           </button>
         </div>
       </div>
 
+      {showForm && (
+        <NewMovieForm
+          onSuccess={async () => {
+            setShowForm(false);
+            const data = await fetchAllMovies();
+            setAllMovies(data.movies);
+          }}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
+
       <table>
         <thead>
           <tr>
+            <th>ShowId</th>
             <th>Title</th>
             <th>Director</th>
             <th>Year</th>
             <th>Type</th>
-            <th>Genre</th>
+            <th>Rating</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {paginatedData.length === 0 ? (
+          {paginatedMovies.length === 0 ? (
             <tr>
-              <td colSpan={6} style={{ textAlign: "center" }}>No movies yet.</td>
+              <td colSpan={7} style={{ textAlign: "center" }}>No movies found.</td>
             </tr>
           ) : (
-            paginatedData.map((movie, index) => (
+            paginatedMovies.map((movie, index) => (
               <tr key={index}>
+                <td>{movie.showId}</td>
                 <td>{movie.title}</td>
                 <td>{movie.director}</td>
                 <td>{movie.releaseYear}</td>
                 <td>{movie.type}</td>
                 <td>{movie.rating}</td>
                 <td>
-                  <button onClick={() => handleEdit(index)}>Edit</button>
-                  <button onClick={() => handleDelete(index)}>Delete</button>
+                  <button className="btn btn-success" onClick={() => alert("TODO: Edit")}>Edit</button>
+                  <button className="btn btn-danger" onClick={() => {
+                    setSelectedShowId(movie.showId!);
+                    setShowConfirm(true);
+                  }}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))
@@ -92,27 +132,25 @@ export const DarkModeDataTable = () => {
         </tbody>
       </table>
 
-      {showForm && (
-        <NewMovieForm
-          onSuccess={() => {
-            setShowForm(false);
-            // Optionally refresh list or optimistically update
-          }}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
+      <Pagination
+        currentPage={pageNum}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPageNum}
+        onPageSizeChange={(newSize) => setPageSize(newSize)}
+      />
 
-      <div className="pagination">
-        <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-          Prev
-        </button>
-        <span>
-          Page {currentPage} of {totalPages || 1}
-        </span>
-        <button disabled={currentPage === totalPages || totalPages === 0} onClick={() => setCurrentPage(currentPage + 1)}>
-          Next
-        </button>
-      </div>
+      {showConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Are you sure you want to delete this movie?</p>
+            <div className="modal-actions">
+              <button className="btn btn-danger" onClick={handleDelete}>Yes, Delete</button>
+              <button className="btn btn-secondary" onClick={() => setShowConfirm(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style react-jsx>{`
         .datatable-container {
@@ -120,22 +158,32 @@ export const DarkModeDataTable = () => {
           color: #ebfaff;
           min-height: 100vh;
           width: 100%;
-          max-width: 100%;
           margin: 0 auto;
           padding: 48px;
           font-family: Inter, sans-serif;
           box-sizing: border-box;
         }
+
         .header-bar {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 24px;
         }
+
         .header-actions {
           display: flex;
           gap: 12px;
         }
+
+        .search-input {
+          background-color: #2a2a2a;
+          color: white;
+          padding: 10px;
+          border-radius: 6px;
+          border: 1px solid #444;
+        }
+
         .utility-button {
           background-color: #228ee5;
           border: none;
@@ -145,44 +193,80 @@ export const DarkModeDataTable = () => {
           font-size: 14px;
           cursor: pointer;
         }
+
         table {
           width: 100%;
           border-collapse: collapse;
           margin-bottom: 32px;
           box-shadow: 0 0 0 1px #333;
         }
+
         th, td {
           padding: 14px;
           border: 1px solid #333;
           text-align: left;
         }
+
         th {
           background-color: #1f1f1f;
           font-size: 12px;
           letter-spacing: 0.5px;
         }
+
         tr:nth-child(even) {
           background-color: #1c1c1c;
         }
-        button {
-          margin-right: 6px;
-          background-color: #228ee5;
-          border: none;
-          color: white;
+
+        .btn {
           padding: 6px 12px;
+          border: none;
           border-radius: 4px;
+          font-size: 14px;
           cursor: pointer;
+          margin-right: 6px;
         }
-        .pagination {
+
+        .btn-success {
+          background-color: #4caf50;
+          color: white;
+        }
+
+        .btn-danger {
+          background-color: #f44336;
+          color: white;
+        }
+
+        .btn-secondary {
+          background-color: #555;
+          color: white;
+        }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 20px;
-          margin-top: 24px;
+          z-index: 1000;
         }
-        .pagination button {
-          padding: 8px 16px;
-          font-size: 14px;
+
+        .modal {
+          background: #1e1e1e;
+          padding: 32px;
+          border-radius: 10px;
+          text-align: center;
+          color: #fff;
+          width: 300px;
+        }
+
+        .modal-actions {
+          margin-top: 20px;
+          display: flex;
+          justify-content: space-between;
         }
       `}</style>
     </div>

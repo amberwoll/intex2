@@ -7,9 +7,19 @@ interface NewMovieFormProps {
   onCancel: () => void;
 }
 
+const genreOptions = [
+  { label: "Action", key: "action" },
+  { label: "Adventure", key: "adventure" },
+  { label: "Comedies", key: "comedies" },
+  { label: "Documentaries", key: "documentaries" },
+  { label: "Dramas", key: "dramas" },
+  { label: "Fantasy", key: "fantasy" },
+  { label: "Horror", key: "horrorMovies" },
+  { label: "Thrillers", key: "thrillers" },
+];
+
 const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
-  const [formData, setFormData] = useState<moviesTitle>({
-    showId: "",
+  const [formData, setFormData] = useState<Omit<moviesTitle, "showId">>({
     type: "",
     title: "",
     director: "",
@@ -19,7 +29,41 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
     rating: "",
     duration: "",
     description: "",
+    action: 0,
+    adventure: 0,
+    animeSeriesInternationalTvShows: 0,
+    britishTvShowsDocuseriesInternationalTvShows: 0,
+    children: 0,
+    comedies: 0,
+    comediesDramasInternationalMovies: 0,
+    comediesInternationalMovies: 0,
+    comediesRomanticMovies: 0,
+    crimeTvShowsDocuseries: 0,
+    documentaries: 0,
+    documentariesInternationalMovies: 0,
+    docuseries: 0,
+    dramas: 0,
+    dramasInternationalMovies: 0,
+    dramasRomanticMovies: 0,
+    familyMovies: 0,
+    fantasy: 0,
+    horrorMovies: 0,
+    internationalMoviesThrillers: 0,
+    internationalTvShowsRomanticTvShowsTvDramas: 0,
+    kidsTv: 0,
+    languageTvShows: 0,
+    musicals: 0,
+    natureTv: 0,
+    realityTv: 0,
+    spirituality: 0,
+    tvAction: 0,
+    tvComedies: 0,
+    tvDramas: 0,
+    talkShowsTvComedies: 0,
+    thrillers: 0,
   });
+
+  const [selectedGenre, setSelectedGenre] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -31,9 +75,20 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const genreField = genreOptions.reduce((acc, genre) => {
+      acc[genre.key as keyof moviesTitle] = genre.key === selectedGenre ? 1 : 0;
+      return acc;
+    }, {} as Partial<moviesTitle>);
+
+    const movieToAdd: moviesTitle = {
+      ...formData,
+      ...genreField,
+    };
+
     try {
-      await addMovie(formData);
-      onSuccess(); // Trigger parent to refresh movie list
+      await addMovie(movieToAdd);
+      onSuccess();
     } catch (error) {
       console.error("Failed to add movie:", error);
       alert("Failed to add movie. Check console for details.");
@@ -44,14 +99,6 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
     <form onSubmit={handleSubmit} style={{ marginBottom: "24px" }}>
       <h2 style={{ color: "#EBFAFF" }}>Add New Movie</h2>
 
-      <input
-        type="text"
-        name="showId"
-        placeholder="Show ID"
-        value={formData.showId}
-        onChange={handleChange}
-        required
-      />
       <input
         type="text"
         name="type"
@@ -118,11 +165,33 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
         onChange={handleChange}
       />
 
+      <div style={{ marginTop: "12px" }}>
+        <label style={{ color: "#EBFAFF" }}>Select Genre:</label>
+        <select
+          value={selectedGenre}
+          onChange={(e) => setSelectedGenre(e.target.value)}
+          style={{ padding: "10px", marginLeft: "10px" }}
+          required
+        >
+          <option value="">-- Choose a genre --</option>
+          {genreOptions.map((genre) => (
+            <option key={genre.key} value={genre.key}>
+              {genre.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div style={{ marginTop: "16px" }}>
         <button type="submit" className="btn btn-success">
           Add Movie
         </button>
-        <button type="button" onClick={onCancel} className="btn btn-danger" style={{ marginLeft: "10px" }}>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="btn btn-danger"
+          style={{ marginLeft: "10px" }}
+        >
           Cancel
         </button>
       </div>
