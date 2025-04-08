@@ -1,5 +1,5 @@
-"use client";
-import * as React from "react";
+'use client';
+import * as React from 'react';
 
 const LoginPage: React.FC = () => {
   return (
@@ -155,6 +155,7 @@ const LoginPage: React.FC = () => {
         .back-arrow {
           width: 27px;
           height: 27px;
+           background-color: #002244;
           transform: rotate(90deg);
         }
 

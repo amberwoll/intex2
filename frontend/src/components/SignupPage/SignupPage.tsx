@@ -1,7 +1,17 @@
-"use client";
-import * as React from "react";
+'use client';
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const SignupPage: React.FC = () => {
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent the default form submission
+    // You can handle the form submission here
+    console.log('Form submitted');
+    navigate('/signup'); // Navigate back to the signup page after submission
+  };
+
   return (
     <main className="signup-container">
       <div className="content-wrapper">
@@ -20,7 +30,11 @@ const SignupPage: React.FC = () => {
             </div>
           </nav>
 
-          <form className="signup-form" aria-label="Signup form">
+          <form
+            className="signup-form"
+            onSubmit={handleSubmit}
+            aria-label="Signup form"
+          >
             <div className="form-grid">
               <div className="form-field">
                 <input
@@ -63,7 +77,11 @@ const SignupPage: React.FC = () => {
                 />
               </div>
               <div className="form-field">
-                <select className="input-field" aria-label="Gender" defaultValue="">
+                <select
+                  className="input-field"
+                  aria-label="Gender"
+                  defaultValue=""
+                >
                   <option value="" disabled>
                     Gender
                   </option>
@@ -107,12 +125,25 @@ const SignupPage: React.FC = () => {
 
             <div className="checkbox-section">
               <p className="disclaimer">
-                We are collecting this info to ensure we are giving you unique value compared to other streaming services.
+                We are collecting this info to ensure we are giving you unique
+                value compared to other streaming services.
               </p>
               <div className="checkbox-grid">
-                {['Netflix', 'Hulu', 'Disney+', 'Prime Video', 'HBO Max', 'Apple TV+'].map((service) => (
+                {[
+                  'Netflix',
+                  'Hulu',
+                  'Disney+',
+                  'Prime Video',
+                  'HBO Max',
+                  'Apple TV+',
+                ].map((service) => (
                   <label key={service} className="checkbox-label">
-                    <input type="checkbox" name="streamingServices" value={service} /> {service}
+                    <input
+                      type="checkbox"
+                      name="streamingServices"
+                      value={service}
+                    />{' '}
+                    {service}
                   </label>
                 ))}
               </div>

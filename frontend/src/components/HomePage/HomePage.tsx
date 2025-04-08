@@ -1,7 +1,20 @@
-"use client";
-import * as React from "react";
+'use client';
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  // Handle button click for Create Account
+  const handleCreateClick = () => {
+    navigate('/create-account');
+  };
+
+  // Handle button click for Login
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
   return (
     <main className="home-container">
       <div className="background-image" aria-hidden="true"></div>
@@ -9,12 +22,18 @@ const HomePage: React.FC = () => {
         <section className="home-section">
           <header className="home-header">
             <h1 className="home-title">CineNiche</h1>
-            <p className="home-subtitle">Discover the movies you were meant to love</p>
+            <p className="home-subtitle">
+              Discover the movies you were meant to love
+            </p>
           </header>
 
           <div className="action-box">
-            <button className="action-button">Create</button>
-            <button className="action-button">Login</button>
+            <button className="action-button" onClick={handleCreateClick}>
+              Create
+            </button>
+            <button className="action-button" onClick={handleLoginClick}>
+              Login
+            </button>
           </div>
         </section>
       </div>
@@ -32,23 +51,18 @@ const HomePage: React.FC = () => {
         }
 
         .background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/dist/assets/img/Home.png');
-  background-size: cover;
-  background-position: center;
-
-  /* REMOVE opacity, it fades everything including text */
-  /* opacity: 0.25; */
-
-  background-color: rgba(0, 0, 0, 0.2); /* dark overlay */
-  background-blend-mode: darken;
-  z-index: 1;
-}
-
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url('/dist/assets/img/Home.png');
+          background-size: cover;
+          background-position: center;
+          background-color: rgba(0, 0, 0, 0.2); /* dark overlay */
+          background-blend-mode: darken;
+          z-index: 1;
+        }
 
         .content-wrapper {
           max-width: 1000px;
