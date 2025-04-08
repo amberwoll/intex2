@@ -39,6 +39,7 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUser
 
 builder.Services.AddCors(options =>
 {
+<<<<<<< HEAD
     options.AddPolicy("AllowAll", builder =>
     {
         builder.AllowAnyOrigin()

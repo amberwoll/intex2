@@ -69,10 +69,58 @@ namespace intex2.Controllers
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
             var existingMovie = _movieContext.MoviesTitles.Find(showId);
-            if (existingMovie == null)
-                return NotFound($"Movie with ShowId '{showId}' not found.");
 
-            _movieContext.Entry(existingMovie).CurrentValues.SetValues(updatedMovie);
+            if (existingMovie == null)
+            {
+                return NotFound($"Movie with ShowId '{showId}' not found.");
+            }
+
+            // Manually copy over all relevant fields
+            existingMovie.Type = updatedMovie.Type;
+            existingMovie.Title = updatedMovie.Title;
+            existingMovie.Director = updatedMovie.Director;
+            existingMovie.Cast = updatedMovie.Cast;
+            existingMovie.Country = updatedMovie.Country;
+            existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
+            existingMovie.Rating = updatedMovie.Rating;
+            existingMovie.Duration = updatedMovie.Duration;
+            existingMovie.Description = updatedMovie.Description;
+
+            // Category fields
+            existingMovie.Action = updatedMovie.Action;
+            existingMovie.Adventure = updatedMovie.Adventure;
+            existingMovie.AnimeSeriesInternationalTvShows = updatedMovie.AnimeSeriesInternationalTvShows;
+            existingMovie.BritishTvShowsDocuseriesInternationalTvShows = updatedMovie.BritishTvShowsDocuseriesInternationalTvShows;
+            existingMovie.Children = updatedMovie.Children;
+            existingMovie.Comedies = updatedMovie.Comedies;
+            existingMovie.ComediesDramasInternationalMovies = updatedMovie.ComediesDramasInternationalMovies;
+            existingMovie.ComediesInternationalMovies = updatedMovie.ComediesInternationalMovies;
+            existingMovie.ComediesRomanticMovies = updatedMovie.ComediesRomanticMovies;
+            existingMovie.CrimeTvShowsDocuseries = updatedMovie.CrimeTvShowsDocuseries;
+            existingMovie.Documentaries = updatedMovie.Documentaries;
+            existingMovie.DocumentariesInternationalMovies = updatedMovie.DocumentariesInternationalMovies;
+            existingMovie.Docuseries = updatedMovie.Docuseries;
+            existingMovie.Dramas = updatedMovie.Dramas;
+            existingMovie.DramasInternationalMovies = updatedMovie.DramasInternationalMovies;
+            existingMovie.DramasRomanticMovies = updatedMovie.DramasRomanticMovies;
+            existingMovie.FamilyMovies = updatedMovie.FamilyMovies;
+            existingMovie.Fantasy = updatedMovie.Fantasy;
+            existingMovie.HorrorMovies = updatedMovie.HorrorMovies;
+            existingMovie.InternationalMoviesThrillers = updatedMovie.InternationalMoviesThrillers;
+            existingMovie.InternationalTvShowsRomanticTvShowsTvDramas = updatedMovie.InternationalTvShowsRomanticTvShowsTvDramas;
+            existingMovie.KidsTv = updatedMovie.KidsTv;
+            existingMovie.LanguageTvShows = updatedMovie.LanguageTvShows;
+            existingMovie.Musicals = updatedMovie.Musicals;
+            existingMovie.NatureTv = updatedMovie.NatureTv;
+            existingMovie.RealityTv = updatedMovie.RealityTv;
+            existingMovie.Spirituality = updatedMovie.Spirituality;
+            existingMovie.TvAction = updatedMovie.TvAction;
+            existingMovie.TvComedies = updatedMovie.TvComedies;
+            existingMovie.TvDramas = updatedMovie.TvDramas;
+            existingMovie.TalkShowsTvComedies = updatedMovie.TalkShowsTvComedies;
+            existingMovie.Thrillers = updatedMovie.Thrillers;
+
+            _movieContext.MoviesTitles.Update(existingMovie);
             _movieContext.SaveChanges();
 
             return Ok(existingMovie);
