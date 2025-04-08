@@ -41,10 +41,7 @@ const TvRecs = () => {
           .filter((tv: { title?: string }) => !!tv.title)
           .map(
             (tv: { title: string }) =>
-              new URL(
-                `/src/assets/img/Movie Posters/${sanitizeFileName(tv.title)}.jpg`,
-                import.meta.url
-              ).href
+              `https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(tv.title)}.jpg`
           );
 
         setTvImagePaths(paths);

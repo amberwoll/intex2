@@ -1,12 +1,14 @@
-// MoviesforYou.tsx
 'use client';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import TrendCard from './TrendCard';
 import { fetchUserMovieRecommendationById } from '../../api/UserMovieRecommendationsAPI';
 
 const MoviesforYou = () => {
   const [movieImagePaths, setMovieImagePaths] = useState<string[]>([]);
-  const [movieList, setMovieList] = useState<{ title: string }[]>([]);
+  const [movieList, setMovieList] = useState<
+    { title: string; showId: string }[]
+  >([]);
   const userId = '1';
 
   const sanitizeFileName = (title: string) =>
@@ -34,16 +36,13 @@ const MoviesforYou = () => {
         );
 
         if (!titleResponse.ok) throw new Error('Failed to fetch movie titles');
-        const movieList = await titleResponse.json();
+        const movieList = await titleResponse.json(); // [{ title, showId }, ...]
 
         const paths = movieList
           .filter((movie: { title?: string }) => !!movie.title)
           .map(
             (movie: { title: string }) =>
-              new URL(
-                `/src/assets/img/Movie Posters/${sanitizeFileName(movie.title)}.jpg`,
-                import.meta.url
-              ).href
+              `https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`
           );
 
         setMovieImagePaths(paths);
@@ -66,11 +65,12 @@ const MoviesforYou = () => {
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movieList.map((movie, index) => (
-            <TrendCard
-              key={index}
-              imageUrl={movieImagePaths[index] ?? ''}
-              title={movie.title}
-            />
+            <Link to={`/movies/${movie.showId}`} key={movie.showId}>
+              <TrendCard
+                imageUrl={movieImagePaths[index] ?? ''}
+                title={movie.title}
+              />
+            </Link>
           ))}
         </div>
       </div>

@@ -3,18 +3,28 @@ import React from 'react';
 import { MovieActions } from './MovieActions';
 import { MovieControls } from './MovieControls';
 
-export const MovieHero: React.FC = () => {
+interface MovieHeroProps {
+  title: string;
+  duration: string;
+  posterUrl: string;
+}
+
+export const MovieHero: React.FC<MovieHeroProps> = ({
+  title,
+  duration,
+  posterUrl,
+}) => {
   return (
     <section className="hero-section">
       <img
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/9b153439e3186c81fa9e8456468e62e3a6f4608e"
-        alt="John Wick 4 movie poster"
+        src={posterUrl}
+        alt={`${title} movie poster`}
         className="hero-image"
       />
       <div className="content-wrapper">
         <div className="hero-content">
-          <h1 className="title">John Wick 4</h1>
-          <p className="metadata">2h 49m - 2023-USA</p>
+          <h1 className="title">{title}</h1>
+          <p className="metadata">{duration}</p>
           <MovieActions />
           <MovieControls />
         </div>
@@ -39,7 +49,7 @@ export const MovieHero: React.FC = () => {
           height: 100%;
           background-color: rgba(3, 10, 27, 0.5);
           transform: rotate(-16.53deg);
-          z-index: 1; /* Overlay behind the content */
+          z-index: 1;
         }
         .content-wrapper {
           position: absolute;
@@ -48,11 +58,11 @@ export const MovieHero: React.FC = () => {
           right: 0;
           padding-left: 40px;
           padding-right: 40px;
-          z-index: 2; /* Content above the overlay */
+          z-index: 2;
         }
         .hero-content {
           position: absolute;
-          bottom: 80px; /* Push content higher */
+          bottom: 80px;
           left: 104px;
         }
         .title {

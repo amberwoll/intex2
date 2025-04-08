@@ -1,5 +1,7 @@
+// MovieDetails.tsx
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { MovieHero } from './MovieHero';
 import { MovieInfo } from './MovieInfo';
 import { MovieControls } from './MovieControls';
@@ -18,7 +20,7 @@ const ModalWrapper: React.FC<{
   }, [onClose]);
 
   const handleClose = () => {
-    window.history.back(); // Go back to the previous page when closing the modal
+    window.history.back();
   };
 
   return (
@@ -60,16 +62,16 @@ const ModalWrapper: React.FC<{
           position: absolute;
           top: 16px;
           right: 16px;
-          font-size: 36px; /* Increased the font size of the close button */
+          font-size: 36px;
           color: #ebfaff;
           background: none;
           border: none;
           cursor: pointer;
-          z-index: 1100; /* Ensure close button is above other content */
-          transition: transform 0.3s ease; /* Smooth transition effect */
+          z-index: 1100;
+          transition: transform 0.3s ease;
         }
         .close-button:hover {
-          transform: scale(1.2); /* Slightly enlarge the button on hover */
+          transform: scale(1.2);
         }
       `}</style>
     </div>
@@ -79,20 +81,52 @@ const ModalWrapper: React.FC<{
 export const MovieDetails: React.FC<{ onClose?: () => void }> = ({
   onClose = () => {},
 }) => {
+  const { showId } = useParams<{ showId: string }>();
+  const [movie, setMovie] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      const response = await fetch(`https://localhost:5500/Movie/${showId}`);
+      const data = await response.json();
+
+      const genres = Object.entries(data)
+        .filter(([key, value]) => typeof value === 'number' && value === 1)
+        .map(([key]) => key);
+
+      setMovie({
+        title: data.title || '',
+        director: data.director || '',
+        actors: data.cast || '',
+        synopsis: data.description || '',
+        genres: genres || [],
+        duration: data.duration || '',
+        releaseYear: data.releaseYear || '',
+      });
+    };
+
+    if (showId) fetchMovie();
+  }, [showId]);
+
+  if (!movie) return null;
+
   return (
     <ModalWrapper onClose={onClose}>
       <main className="movie-details">
         <div className="movie-hero-container">
-          <MovieHero />
+          <img
+            src={`/assets/img/Movie Posters/${movie.title}.jpg`}
+            alt={movie.title}
+            className="hero-image"
+          />
           <div className="title-holder">
-            <h1>John Wick 4</h1>
+            <h1>{movie.title}</h1>
           </div>
           <div className="overlay-controls">
             <MovieControls />
             <MovieActions />
           </div>
         </div>
-        <MovieInfo />
+        <MovieInfo movie={movie} />
         <style react-jsx>{`
           .movie-details {
             width: 100%;
@@ -107,10 +141,10 @@ export const MovieDetails: React.FC<{ onClose?: () => void }> = ({
           }
           .title-holder {
             position: absolute;
-            bottom: 170px; /* Move title further down */
+            bottom: 170px;
             left: 16px;
             color: #fff;
-            font-size: 22px; /* Smaller font size */
+            font-size: 22px;
             font-weight: bold;
             z-index: 5;
           }
