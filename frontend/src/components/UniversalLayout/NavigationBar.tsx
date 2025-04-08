@@ -1,10 +1,47 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../MoviePage/IconButton';
 
 export const NavigationBar: React.FC = () => {
   const location = useLocation();
+
+  const [isGreetingEnabled, setIsGreetingEnabled] = useState(false);
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+
+  useEffect(() => {
+    const greetingSetting = localStorage.getItem('greetingEnabled');
+    const greetingExpiration = localStorage.getItem('greetingExpiration');
+
+    if (greetingSetting === 'true' && greetingExpiration) {
+      const currentTime = new Date().getTime();
+      if (currentTime < parseInt(greetingExpiration)) {
+        setIsGreetingEnabled(true);
+      }
+    }
+
+    const expirationTime = parseInt(
+      localStorage.getItem('greetingExpiration') || '0'
+    );
+    const timePassed = new Date().getTime() - expirationTime;
+    if (timePassed > 20 * 60 * 1000) {
+      setIsButtonVisible(true);
+    }
+  }, []);
+
+  const handleGreetingToggle = () => {
+    const newGreetingState = !isGreetingEnabled;
+    setIsGreetingEnabled(newGreetingState);
+    const expirationTime = new Date().getTime() + 20 * 60 * 1000;
+    localStorage.setItem('greetingEnabled', newGreetingState.toString());
+    localStorage.setItem('greetingExpiration', expirationTime.toString());
+
+    if (!newGreetingState) {
+      setIsButtonVisible(false);
+    }
+  };
+
+  const greetingMessage = isGreetingEnabled ? `Welcome back, masterbruce!` : '';
 
   const menuItems = [
     { label: 'Home', path: '/' },
@@ -16,11 +53,7 @@ export const NavigationBar: React.FC = () => {
   return (
     <header className="header-wrapper">
       <nav className="navbar">
-      <img
-  src="/logo/cinelogo.png"
-  alt="Cine Niche Logo"
-  className="logo"
-/>
+        <img src="/logo/cinelogo.png" alt="Cine Niche Logo" className="logo" />
 
         <div className="nav-right">
           <ul className="menu-list">
@@ -40,9 +73,25 @@ export const NavigationBar: React.FC = () => {
 
           <div className="actions-group">
             <IconButton icon="profile" label="Profile" />
+            {isButtonVisible && (
+              <div className="toggle-container">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={isGreetingEnabled}
+                    onChange={handleGreetingToggle}
+                  />
+                  <span className="slider"></span>
+                </label>
+              </div>
+            )}
           </div>
         </div>
       </nav>
+
+      {greetingMessage && (
+        <div className="greeting-message">{greetingMessage}</div>
+      )}
 
       <style react-jsx>{`
         /* Body padding to prevent content cut-off */
@@ -52,7 +101,7 @@ export const NavigationBar: React.FC = () => {
 
         .header-wrapper {
           width: 100%;
-          padding: 5px 20px; /* Thinner navbar */
+          padding: 0.05px 20px; /* Thinner navbar */
           background: #101828;
           position: absolute; /* Allow it to scroll with content */
           top: 0;
@@ -78,7 +127,7 @@ export const NavigationBar: React.FC = () => {
           align-items: center;
           gap: 24px;
           margin-left: auto;
-          padding-right: 20px; /* Added right padding */
+          padding-right: 30px; /* Added right padding */
         }
 
         .menu-list {
@@ -111,6 +160,74 @@ export const NavigationBar: React.FC = () => {
         .actions-group {
           display: flex;
           gap: 12px;
+        }
+
+        .greeting-message {
+          padding: 5px;
+          color: #fff;
+          background: linear-gradient(135deg, #228ee5, #1a7fb1); /* Gradient background */
+          font-size: 18px;
+          margin-top: 20px;
+          width: 60%;
+          max-width: 300px;
+          margin-left: auto;
+          margin-right: auto;
+          border-radius: 12px; /* Rounded corners */
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+          text-align: center; /* Center the text */
+          transition: transform 0.3s ease-in-out; /* Smooth animation */
+        }
+
+        /* Toggle Switch Styles */
+        .toggle-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 34px;
+          height: 20px;
+        }
+
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          transition: 0.4s;
+          border-radius: 34px;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 12px;
+          width: 12px;
+          border-radius: 50%;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          transition: 0.4s;
+        }
+
+        input:checked + .slider {
+          background-color: #4caf50; /* Green color when toggled */
+        }
+
+        input:checked + .slider:before {
+          transform: translateX(14px); /* Move the slider when toggled */
         }
       `}</style>
     </header>
