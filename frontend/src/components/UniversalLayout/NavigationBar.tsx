@@ -16,11 +16,11 @@ export const NavigationBar: React.FC = () => {
   return (
     <header className="header-wrapper">
       <nav className="navbar">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/309479ff8acc41fdd60e0caacac582f2b7d0f19c"
-          alt="Logo"
-          className="logo"
-        />
+      <img
+  src="/logo/cinelogo.png"
+  alt="Cine Niche Logo"
+  className="logo"
+/>
 
         <div className="nav-right">
           <ul className="menu-list">
@@ -68,7 +68,9 @@ export const NavigationBar: React.FC = () => {
         }
 
         .logo {
-          height: 28px; /* Reduced logo height */
+          height: 80px; /* Reduced logo height */
+          width: auto;
+          border-radius: 50%;
         }
 
         .nav-right {
