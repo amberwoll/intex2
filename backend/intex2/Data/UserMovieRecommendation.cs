@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace intex2.Data;
 
 public partial class UserMovieRecommendation
 {
+    [Key]
+    [Required]
     public string UserId { get; set; } = null!;
 
     public string? Recommendation1 { get; set; }

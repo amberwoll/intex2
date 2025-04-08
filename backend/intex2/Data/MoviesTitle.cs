@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace intex2.Data;
 
 public partial class MoviesTitle
 {
+    [Key]
+    [Required]
     public string? ShowId { get; set; }
 
     public string? Type { get; set; }
