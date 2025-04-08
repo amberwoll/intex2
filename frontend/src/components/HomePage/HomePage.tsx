@@ -5,6 +5,45 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const HomePage: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate function
 
+  // Cookie consent state
+  const [isCookieConsentVisible, setIsCookieConsentVisible] =
+    React.useState<boolean>(false);
+
+  // Check for stored cookie consent when the component mounts
+  React.useEffect(() => {
+    const consentGiven = localStorage.getItem('cookieConsent');
+    const consentExpiration = localStorage.getItem('cookieConsentExpiration');
+
+    // If consent has been given, check if it's expired
+    if (consentGiven && consentExpiration) {
+      const currentTime = new Date().getTime();
+      if (currentTime > parseInt(consentExpiration)) {
+        // If expired (after 5 minutes), reset the cookie consent and show the popup again
+        localStorage.removeItem('cookieConsent');
+        localStorage.removeItem('cookieConsentExpiration');
+        setIsCookieConsentVisible(true);
+      }
+    } else {
+      setIsCookieConsentVisible(true); // Show popup if no consent found
+    }
+  }, []);
+
+  // Handle the consent button click
+  const handleCookieConsent = () => {
+    const expirationTime = new Date().getTime() + 5 * 60 * 1000; // Set expiry to 5 minutes
+    localStorage.setItem('cookieConsent', 'true');
+    localStorage.setItem('cookieConsentExpiration', expirationTime.toString()); // Store expiration time
+    setIsCookieConsentVisible(false); // Hide consent notification
+  };
+
+  // Handle the decline button click
+  const handleCookieDecline = () => {
+    const expirationTime = new Date().getTime() + 5 * 60 * 1000; // Set expiry to 5 minutes
+    localStorage.setItem('cookieConsent', 'false');
+    localStorage.setItem('cookieConsentExpiration', expirationTime.toString()); // Store expiration time
+    setIsCookieConsentVisible(false); // Hide consent notification
+  };
+
   // Handle button click for Create Account
   const handleCreateClick = () => {
     navigate('/create-account');
@@ -37,6 +76,22 @@ const HomePage: React.FC = () => {
           </div>
         </section>
       </div>
+
+      {isCookieConsentVisible && (
+        <div className="cookie-consent">
+          <p>
+            We use cookies to enhance your browsing experience. By clicking
+            "Accept All" you consent to our use of cookies.{' '}
+            <a href="/privacy" className="privacy-link">
+              Policy
+            </a>
+            <br />
+            <br />
+            <button onClick={handleCookieConsent}>Accept All</button>
+            <button onClick={handleCookieDecline}>Reject All</button>
+          </p>
+        </div>
+      )}
 
       <style react-jsx>{`
         .home-container {
@@ -109,6 +164,59 @@ const HomePage: React.FC = () => {
 
         .action-button:hover {
           background-color: #1a6bb9;
+        }
+
+        .cookie-consent {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;  /* Change to 'left' for bottom-left corner */
+          background-color: #333;
+          color: white;
+          text-align: center;
+          padding: 16px;
+          width: 280px;
+          border-radius: 10px;
+          z-index: 3;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+          font-size: 14px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .cookie-consent p {
+          margin: 0 0 12px 0; /* spacing between text and buttons */
+          line-height: 1.4;
+        }
+
+        .cookie-consent button {
+          background-color: #228ee5;
+          border: none;
+          color: white;
+          padding: 8px 16px;
+          border-radius: 5px;
+          cursor: pointer;
+          margin: 0 10px;
+        }
+
+        .cookie-consent a {
+          color: #a4d4ff;
+          text-decoration: underline;
+        }
+
+        .cookie-consent button:hover {
+          background-color: #1a6bb9;
+        }
+
+        .privacy-link {
+          color: #7ec9ff;
+          text-decoration: underline;
+          margin-left: 6px;
+          cursor: pointer;
+        }
+
+        .privacy-link:hover {
+          color: #a6dcff;
         }
 
         @media (max-width: 640px) {
