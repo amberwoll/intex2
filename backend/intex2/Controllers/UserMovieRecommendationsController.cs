@@ -8,9 +8,10 @@ namespace intex2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+
     public class UserMovieRecommendationsController : ControllerBase
     {
-        private readonly RecommendationsContext _context;
+        private RecommendationsContext _context;
 
         public UserMovieRecommendationsController(RecommendationsContext context)
         {
@@ -18,11 +19,13 @@ namespace intex2.Controllers
         }
 
         // GET: api/UserMovieRecommendations
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserMovieRecommendation>>> GetUserMovieRecommendations()
+        [HttpGet("AllRecommendations")]
+        public IActionResult GetUserMovieRecommendations()
         {
-            return await _context.UserMovieRecommendations.ToListAsync();
+            var recommendationQuery = _context.UserMovieRecommendations.ToList();
+            return Ok(recommendationQuery);
         }
+
 
         // GET: api/UserMovieRecommendations/{id}
         [HttpGet("{id}")]
