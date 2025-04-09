@@ -48,7 +48,7 @@ const TopRatedMovies = () => {
             <TrendCard
               key={movie.showId}
               title={movie.title}
-              imageUrl={`https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`}
+              imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(movie.title)}.jpg`}
               rank={index + 1}
             />
           ))}

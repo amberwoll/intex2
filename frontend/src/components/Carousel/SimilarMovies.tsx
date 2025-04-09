@@ -40,7 +40,7 @@ const SimilarMovies = () => {
               key={movie.showId}
               title={movie.title}
               showId={movie.showId}
-              imageUrl={`https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`}
+              imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(movie.title)}.jpg`}
             />
           ))}
         </div>

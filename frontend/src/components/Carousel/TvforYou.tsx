@@ -41,7 +41,7 @@ const TvRecs = () => {
           .filter((tv: { title?: string }) => !!tv.title)
           .map(
             (tv: { title: string }) =>
-              `https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(tv.title)}.jpg`
+              `https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(tv.title)}.jpg`
           );
 
         setTvImagePaths(paths);
