@@ -12,7 +12,9 @@ const API_URL = 'https://localhost:5500';
 export const fetchUserTvRecommendations =
   async (): Promise<FetchUserTvRecommendationsResponse> => {
     try {
-      const response = await fetch(`${API_URL}/UserTvRecommendations`);
+      const response = await fetch(`${API_URL}/UserTvRecommendations`, {
+        credentials: 'include',
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch user TV recommendations');
       }
@@ -28,7 +30,9 @@ export const fetchUserTvRecommendationById = async (
   id: string
 ): Promise<userTvRecommendation> => {
   try {
-    const response = await fetch(`${API_URL}/UserTvRecommendations/${id}`);
+    const response = await fetch(`${API_URL}/UserTvRecommendations/${id}`, {
+      credentials: 'include',
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch user TV recommendation with ID: ${id}`);
     }

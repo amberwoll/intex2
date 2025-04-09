@@ -212,7 +212,7 @@ const LoginPage: React.FC = () => {
         </div>
       </div>
 
-      <style react-jsx>{`
+      <style>{`
         .login-container {
           width: 100vw;
           height: 100vh;
