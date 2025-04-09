@@ -90,7 +90,11 @@ export const NavigationBar: React.FC = () => {
       </nav>
 
       {greetingMessage && (
-        <div className="greeting-message">{greetingMessage}</div>
+        <div
+          className={`greeting-message ${isGreetingEnabled ? 'visible' : ''}`}
+        >
+          {greetingMessage}
+        </div>
       )}
 
       <style>{`
@@ -167,7 +171,6 @@ export const NavigationBar: React.FC = () => {
           color: #fff;
           background: linear-gradient(135deg, #228ee5, #1a7fb1); /* Gradient background */
           font-size: 18px;
-          margin-top: 20px;
           width: 60%;
           max-width: 300px;
           margin-left: auto;
@@ -176,6 +179,17 @@ export const NavigationBar: React.FC = () => {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
           text-align: center; /* Center the text */
           transition: transform 0.3s ease-in-out; /* Smooth animation */
+          
+          position: absolute; /* Position it absolutely */
+          top: 100px; /* Place it below the navbar */
+          left: 50%;
+          transform: translateX(-50%); /* Center it horizontally */
+          z-index: 9999; /* Ensure it stays on top of everything else */
+          display: none; /* Hide it by default */
+        }
+
+        .greeting-message.visible {
+          display: block; /* Show the greeting message when it's visible */
         }
 
         /* Toggle Switch Styles */
