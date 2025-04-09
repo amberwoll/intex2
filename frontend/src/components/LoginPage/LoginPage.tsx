@@ -1,5 +1,6 @@
 'use client';
 import * as React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 // Handle button click for Create Account
@@ -14,6 +15,65 @@ const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate function
+  // state variables for email and passwords
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [rememberme, setRememberme] = useState<boolean>(false);
+
+  // state variable for error messages
+  const [error, setError] = useState<string>('');
+
+  // handle change events for input fields
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, type, checked, value } = e.target;
+    if (type === 'checkbox') {
+      setRememberme(checked);
+    } else if (name === 'email') {
+      setEmail(value);
+    } else if (name === 'password') {
+      setPassword(value);
+    }
+  };
+
+  // handle submit event for the form
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(''); // Clear any previous errors
+
+    if (!email || !password) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    const loginUrl = rememberme
+      ? 'https://localhost:5500/login?useCookies=true'
+      : 'https://localhost:5500/login?useSessionCookies=true';
+
+    try {
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        credentials: 'include', // ✅ Ensures cookies are sent & received
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      // Ensure we only parse JSON if there is content
+      let data = null;
+      const contentLength = response.headers.get('content-length');
+      if (contentLength && parseInt(contentLength, 10) > 0) {
+        data = await response.json();
+      }
+
+      if (!response.ok) {
+        throw new Error(data?.message || 'Invalid email or password.');
+      }
+
+      navigate('/movies');
+    } catch (error: any) {
+      setError(error.message || 'Error logging in.');
+      console.error('Fetch attempt failed:', error);
+    }
+  };
 
   return (
     <main className="login-container">
@@ -36,13 +96,21 @@ const LoginPage: React.FC = () => {
             </div>
           </nav>
 
-          <form className="login-form" aria-label="Login form">
+          <form
+            className="login-form"
+            aria-label="Login form"
+            onSubmit={handleSubmit}
+          >
             <div className="form-field">
               <input
                 type="text"
-                placeholder="User"
+                placeholder="Email"
                 className="input-field"
-                aria-label="Username"
+                aria-label="Email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
               />
               <svg
                 className="field-icon"
@@ -74,6 +142,10 @@ const LoginPage: React.FC = () => {
                 placeholder="Password"
                 className="input-field"
                 aria-label="Password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
               />
               <svg
                 className="field-icon"
@@ -107,13 +179,21 @@ const LoginPage: React.FC = () => {
               </svg>
             </div>
 
-            <button
-              type="button"
-              className="forgot-password"
-              onClick={() => {}}
-            >
-              Forgot Password?
-            </button>
+            <div className="form-check mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="rememberme"
+                name="rememberme"
+                checked={rememberme}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="rememberme">
+                Remember me?
+              </label>
+              <br />
+              <br />
+            </div>
 
             <button
               type="submit"
