@@ -1,7 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
+<<<<<<< Updated upstream
 import { fetchAllMovies } from '../../api/MovieApi';
+=======
+import { fetchAllMovies, deleteMovie } from '../../api/MovieApi';
+import NewMovieForm from './NewMovieForm';
+import EditMovieForm from './EditMovieForm';
+>>>>>>> Stashed changes
 import Pagination from '../Pagination';
 import AddMovieButton from './AddMovieButton';
 import { deleteMovie } from '../../services/movieServices';
@@ -13,6 +19,14 @@ const DarkModeDataTable = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+<<<<<<< Updated upstream
+=======
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showEditForm, setShowEditForm] = useState<boolean>(false);
+  const [movieToEdit, setMovieToEdit] = useState<moviesTitle | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
+>>>>>>> Stashed changes
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
@@ -33,6 +47,27 @@ const DarkModeDataTable = () => {
     loadMovies();
   }, []);
 
+<<<<<<< Updated upstream
+=======
+  const handleDelete = async () => {
+    if (!selectedShowId) return;
+    try {
+      await deleteMovie(selectedShowId);
+      setAllMovies((prev) => prev.filter((m) => m.showId !== selectedShowId));
+      setShowConfirm(false);
+      setSelectedShowId(null);
+    } catch (err) {
+      console.error('Error deleting movie:', err);
+      setError('Failed to delete movie.');
+    }
+  };
+
+  const handleEdit = (movie: moviesTitle) => {
+    setMovieToEdit(movie);
+    setShowEditForm(true);
+  };
+
+>>>>>>> Stashed changes
   // Filter and paginate
   const filteredMovies = allMovies.filter((movie) =>
     movie.title?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -66,6 +101,45 @@ const DarkModeDataTable = () => {
         </div>
       </div>
 
+<<<<<<< Updated upstream
+=======
+      {showForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <NewMovieForm
+              onSuccess={async () => {
+                setShowForm(false);
+                const data = await fetchAllMovies();
+                setAllMovies(data.movies);
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {showEditForm && movieToEdit && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <EditMovieForm
+              movie={movieToEdit}
+              onSuccess={async () => {
+                setShowEditForm(false);
+                setMovieToEdit(null);
+                // Refresh movie list after edit
+                const data = await fetchAllMovies();
+                setAllMovies(data.movies);
+              }}
+              onCancel={() => {
+                setShowEditForm(false);
+                setMovieToEdit(null);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+>>>>>>> Stashed changes
       <table>
         <thead>
           <tr>
@@ -97,7 +171,7 @@ const DarkModeDataTable = () => {
                 <td>
                   <button
                     className="btn btn-success"
-                    onClick={() => alert('TODO: Edit')}
+                    onClick={() => handleEdit(movie)}
                   >
                     Edit
                   </button>
@@ -138,7 +212,7 @@ const DarkModeDataTable = () => {
         />
       )}
 
-      <style react-jsx>{`
+      <style jsx>{`
         .datatable-container {
           background-color: #121212;
           color: #ebfaff;
@@ -181,27 +255,26 @@ const DarkModeDataTable = () => {
         }
 
         .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100vw;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
 
-.modal-content {
-  background: #1e1e1e;
-  padding: 32px;
-  border-radius: 10px;
-  width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
+        .modal-content {
+          background: #1e1e1e;
+          padding: 32px;
+          border-radius: 10px;
+          width: 600px;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
 
         table {
           width: 100%;
@@ -248,19 +321,6 @@ const DarkModeDataTable = () => {
         .btn-secondary {
           background-color: #555;
           color: white;
-        }
-
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.7);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 1000;
         }
 
         .modal {
