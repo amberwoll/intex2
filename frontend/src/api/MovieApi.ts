@@ -5,12 +5,13 @@ interface FetchMoviesResponse {
   totalMovies: number;
 }
 
-const API_URL = `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie`;
+const API_URL = `https://localhost:5500/Movie`;
 
 export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {
     const response = await fetch(
-      `${API_URL}/AllMovies?pageHowMany=10000&pageNum=1`
+      `${API_URL}/AllMovies?pageHowMany=10000&pageNum=1`,
+      { credentials: 'include' }
     );
     if (!response.ok) throw new Error('Failed to fetch movies');
     const result = await response.json();
@@ -59,6 +60,7 @@ export const updateMovie = async (
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedMovie),
+        credentials: 'include',
       }
     );
 
@@ -82,6 +84,7 @@ export const deleteMovie = async (showId: string): Promise<void> => {
       `${API_URL}/DeleteMovie/${encodeURIComponent(showId)}`,
       {
         method: 'DELETE',
+        credentials: 'include',
       }
     );
 
