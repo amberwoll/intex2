@@ -24,14 +24,7 @@ export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   }
 };
 
-<<<<<<< Updated upstream
 export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
-=======
-export const addMovie = async (
-  newMovie: Omit<moviesTitle, 'showId'>
-): Promise<moviesTitle> => {
-  // of type movie
->>>>>>> Stashed changes
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: 'POST',
