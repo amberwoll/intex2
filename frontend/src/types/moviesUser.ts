@@ -16,4 +16,5 @@ export interface moviesUser {
   city?: string;
   state?: string;
   zip?: number;
+  privilegeLevel: number;
 }
