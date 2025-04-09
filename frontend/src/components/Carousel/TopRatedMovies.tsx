@@ -29,14 +29,17 @@ const TopRatedMovies = () => {
 
   return (
     <section className="trends-section" role="region" aria-label="Top Rated">
-      <div className="trends-header">
-        <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
+      <div className="view-all-wrapper">
         <button
           className="view-all-button"
           onClick={() => navigate('/view-movies')}
         >
-          View All Movies
+          View All Movies/TV Shows
         </button>
+      </div>
+
+      <div className="trends-header">
+        <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
       </div>
 
       <div className="trends-scroll-container">
@@ -76,6 +79,30 @@ const TopRatedMovies = () => {
           font-family: Lato;
           font-weight: 700;
         }
+
+        .header-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-right: 16px;
+  margin-bottom: 16px;
+}
+
+.view-all-button {
+  background-color: #228ee5;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.view-all-button:hover {
+  background-color: #1a6db7;
+}
 
         .view-all-button {
           background-color: #ffffff;
