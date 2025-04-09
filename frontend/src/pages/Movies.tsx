@@ -17,8 +17,6 @@ export const Movies: React.FC = () => {
       />
       <NavigationBar />
       <MovieHero />
-
-      <TrendSection imageUrl={''} />
       <TopRatedMovies />
       <TvRecs />
       <MovieforYou />

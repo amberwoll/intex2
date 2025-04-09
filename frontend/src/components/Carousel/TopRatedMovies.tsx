@@ -27,7 +27,7 @@ const TopRatedMovies = () => {
 
   return (
     <section className="trends-section" role="region" aria-label="Top Rated">
-      <h2 className="trends-title">Top 10 Rated Movies</h2>
+      <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movies.map((movie, index) => (

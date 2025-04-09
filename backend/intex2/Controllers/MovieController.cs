@@ -1,7 +1,5 @@
 using intex2.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +11,12 @@ namespace intex2.Controllers
     public class MovieController : ControllerBase
     {
         private readonly MoviesContext _movieContext;
+        private readonly RecommendationsContext _recsContext;
 
-        public MovieController(MoviesContext temp)
+        public MovieController(MoviesContext movieContext, RecommendationsContext recsContext)
         {
-            _movieContext = temp;
+            _movieContext = movieContext;
+            _recsContext = recsContext;
         }
 
         [HttpGet("AllMovies")]
@@ -26,30 +26,22 @@ namespace intex2.Controllers
 
             if (movieCats != null && movieCats.Any())
             {
-                // Optional filtering here
+                // Optional filtering
             }
 
             var totalMovies = moviesQuery.Count();
 
             if (sortOrder.ToLower() == "asc")
-            {
                 moviesQuery = moviesQuery.OrderBy(m => m.Title);
-            }
             else if (sortOrder.ToLower() == "desc")
-            {
                 moviesQuery = moviesQuery.OrderByDescending(m => m.Title);
-            }
 
             var movieList = moviesQuery
                 .Skip((pageNum - 1) * pageHowMany)
                 .Take(pageHowMany)
                 .ToList();
 
-            return Ok(new
-            {
-                movies = movieList,
-                totalMovies = totalMovies
-            });
+            return Ok(new { movies = movieList, totalMovies });
         }
 
         [HttpGet("GetMovieTypes")]
@@ -69,9 +61,7 @@ namespace intex2.Controllers
         public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
         {
             if (string.IsNullOrWhiteSpace(newMovie.ShowId))
-            {
                 newMovie.ShowId = Guid.NewGuid().ToString();
-            }
 
             _movieContext.MoviesTitles.Add(newMovie);
             _movieContext.SaveChanges();
@@ -82,11 +72,8 @@ namespace intex2.Controllers
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
             var existingMovie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
-
             if (existingMovie == null)
-            {
                 return NotFound($"Movie with ShowId '{showId}' not found.");
-            }
 
             updatedMovie.Id = existingMovie.Id;
             updatedMovie.ShowId = existingMovie.ShowId;
@@ -101,15 +88,11 @@ namespace intex2.Controllers
         public IActionResult DeleteMovie(string showId)
         {
             var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
-
             if (movie == null)
-            {
                 return NotFound(new { message = $"Movie with ID '{showId}' not found." });
-            }
 
             _movieContext.MoviesTitles.Remove(movie);
             _movieContext.SaveChanges();
-
             return NoContent();
         }
 
@@ -121,7 +104,7 @@ namespace intex2.Controllers
 
             var titles = _movieContext.MoviesTitles
                 .Where(m => showIds.Contains(m.ShowId!))
-                .Select(m => new { ShowId = m.ShowId, Title = m.Title })
+                .Select(m => new { m.ShowId, m.Title })
                 .ToList();
 
             return Ok(titles);
@@ -158,13 +141,11 @@ namespace intex2.Controllers
         [HttpGet("HighRatedRecs/{userId}")]
         public IActionResult GetHighRatedRecommendations(string userId)
         {
-            var rec = _movieContext.HighRatedContentRecommendations
+            var rec = _recsContext.HighRatedContentRecommendations
                 .FirstOrDefault(r => r.UserId == userId);
 
             if (rec == null)
-            {
                 return NotFound("No recommendations found for this user.");
-            }
 
             var showIds = new[]
             {
@@ -179,8 +160,11 @@ namespace intex2.Controllers
                 rec.Recommendation9,
                 rec.Recommendation10
             }
-            .Where(id => !string.IsNullOrEmpty(id))
+            .Where(id => !string.IsNullOrWhiteSpace(id))
             .ToList();
+
+            if (!showIds.Any())
+                return Ok(new List<object>()); // return empty array
 
             var movieTitles = _movieContext.MoviesTitles
                 .Where(m => showIds.Contains(m.ShowId!))

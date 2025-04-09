@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import TrendCard from './TrendCard';
 import { fetchHighRatedRecommendations } from '../../api/HighRatedRecommendationsAPI';
 
@@ -37,12 +36,12 @@ const SimilarMovies = () => {
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movies.map((movie, index) => (
-            <Link to={`/movies/${movie.showId}`} key={movie.showId}>
-              <TrendCard
-                title={movie.title}
-                imageUrl={`https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`}
-              />
-            </Link>
+            <TrendCard
+              key={movie.showId}
+              title={movie.title}
+              showId={movie.showId}
+              imageUrl={`https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`}
+            />
           ))}
         </div>
       </div>
