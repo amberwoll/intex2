@@ -106,17 +106,22 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
             return Ok(updatedMovie);
         }
 
-        [HttpDelete("DeleteMovie/{showId}")]
-        public IActionResult DeleteMovie(string showId)
-        {
-            var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
-            if (movie == null)
-                return NotFound(new { message = $"Movie with ID '{showId}' not found." });
+[HttpDelete("Delete/{showId}")]
+public IActionResult DeleteMovie(string showId)
+{
+    var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
 
-            _movieContext.MoviesTitles.Remove(movie);
-            _movieContext.SaveChanges();
-            return NoContent();
-        }
+    if (movie == null)
+    {
+        return NotFound("Movie not found.");
+    }
+
+    _movieContext.MoviesTitles.Remove(movie);
+    _movieContext.SaveChanges();
+
+    return Ok($"Movie {showId} deleted successfully.");
+}
+
 
         [HttpPost("GetMovieTitlesByShowIds")]
         public IActionResult GetMovieTitlesByShowIds([FromBody] List<string> showIds)

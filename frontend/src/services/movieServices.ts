@@ -19,3 +19,22 @@ export const addMovie = async (movieData: any) => {
     console.error('Error:', error);
   }
 };
+
+export const deleteMovie = async (showId: string) => {
+  try {
+    const response = await fetch(
+      `https://localhost:5500/Movie/Delete/${showId}`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to delete movie.');
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error);
+  }
+};
