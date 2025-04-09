@@ -20,9 +20,8 @@ const genreOptions = [
 const sanitizeFileName = (title: string) =>
   title
     .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-    .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '') // Remove special characters (with escaped hyphen)
-    // No space collapsing line here
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '')
     .trim();
 
 const MovieGallery = () => {
@@ -50,9 +49,7 @@ const MovieGallery = () => {
 
   const getFilteredMovies = () => {
     return allMovies.filter((movie) => {
-      const titleMatch = movie.title
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      const titleMatch = movie.title?.toLowerCase().includes(searchQuery.toLowerCase());
       const genreMatch = selectedGenre
         ? movie[selectedGenre as keyof moviesTitle] === 1
         : true;
@@ -75,12 +72,10 @@ const MovieGallery = () => {
   }, [pageNum, searchQuery, selectedGenre, selectedType, allMovies]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) setPageNum((prev) => prev + 1);
-      },
-      { threshold: 1 }
-    );
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) setPageNum((prev) => prev + 1);
+    }, { threshold: 1 });
+
     if (loaderRef.current) observer.observe(loaderRef.current);
     return () => {
       if (loaderRef.current) observer.unobserve(loaderRef.current);
@@ -91,11 +86,7 @@ const MovieGallery = () => {
     <section className="movie-gallery">
       <div className="controls">
         <div className="left-controls">
-          <button
-            type="button"
-            className="utility-button"
-            onClick={() => navigate(-1)}
-          >
+          <button type="button" className="utility-button" onClick={() => navigate(-1)}>
             Back
           </button>
         </div>
@@ -109,26 +100,20 @@ const MovieGallery = () => {
               setPageNum(1);
             }}
           />
-          <select
-            value={selectedGenre}
-            onChange={(e) => {
-              setSelectedGenre(e.target.value);
-              setPageNum(1);
-            }}
-          >
+          <select value={selectedGenre} onChange={(e) => {
+            setSelectedGenre(e.target.value);
+            setPageNum(1);
+          }}>
             {genreOptions.map((opt) => (
               <option key={opt.key} value={opt.key}>
                 {opt.label}
               </option>
             ))}
           </select>
-          <select
-            value={selectedType}
-            onChange={(e) => {
-              setSelectedType(e.target.value);
-              setPageNum(1);
-            }}
-          >
+          <select value={selectedType} onChange={(e) => {
+            setSelectedType(e.target.value);
+            setPageNum(1);
+          }}>
             <option value="">All Types</option>
             <option value="movie">Movie</option>
             <option value="tv">TV</option>
@@ -142,12 +127,13 @@ const MovieGallery = () => {
           const imageUrl = `https://intexphotos.blob.core.windows.net/posters/${sanitizedTitle}.jpg`;
 
           return (
-            <div className="image-card" key={movie.showId ?? idx}>
-              <img
-                src={imageUrl}
-                alt={movie.title ?? 'Movie'}
-                className="card-image"
-              />
+            <div
+              className="image-card"
+              key={movie.showId ?? idx}
+              onClick={() => navigate(`/movies/${movie.showId}`)}
+              style={{ cursor: 'pointer' }}
+            >
+              <img src={imageUrl} alt={movie.title ?? 'Movie'} className="card-image" />
               <div className="overlay">
                 <h3>{movie.title}</h3>
                 <p>{movie.rating}</p>
@@ -167,7 +153,6 @@ const MovieGallery = () => {
           min-height: 100vh;
           font-family: Inter, sans-serif;
         }
-
         .controls {
           display: flex;
           justify-content: space-between;
@@ -176,11 +161,9 @@ const MovieGallery = () => {
           flex-wrap: wrap;
           position: relative;
         }
-
         .left-controls {
           flex: 0 0 auto;
         }
-
         .right-controls {
           position: absolute;
           left: 50%;
@@ -190,7 +173,6 @@ const MovieGallery = () => {
           flex-wrap: wrap;
           justify-content: center;
         }
-
         .utility-button,
         input,
         select {
@@ -202,7 +184,6 @@ const MovieGallery = () => {
           font-size: 16px;
           font-weight: 500;
         }
-
         .grid-container {
           margin-top: 48px;
           display: grid;
@@ -210,7 +191,6 @@ const MovieGallery = () => {
           gap: 24px;
           justify-items: center;
         }
-
         .image-card {
           position: relative;
           width: 160px;
@@ -220,20 +200,17 @@ const MovieGallery = () => {
           transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
           z-index: 1;
         }
-
         .image-card:hover {
           transform: scale(1.2);
           box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
           z-index: 20;
         }
-
         .card-image {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
         }
-
         .overlay {
           position: absolute;
           bottom: 0;
@@ -246,17 +223,14 @@ const MovieGallery = () => {
           opacity: 0;
           transition: opacity 0.25s ease-in;
         }
-
         .image-card:hover .overlay {
           opacity: 1;
         }
-
         .overlay h3 {
           margin: 0;
           font-size: 16px;
           font-weight: 600;
         }
-
         .overlay p {
           margin: 4px 0 0;
           font-size: 13px;

@@ -1,10 +1,12 @@
-import MovieDetails from "../components/MovieDetailsPage/MovieDetails";
+import AuthorizeView from '../components/AuthorizeView';
+import MovieDetails from '../components/MovieDetailsPage/MovieDetails';
 
 const MovieDetail = () => (
   <>
-    <MovieDetails />
+    <AuthorizeView>
+      <MovieDetails />
+    </AuthorizeView>
   </>
 );
-
 
 export default MovieDetail;
