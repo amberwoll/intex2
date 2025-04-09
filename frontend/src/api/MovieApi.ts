@@ -1,20 +1,17 @@
-// const url =
-//   'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/';
-
 import { moviesTitle } from '../types/moviesTitle';
 
 interface FetchMoviesResponse {
   movies: moviesTitle[];
-  totalMovies: number; // <-- Match the API's response
+  totalMovies: number;
 }
 
-const API_URL = `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie`;
-
-
+const API_URL = `https://localhost:5500/Movie`;
 
 export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {
-    const response = await fetch(`${API_URL}/AllMovies?pageHowMany=10000&pageNum=1`);
+    const response = await fetch(
+      `${API_URL}/AllMovies?pageHowMany=10000&pageNum=1`
+    );
     if (!response.ok) throw new Error('Failed to fetch movies');
     const result = await response.json();
     return {
@@ -27,12 +24,7 @@ export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   }
 };
 
-
-
-
-
-export const addMovie = async (newMovie: Omit<moviesTitle, "showId">): Promise<moviesTitle> => {
-  // of type movie
+export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: 'POST',
@@ -45,6 +37,7 @@ export const addMovie = async (newMovie: Omit<moviesTitle, "showId">): Promise<m
     if (!response.ok) {
       throw new Error('Failed to add movie');
     }
+
     return await response.json();
   } catch (error) {
     console.error('Error adding movie', error);
@@ -74,17 +67,21 @@ export const updateMovie = async (
 
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
-    const response = await fetch(`${API_URL}/DeleteMovie/${encodeURIComponent(showId)}`, {
-      method: 'DELETE',
-    });
+    const response = await fetch(
+      `${API_URL}/DeleteMovie/${encodeURIComponent(showId)}`,
+      {
+        method: 'DELETE',
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to delete movie: ${response.status} - ${errorText}`);
+      throw new Error(
+        `Failed to delete movie: ${response.status} - ${errorText}`
+      );
     }
   } catch (error) {
     console.error('Error deleting movies:', error);
     throw error;
   }
 };
-

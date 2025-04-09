@@ -11,8 +11,7 @@ public partial class MoviesTitle
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; } // Auto-incremented ID
 
-    [Required]
-    public string ShowId { get; set; } = string.Empty;
+public string ShowId { get; set; } = string.Empty; // remove [Required]
 
     [NotMapped]
     public string DisplayShowId => $"s{Id}";

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
 import { addMovie } from '../../api/MovieApi';
 import countries from '../../assets/countries';
+import { v4 as uuidv4 } from 'uuid';
 
 interface NewMovieFormProps {
   onSuccess: () => void;
@@ -27,7 +28,8 @@ const genreOptions = [
 const NewMovieModalForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
   const [type, setType] = useState<'Movie' | 'TV Show'>('Movie');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
-  const [formData, setFormData] = useState<Omit<moviesTitle, 'id' | 'showId'>>({
+  const [formData, setFormData] = useState<Omit<moviesTitle, 'showId'>>({
+    id: 0,
     type: 'Movie',
     title: '',
     director: '',
@@ -84,7 +86,6 @@ const NewMovieModalForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // All genre keys → default 0, only selectedGenre = 1
     const allGenreKeys = [
       'action',
       'adventure',
@@ -125,13 +126,12 @@ const NewMovieModalForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
       return acc;
     }, {} as Partial<moviesTitle>);
 
-    // remove showId from formData to prevent conflict
-    const { showId, ...restFormData } = formData;
+    const { showId, id, ...restFormData } = formData;
 
+    // Remove showId and id before sending to backend
     const movieToAdd: moviesTitle = {
       ...restFormData,
       type,
-      showId: crypto.randomUUID(), // Required by backend
       ...genreField,
     };
 

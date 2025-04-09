@@ -4,6 +4,7 @@ import { moviesTitle } from '../../types/moviesTitle';
 import { fetchAllMovies, deleteMovie } from '../../api/MovieApi';
 import NewMovieForm from './NewMovieForm';
 import Pagination from '../Pagination';
+import AddMovieButton from './AddMovieButton';
 
 const DarkModeDataTable = () => {
   const [allMovies, setAllMovies] = useState<moviesTitle[]>([]);
@@ -11,7 +12,6 @@ const DarkModeDataTable = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [showForm, setShowForm] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -74,29 +74,9 @@ const DarkModeDataTable = () => {
             className="search-input"
           />
 
-          <button
-            className="utility-button"
-            onClick={() => setShowForm(!showForm)}
-          >
-            {showForm ? 'Close Form' : 'Add Movie'}
-          </button>
+          <AddMovieButton />
         </div>
       </div>
-
-      {showForm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <NewMovieForm
-              onSuccess={async () => {
-                setShowForm(false);
-                const data = await fetchAllMovies();
-                setAllMovies(data.movies);
-              }}
-              onCancel={() => setShowForm(false)}
-            />
-          </div>
-        </div>
-      )}
 
       <table>
         <thead>

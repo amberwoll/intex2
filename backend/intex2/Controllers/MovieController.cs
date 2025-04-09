@@ -57,16 +57,29 @@ namespace intex2.Controllers
             return Ok(categoryNames);
         }
 
-        [HttpPost("AddMovie")]
-        public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
-        {
-            if (string.IsNullOrWhiteSpace(newMovie.ShowId))
-                newMovie.ShowId = Guid.NewGuid().ToString();
+[HttpPost("AddMovie")]
+public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
+{
+    // Automatically generate a ShowId if not provided
+    if (string.IsNullOrWhiteSpace(newMovie.ShowId))
+    {
+        newMovie.ShowId = $"s{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8)}";
+    }
 
-            _movieContext.MoviesTitles.Add(newMovie);
-            _movieContext.SaveChanges();
-            return Ok(newMovie);
-        }
+    // Check if the generated ShowId already exists
+    var exists = _movieContext.MoviesTitles.Any(m => m.ShowId == newMovie.ShowId);
+    if (exists)
+    {
+        return Conflict("Generated ShowId already exists. Try again.");
+    }
+
+    _movieContext.MoviesTitles.Add(newMovie);
+    _movieContext.SaveChanges();
+
+    return Ok(newMovie);
+}
+
+
 
         [HttpPut("UpdateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
