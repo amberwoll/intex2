@@ -19,7 +19,8 @@ const genreOptions = [
 
 const sanitizeFileName = (title: string) =>
   title
-    .replace(/[:*?"<>|\\/.'’!&]/g, '') // now includes period, apostrophes, smart quotes, exclamation mark, and ampersand
+    .replace(/\.\.\./g, '') // remove ellipses
+    .replace(/[-:*?"<>|\\/.'’!&()]/g, '') // remove special characters
     .replace(/\s+/g, ' ') // normalize whitespace
     .trim();
 
