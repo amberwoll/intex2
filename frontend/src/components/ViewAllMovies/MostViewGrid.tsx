@@ -1,9 +1,10 @@
+// ✅ MostViewGrid.tsx — with modal overlay navigation and full styling
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
 import { fetchAllMovies } from '../../api/MovieApi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const genreOptions = [
   { label: 'All Genres', key: '' },
@@ -21,11 +22,12 @@ const sanitizeFileName = (title: string) =>
   title
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '')
+    .replace(/[&:\u2013\u2014'"!?@#$%^*(){}\[\]<>.,.|\\/`~+=\-]/g, '')
     .trim();
 
 const MovieGallery = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [allMovies, setAllMovies] = useState<moviesTitle[]>([]);
   const [displayedMovies, setDisplayedMovies] = useState<moviesTitle[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -49,7 +51,9 @@ const MovieGallery = () => {
 
   const getFilteredMovies = () => {
     return allMovies.filter((movie) => {
-      const titleMatch = movie.title?.toLowerCase().includes(searchQuery.toLowerCase());
+      const titleMatch = movie.title
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase());
       const genreMatch = selectedGenre
         ? movie[selectedGenre as keyof moviesTitle] === 1
         : true;
@@ -72,9 +76,12 @@ const MovieGallery = () => {
   }, [pageNum, searchQuery, selectedGenre, selectedType, allMovies]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) setPageNum((prev) => prev + 1);
-    }, { threshold: 1 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setPageNum((prev) => prev + 1);
+      },
+      { threshold: 1 }
+    );
 
     if (loaderRef.current) observer.observe(loaderRef.current);
     return () => {
@@ -86,7 +93,11 @@ const MovieGallery = () => {
     <section className="movie-gallery">
       <div className="controls">
         <div className="left-controls">
-          <button type="button" className="utility-button" onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className="utility-button"
+            onClick={() => navigate(-1)}
+          >
             Back
           </button>
         </div>
@@ -100,20 +111,26 @@ const MovieGallery = () => {
               setPageNum(1);
             }}
           />
-          <select value={selectedGenre} onChange={(e) => {
-            setSelectedGenre(e.target.value);
-            setPageNum(1);
-          }}>
+          <select
+            value={selectedGenre}
+            onChange={(e) => {
+              setSelectedGenre(e.target.value);
+              setPageNum(1);
+            }}
+          >
             {genreOptions.map((opt) => (
               <option key={opt.key} value={opt.key}>
                 {opt.label}
               </option>
             ))}
           </select>
-          <select value={selectedType} onChange={(e) => {
-            setSelectedType(e.target.value);
-            setPageNum(1);
-          }}>
+          <select
+            value={selectedType}
+            onChange={(e) => {
+              setSelectedType(e.target.value);
+              setPageNum(1);
+            }}
+          >
             <option value="">All Types</option>
             <option value="movie">Movie</option>
             <option value="tv">TV</option>
@@ -130,10 +147,18 @@ const MovieGallery = () => {
             <div
               className="image-card"
               key={movie.showId ?? idx}
-              onClick={() => navigate(`/movies/${movie.showId}`)}
+              onClick={() =>
+                navigate(`/movies/${movie.showId}`, {
+                  state: { backgroundLocation: location },
+                })
+              }
               style={{ cursor: 'pointer' }}
             >
-              <img src={imageUrl} alt={movie.title ?? 'Movie'} className="card-image" />
+              <img
+                src={imageUrl}
+                alt={movie.title ?? 'Movie'}
+                className="card-image"
+              />
               <div className="overlay">
                 <h3>{movie.title}</h3>
                 <p>{movie.rating}</p>
