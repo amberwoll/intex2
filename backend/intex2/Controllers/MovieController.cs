@@ -43,6 +43,15 @@ namespace intex2.Controllers
 
             return Ok(new { movies = movieList, totalMovies });
         }
+        
+        [HttpGet("{showId}")]
+        public IActionResult GetMovieByShowId(string showId)
+        {
+            var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
+            if (movie == null)
+                return NotFound();
+            return Ok(movie);
+        }
 
         [HttpGet("GetMovieTypes")]
         public IActionResult GetMovieTypes()
