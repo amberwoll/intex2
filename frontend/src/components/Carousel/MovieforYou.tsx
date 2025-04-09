@@ -13,9 +13,9 @@ const MoviesforYou = () => {
 
   const sanitizeFileName = (title: string) =>
     title
-      .replace(/\.\.\./g, '') // remove ellipses
-      .replace(/[-:*?"<>|\\/.'’!&()]/g, '') // remove special characters
-      .replace(/\s+/g, ' ') // normalize whitespace
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '')
       .trim();
 
   useEffect(() => {

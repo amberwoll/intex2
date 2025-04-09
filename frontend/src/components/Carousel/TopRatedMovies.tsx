@@ -9,8 +9,9 @@ const TopRatedMovies = () => {
 
   const sanitizeFileName = (title: string) =>
     title
-      .replace(/[:*?"<>|\\/.'’]/g, '')
-      .replace(/\s+/g, ' ')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '')
       .trim();
 
   useEffect(() => {
