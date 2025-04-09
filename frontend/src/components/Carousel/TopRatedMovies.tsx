@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TrendCard from './TrendCard';
 
 const TopRatedMovies = () => {
   const [movies, setMovies] = useState<{ title: string; showId: string }[]>([]);
+  const navigate = useNavigate();
 
   const sanitizeFileName = (title: string) =>
     title
@@ -27,7 +29,13 @@ const TopRatedMovies = () => {
 
   return (
     <section className="trends-section" role="region" aria-label="Top Rated">
-      <h2 className="trends-title">Top 10 Rated Movies</h2>
+      <div className="trends-header">
+        <h2 className="trends-title">Top 10 Rated Movies</h2>
+        <button className="view-all-button" onClick={() => navigate('/view-movies')}>
+          View All Movies
+        </button>
+      </div>
+
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movies.map((movie, index) => (
@@ -35,7 +43,7 @@ const TopRatedMovies = () => {
               key={movie.showId}
               title={movie.title}
               imageUrl={`https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`}
-              rank={index + 1} // 🏆 add rank only for Top Rated
+              rank={index + 1}
             />
           ))}
         </div>
@@ -53,11 +61,33 @@ const TopRatedMovies = () => {
           padding: 40px 48px;
         }
 
+        .trends-header {
+          display: flex;
+          align-items: center;
+          gap: 750px; /* <- Fixed the typo here */
+        }
+
         .trends-title {
           color: #ffffff;
           font-size: 40px;
           font-family: Lato;
           font-weight: 700;
+        }
+
+        .view-all-button {
+          background-color: #ffffff;
+          color: #0a0a0a;
+          border: none;
+          padding: 10px 20px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background-color 0.2s;
+        }
+
+        .view-all-button:hover {
+          background-color: #e5e5e5;
         }
 
         .trends-scroll-container {
