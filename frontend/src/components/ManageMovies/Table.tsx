@@ -1,13 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
-<<<<<<< Updated upstream
 import { fetchAllMovies } from '../../api/MovieApi';
-=======
-import { fetchAllMovies, deleteMovie } from '../../api/MovieApi';
 import NewMovieForm from './NewMovieForm';
 import EditMovieForm from './EditMovieForm';
->>>>>>> Stashed changes
 import Pagination from '../Pagination';
 import AddMovieButton from './AddMovieButton';
 import { deleteMovie } from '../../services/movieServices';
@@ -19,14 +15,11 @@ const DarkModeDataTable = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-<<<<<<< Updated upstream
-=======
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
   const [movieToEdit, setMovieToEdit] = useState<moviesTitle | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
->>>>>>> Stashed changes
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
@@ -47,8 +40,6 @@ const DarkModeDataTable = () => {
     loadMovies();
   }, []);
 
-<<<<<<< Updated upstream
-=======
   const handleDelete = async () => {
     if (!selectedShowId) return;
     try {
@@ -67,7 +58,6 @@ const DarkModeDataTable = () => {
     setShowEditForm(true);
   };
 
->>>>>>> Stashed changes
   // Filter and paginate
   const filteredMovies = allMovies.filter((movie) =>
     movie.title?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -101,8 +91,6 @@ const DarkModeDataTable = () => {
         </div>
       </div>
 
-<<<<<<< Updated upstream
-=======
       {showForm && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -139,7 +127,6 @@ const DarkModeDataTable = () => {
         </div>
       )}
 
->>>>>>> Stashed changes
       <table>
         <thead>
           <tr>

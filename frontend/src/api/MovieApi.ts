@@ -5,11 +5,7 @@ interface FetchMoviesResponse {
   totalMovies: number;
 }
 
-<<<<<<< Updated upstream
 const API_URL = `https://localhost:5500/Movie`;
-=======
-const API_URL = `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie`;
->>>>>>> Stashed changes
 
 export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {
@@ -28,14 +24,10 @@ export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   }
 };
 
-<<<<<<< Updated upstream
-export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
-=======
 export const addMovie = async (
   newMovie: Omit<moviesTitle, 'showId'>
 ): Promise<moviesTitle> => {
   // of type movie
->>>>>>> Stashed changes
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: 'POST',
