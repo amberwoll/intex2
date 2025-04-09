@@ -1,13 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
-import { fetchAllMovies } from '../../api/MovieApi';
+import { fetchAllMovies, deleteMovie } from '../../api/MovieApi';
 import NewMovieForm from './NewMovieForm';
 import EditMovieForm from './EditMovieForm';
 import Pagination from '../Pagination';
-import AddMovieButton from './AddMovieButton';
-import { deleteMovie } from '../../services/movieServices';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 const DarkModeDataTable = () => {
   const [allMovies, setAllMovies] = useState<moviesTitle[]>([]);
@@ -21,8 +18,6 @@ const DarkModeDataTable = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadMovies = async () => {
@@ -87,7 +82,12 @@ const DarkModeDataTable = () => {
             className="search-input"
           />
 
-          <AddMovieButton />
+          <button
+            className="utility-button"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? 'Close Form' : 'Add Movie'}
+          </button>
         </div>
       </div>
 
@@ -165,8 +165,8 @@ const DarkModeDataTable = () => {
                   <button
                     className="btn btn-danger"
                     onClick={() => {
-                      setSelectedMovieId(movie.showId ?? null);
-                      setShowDeleteModal(true);
+                      setSelectedShowId(movie.showId!);
+                      setShowConfirm(true);
                     }}
                   >
                     Delete
@@ -186,17 +186,23 @@ const DarkModeDataTable = () => {
         onPageSizeChange={(newSize) => setPageSize(newSize)}
       />
 
-      {showDeleteModal && selectedMovieId && (
-        <DeleteConfirmationModal
-          onConfirm={async () => {
-            await deleteMovie(selectedMovieId);
-            setAllMovies((prevMovies) =>
-              prevMovies.filter((m) => m.showId !== selectedMovieId)
-            );
-            setShowDeleteModal(false);
-          }}
-          onCancel={() => setShowDeleteModal(false)}
-        />
+      {showConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Are you sure you want to delete this movie?</p>
+            <div className="modal-actions">
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Yes, Delete
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <style jsx>{`
