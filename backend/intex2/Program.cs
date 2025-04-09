@@ -7,6 +7,13 @@ using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add HSTS configuration
+//builder.Services.AddHsts(options =>
+//{
+//    options.MaxAge = TimeSpan.FromDays(5);
+//    options.IncludeSubDomains = true;
+//});
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -56,6 +63,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//else
+//{
+//   // Apply HSTS only in production (NOT during local dev)
+//    app.UseHsts();
+//}
 
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
