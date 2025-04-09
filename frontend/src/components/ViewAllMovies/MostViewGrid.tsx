@@ -19,9 +19,10 @@ const genreOptions = [
 
 const sanitizeFileName = (title: string) =>
   title
-    .replace(/\.\.\./g, '') // remove ellipses
-    .replace(/[-:*?"<>|\\/.'’!&()]/g, '') // remove special characters
-    .replace(/\s+/g, ' ') // normalize whitespace
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '') // Remove special characters (with escaped hyphen)
+    // No space collapsing line here
     .trim();
 
 const MovieGallery = () => {
@@ -138,7 +139,7 @@ const MovieGallery = () => {
       <div className="grid-container">
         {displayedMovies.map((movie, idx) => {
           const sanitizedTitle = sanitizeFileName(movie.title ?? '');
-          const imageUrl = `https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizedTitle}.jpg`;
+          const imageUrl = `https://intexphotos.blob.core.windows.net/posters/${sanitizedTitle}.jpg`;
 
           return (
             <div className="image-card" key={movie.showId ?? idx}>
