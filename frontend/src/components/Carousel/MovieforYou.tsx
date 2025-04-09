@@ -33,6 +33,7 @@ const MoviesforYou = () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(showIds),
+            credentials: 'include',
           }
         );
 

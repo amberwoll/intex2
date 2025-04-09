@@ -17,7 +17,9 @@ const TopRatedMovies = () => {
   useEffect(() => {
     const fetchTopRatedMovies = async () => {
       try {
-        const res = await fetch('https://localhost:5500/Movie/TopRatedMovies');
+        const res = await fetch('https://localhost:5500/Movie/TopRatedMovies', {
+          credentials: 'include',
+        });
         const data = await res.json();
         setMovies(data);
       } catch (error) {

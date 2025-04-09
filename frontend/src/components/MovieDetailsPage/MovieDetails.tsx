@@ -9,9 +9,9 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(
-          `https://localhost:5500/Movie/${showId}`
-        );
+        const response = await fetch(`https://localhost:5500/Movie/${showId}`, {
+          credentials: 'include',
+        });
 
         if (!response.ok) throw new Error('Movie not found');
         const data = await response.json();
@@ -41,14 +41,29 @@ const MovieDetails = () => {
 
   return (
     <div style={{ padding: '2rem', background: '#121212', color: 'white' }}>
-      <button onClick={() => window.history.back()} style={{ marginBottom: '1rem' }}>✕ Close</button>
+      <button
+        onClick={() => window.history.back()}
+        style={{ marginBottom: '1rem' }}
+      >
+        ✕ Close
+      </button>
       <h1>{movie.title}</h1>
       {/* IMAGE INTENTIONALLY REMOVED */}
-      <p><strong>Director:</strong> {movie.director}</p>
-      <p><strong>Cast:</strong> {movie.actors}</p>
-      <p><strong>Synopsis:</strong> {movie.synopsis}</p>
-      <p><strong>Release Year:</strong> {movie.releaseYear}</p>
-      <p><strong>Genres:</strong> {movie.genres.join(', ')}</p>
+      <p>
+        <strong>Director:</strong> {movie.director}
+      </p>
+      <p>
+        <strong>Cast:</strong> {movie.actors}
+      </p>
+      <p>
+        <strong>Synopsis:</strong> {movie.synopsis}
+      </p>
+      <p>
+        <strong>Release Year:</strong> {movie.releaseYear}
+      </p>
+      <p>
+        <strong>Genres:</strong> {movie.genres.join(', ')}
+      </p>
     </div>
   );
 };

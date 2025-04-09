@@ -6,7 +6,9 @@ export const fetchUserMovieRecommendationById = async (
   id: string
 ): Promise<userMovieRecommendation> => {
   try {
-    const response = await fetch(`${API_URL}/UserMovieRecommendations/${id}`);
+    const response = await fetch(`${API_URL}/UserMovieRecommendations/${id}`, {
+      credentials: 'include',
+    });
     if (!response.ok) {
       throw new Error(
         `Failed to fetch user movie recommendation with ID: ${id}`

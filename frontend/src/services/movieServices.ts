@@ -26,6 +26,7 @@ export const deleteMovie = async (showId: string) => {
       `https://localhost:5500/Movie/Delete/${showId}`,
       {
         method: 'DELETE',
+        credentials: 'include',
       }
     );
 
