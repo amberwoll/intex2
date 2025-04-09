@@ -1,7 +1,12 @@
-import MostViewGrid from "../components/ViewAllMovies/MostViewGrid";
+import AuthorizeView from '../components/AuthorizeView';
+import MostViewGrid from '../components/ViewAllMovies/MostViewGrid';
 
 const ViewAllMovies = () => {
-  return <MostViewGrid />;
+  return (
+    <AuthorizeView>
+      <MostViewGrid />
+    </AuthorizeView>
+  );
 };
 
 export default ViewAllMovies;
