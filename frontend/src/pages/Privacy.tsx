@@ -1,6 +1,7 @@
 import './Privacy.css';
 import { NavigationBar } from '../components/UniversalLayout/NavigationBar';
 import AuthorizeView from '../components/AuthorizeView';
+import { Footer } from '../components/MoviePage/Footer';
 const Privacy: React.FC = () => {
   return (
     <AuthorizeView>
@@ -265,6 +266,7 @@ const Privacy: React.FC = () => {
           </ul>
         </div>
       </div>
+      <Footer />
     </AuthorizeView>
   );
 };

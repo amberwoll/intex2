@@ -1,58 +1,66 @@
 'use client';
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 
-export const Footer: React.FC = () => {
+const Footer = () => {
   return (
-    <footer className="footer-wrapper">
+    <footer className="app-footer">
       <div className="footer-content">
-        <p className="footer-text">© 2025 My Movie App</p>
+        <p>
+          &copy; {new Date().getFullYear()} Cine Niche. All rights reserved.
+        </p>
         <Link to="/privacy" className="footer-link">
           Privacy Policy
         </Link>
       </div>
 
       <style>{`
-        /* Footer styling */
-        .footer-wrapper {
-          width: 100%;
-          padding: 20px 20px;
-          background: #101828;
-          position: relative;
-          bottom: 0;
-          left: 0;
-          right: 0;
-        }
-
-        .footer-content {
+        .app-footer {
+          background-color: #101828;
+          color: #d1d5db;
+          padding: 20px 32px;
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
-          gap: 24px;
+          font-size: 14px;
+          border-top: 1px solid #1f2937;
+          margin-top: 40px;
         }
 
-        .footer-text {
-          color: #ebfaff;
-          font-size: 14px;
-        }
+     .footer-content {
+  display: flex;
+  justify-content: space-between; /* <-- This spreads items to the edges */
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 20px; /* Add horizontal padding */
+}
+
 
         .footer-link {
+          color: #93c5fd;
           text-decoration: none;
-          color: #ebfaff;
-          font-size: 14px;
-          cursor: pointer;
-          padding: 4px 8px;
-          border-radius: 8px;
-          transition:
-            background 0.2s ease,
-            color 0.2s ease;
-          margin-left: 10px; /* Add some left margin to move it slightly to the right */
+          font-weight: 500;
+
         }
 
         .footer-link:hover {
-          background-color: #1a2b3c;
+          text-decoration: underline;
+          color: #60a5fa;
+        }
+
+        @media (max-width: 640px) {
+          .footer-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 8px;
+          }
         }
       `}</style>
     </footer>
   );
 };
+
+export default Footer;

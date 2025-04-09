@@ -5,6 +5,13 @@ body {
   overflow-x: hidden; /* Prevent horizontal scroll but still allow vertical */
 }
 
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Ensure the root container fits the screen */
 #root {
   max-width: 100%;

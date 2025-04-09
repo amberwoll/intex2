@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import { MovieHero } from '../components/MoviePage/MovieHero';
-import TrendSection from '../components/Carousel/TrendsSection';
 import { NavigationBar } from '../components/UniversalLayout/NavigationBar';
 import TvRecs from '../components/Carousel/TvforYou';
 import MovieforYou from '../components/Carousel/MovieforYou';
 import MovieRecs from '../components/Carousel/SimilarMovies';
 import AuthorizeView from '../components/AuthorizeView';
 import TopRatedMovies from '../components/Carousel/TopRatedMovies';
+import { Footer } from '../components/MoviePage/Footer';
 
 export const Movies: React.FC = () => {
   return (
@@ -18,15 +18,19 @@ export const Movies: React.FC = () => {
           rel="stylesheet"
         />
         <NavigationBar />
+        <br></br>
+        <br></br>
+        <br></br>
         <MovieHero />
         <TopRatedMovies />
         <TvRecs />
         <MovieforYou />
         <MovieRecs />
+        <Footer />
         <style>{`
           .layout {
             width: 100%;
-            min-height: 100vh;
+            min-height: max-content;
             position: relative;
             background-color: #030a1b;
           }
