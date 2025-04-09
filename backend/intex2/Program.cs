@@ -58,7 +58,7 @@ builder.Services.ConfigureApplicationCookie(options =>
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
         return Task.CompletedTask;
     };
-});// change to samesitemode.none and cookiessecurepolicy.always
+});// change to samesitemode.secure
 
 
 builder.Services.AddCors(options =>
