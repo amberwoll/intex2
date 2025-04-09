@@ -5,7 +5,11 @@ interface FetchMoviesResponse {
   totalMovies: number;
 }
 
+<<<<<<< Updated upstream
 const API_URL = `https://localhost:5500/Movie`;
+=======
+const API_URL = `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie`;
+>>>>>>> Stashed changes
 
 export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {
@@ -24,7 +28,14 @@ export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   }
 };
 
+<<<<<<< Updated upstream
 export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
+=======
+export const addMovie = async (
+  newMovie: Omit<moviesTitle, 'showId'>
+): Promise<moviesTitle> => {
+  // of type movie
+>>>>>>> Stashed changes
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: 'POST',
@@ -46,17 +57,28 @@ export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
 };
 
 export const updateMovie = async (
-  showId: number,
+  id: number,
   updatedMovie: moviesTitle
 ): Promise<moviesTitle> => {
   try {
-    const response = await fetch(`${API_URL}/UpdateMovie/${showId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedMovie),
-    });
+    // Use showId from the movie object for the API endpoint
+    const response = await fetch(
+      `${API_URL}/UpdateMovie/${updatedMovie.showId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedMovie),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to update movie: ${response.status} - ${errorText}`
+      );
+    }
 
     return await response.json();
   } catch (error) {
