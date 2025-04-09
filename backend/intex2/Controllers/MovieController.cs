@@ -88,16 +88,6 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
     return Ok(newMovie);
 }
 
-
-
-
-        [HttpGet("{showId}")]
-        public IActionResult GetMovie(string showId, [FromBody] MoviesTitle updatedMovie)
-        {
-            var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
-            return Ok(movie);
-        }
-
         [HttpPut("UpdateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
