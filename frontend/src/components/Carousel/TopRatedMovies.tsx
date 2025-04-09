@@ -21,7 +21,7 @@ const TopRatedMovies = () => {
           credentials: 'include',
         });
         const data = await res.json();
-        setMovies(data);
+        setMovies(data); // Expecting [{ title, showId }]
       } catch (error) {
         console.error('Failed to load top rated movies:', error);
       }
@@ -32,7 +32,8 @@ const TopRatedMovies = () => {
 
   return (
     <section className="trends-section" role="region" aria-label="Top Rated">
-      <div className="view-all-wrapper">
+      <div className="header-with-button">
+        <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
         <button
           className="view-all-button"
           onClick={() => navigate('/view-movies')}
@@ -41,18 +42,15 @@ const TopRatedMovies = () => {
         </button>
       </div>
 
-      <div className="trends-header">
-        <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
-      </div>
-
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movies.map((movie, index) => (
             <TrendCard
               key={movie.showId}
               title={movie.title}
-              imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(movie.title)}.jpg`}
+              showId={movie.showId}
               rank={index + 1}
+              imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(movie.title)}.jpg`}
             />
           ))}
         </div>
@@ -70,10 +68,13 @@ const TopRatedMovies = () => {
           padding: 40px 48px;
         }
 
-        .trends-header {
+        .header-with-button {
           display: flex;
+          justify-content: space-between;
           align-items: center;
-          gap: 750px; /* <- Fixed the typo here */
+          width: 100%;
+          padding-right: 16px;
+          margin-bottom: 16px;
         }
 
         .trends-title {
@@ -82,30 +83,6 @@ const TopRatedMovies = () => {
           font-family: Lato;
           font-weight: 700;
         }
-
-        .header-with-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-right: 16px;
-  margin-bottom: 16px;
-}
-
-.view-all-button {
-  background-color: #228ee5;
-  color: #fff;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 24px;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.view-all-button:hover {
-  background-color: #1a6db7;
-}
 
         .view-all-button {
           background-color: #ffffff;

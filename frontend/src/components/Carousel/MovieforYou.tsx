@@ -67,12 +67,12 @@ const MoviesforYou = () => {
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movieList.map((movie, index) => (
-            <Link to={`/movies/${movie.showId}`} key={movie.showId}>
-              <TrendCard
-                imageUrl={movieImagePaths[index] ?? ''}
-                title={movie.title}
-              />
-            </Link>
+            <TrendCard
+              key={movie.showId}
+              imageUrl={movieImagePaths[index] ?? ''}
+              title={movie.title}
+              showId={movie.showId}
+            />
           ))}
         </div>
       </div>

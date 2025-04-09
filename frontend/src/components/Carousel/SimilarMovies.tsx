@@ -33,7 +33,7 @@ const SimilarMovies = () => {
       role="region"
       aria-label="Suggested Movies"
     >
-      <h2 className="trends-title">Because you loved something awesome...</h2>
+      <h2 className="trends-title">Because you rated ⭐⭐⭐⭐⭐...</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
           {movies.map((movie, index) => (

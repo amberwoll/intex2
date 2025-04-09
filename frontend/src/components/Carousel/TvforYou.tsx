@@ -1,12 +1,10 @@
-// TvRecs.tsx
 'use client';
 import { useEffect, useState } from 'react';
 import TrendCard from './TrendCard';
 import { fetchUserTvRecommendationById } from '../../api/UserTvRecommendationsAPI';
 
 const TvRecs = () => {
-  const [tvImagePaths, setTvImagePaths] = useState<string[]>([]);
-  const [tvList, setTvList] = useState<{ title: string }[]>([]);
+  const [tvList, setTvList] = useState<{ title: string; showId: string }[]>([]);
   const userId = '1';
 
   const sanitizeFileName = (title: string) =>
@@ -37,17 +35,10 @@ const TvRecs = () => {
 
         if (!titleResponse.ok)
           throw new Error('Failed to fetch TV show titles');
-        const tvList = await titleResponse.json();
 
-        const paths = tvList
-          .filter((tv: { title?: string }) => !!tv.title)
-          .map(
-            (tv: { title: string }) =>
-              `https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(tv.title)}.jpg`
-          );
-
-        setTvImagePaths(paths);
-        setTvList(tvList);
+        const tvData: { title: string; showId: string }[] =
+          await titleResponse.json();
+        setTvList(tvData);
       } catch (error) {
         console.error('Error loading TV recommendations:', error);
       }
@@ -67,9 +58,10 @@ const TvRecs = () => {
         <div className="trends-grid">
           {tvList.map((tv, index) => (
             <TrendCard
-              key={index}
-              imageUrl={tvImagePaths[index] ?? ''}
+              key={tv.showId}
+              imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(tv.title)}.jpg`}
               title={tv.title}
+              showId={tv.showId}
             />
           ))}
         </div>
