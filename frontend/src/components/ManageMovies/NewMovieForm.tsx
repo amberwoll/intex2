@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
 import { addMovie } from '../../api/MovieApi';
 import countries from '../../assets/countries';
-import { v4 as uuidv4 } from 'uuid';
 
 interface NewMovieFormProps {
   onSuccess: () => void;
