@@ -42,7 +42,7 @@ const MoviesforYou = () => {
           .filter((movie: { title?: string }) => !!movie.title)
           .map(
             (movie: { title: string }) =>
-              `https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`
+              `https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(movie.title)}.jpg`
           );
 
         setMovieImagePaths(paths);

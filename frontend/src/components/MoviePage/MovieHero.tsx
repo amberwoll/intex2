@@ -16,7 +16,7 @@ export const MovieHero: React.FC = () => {
 
         <div className="hero-image-wrapper">
           <img
-            src="https://intexphotos.blob.core.windows.net/images/Movie%20Posters/Shadow%20and%20Bone.jpg"
+            src="https://intexphotos.blob.core.windows.net/posters/Shadow%20and%20Bone.jpg"
             alt="Shadow and Bone poster"
             className="hero-image"
           />
