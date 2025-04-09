@@ -1,17 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
-<<<<<<< Updated upstream
-import { fetchAllMovies } from '../../api/MovieApi';
-=======
 import { fetchAllMovies, deleteMovie } from '../../api/MovieApi';
 import NewMovieForm from './NewMovieForm';
 import EditMovieForm from './EditMovieForm';
->>>>>>> Stashed changes
 import Pagination from '../Pagination';
-import AddMovieButton from './AddMovieButton';
-import { deleteMovie } from '../../services/movieServices';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 const DarkModeDataTable = () => {
   const [allMovies, setAllMovies] = useState<moviesTitle[]>([]);
@@ -19,17 +12,12 @@ const DarkModeDataTable = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-<<<<<<< Updated upstream
-=======
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
   const [movieToEdit, setMovieToEdit] = useState<moviesTitle | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
->>>>>>> Stashed changes
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadMovies = async () => {
@@ -47,8 +35,6 @@ const DarkModeDataTable = () => {
     loadMovies();
   }, []);
 
-<<<<<<< Updated upstream
-=======
   const handleDelete = async () => {
     if (!selectedShowId) return;
     try {
@@ -67,7 +53,6 @@ const DarkModeDataTable = () => {
     setShowEditForm(true);
   };
 
->>>>>>> Stashed changes
   // Filter and paginate
   const filteredMovies = allMovies.filter((movie) =>
     movie.title?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -97,12 +82,15 @@ const DarkModeDataTable = () => {
             className="search-input"
           />
 
-          <AddMovieButton />
+          <button
+            className="utility-button"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? 'Close Form' : 'Add Movie'}
+          </button>
         </div>
       </div>
 
-<<<<<<< Updated upstream
-=======
       {showForm && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -139,7 +127,6 @@ const DarkModeDataTable = () => {
         </div>
       )}
 
->>>>>>> Stashed changes
       <table>
         <thead>
           <tr>
@@ -178,8 +165,8 @@ const DarkModeDataTable = () => {
                   <button
                     className="btn btn-danger"
                     onClick={() => {
-                      setSelectedMovieId(movie.showId ?? null);
-                      setShowDeleteModal(true);
+                      setSelectedShowId(movie.showId!);
+                      setShowConfirm(true);
                     }}
                   >
                     Delete
@@ -199,17 +186,23 @@ const DarkModeDataTable = () => {
         onPageSizeChange={(newSize) => setPageSize(newSize)}
       />
 
-      {showDeleteModal && selectedMovieId && (
-        <DeleteConfirmationModal
-          onConfirm={async () => {
-            await deleteMovie(selectedMovieId);
-            setAllMovies((prevMovies) =>
-              prevMovies.filter((m) => m.showId !== selectedMovieId)
-            );
-            setShowDeleteModal(false);
-          }}
-          onCancel={() => setShowDeleteModal(false)}
-        />
+      {showConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Are you sure you want to delete this movie?</p>
+            <div className="modal-actions">
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Yes, Delete
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <style jsx>{`
