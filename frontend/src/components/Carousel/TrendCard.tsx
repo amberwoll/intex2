@@ -1,21 +1,23 @@
-'use client';
 import { Link } from 'react-router-dom';
 
 const TrendCard = ({
   imageUrl,
   title,
+  showId,
+  rank,
 }: {
   imageUrl: string;
   title?: string;
+  showId?: string;
+  rank?: number;
 }) => {
   const showTitle = title ?? 'Trending';
-  const showId = encodeURIComponent(showTitle); // used in route param
-
   const hasImage = imageUrl && !imageUrl.endsWith('/.jpg');
 
   return (
-    <Link to={`/movies/${showId}`}>
+    <Link to={`/movies/${showId ?? encodeURIComponent(showTitle)}`}>
       <div className="trend-card">
+        {rank && <span className="rank-badge">{rank}</span>}
         {hasImage ? (
           <img src={imageUrl} alt={showTitle} className="card-img" />
         ) : (
@@ -48,6 +50,19 @@ const TrendCard = ({
             height: 100%;
             object-fit: cover;
             border-radius: 12px;
+          }
+
+          .rank-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #e50914;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 8px;
+            z-index: 2;
           }
 
           .no-image {

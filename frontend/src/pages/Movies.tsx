@@ -6,6 +6,7 @@ import { NavigationBar } from '../components/UniversalLayout/NavigationBar'; // 
 import TvRecs from '../components/Carousel/TvforYou';
 import MovieforYou from '../components/Carousel/MovieforYou';
 import MovieRecs from '../components/Carousel/SimilarMovies';
+import TopRatedMovies from '../components/Carousel/TopRatedMovies';
 
 export const Movies: React.FC = () => {
   return (
@@ -16,8 +17,7 @@ export const Movies: React.FC = () => {
       />
       <NavigationBar />
       <MovieHero />
-
-      <TrendSection imageUrl={''} />
+      <TopRatedMovies />
       <TvRecs />
       <MovieforYou />
       <MovieRecs />
