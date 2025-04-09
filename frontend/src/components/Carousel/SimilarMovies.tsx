@@ -9,8 +9,8 @@ const SimilarMovies = () => {
 
   const sanitizeFileName = (title: string) =>
     title
-      .replace(/[:*?"<>|\\/.'’]/g, '')
-      .replace(/\s+/g, ' ')
+      .replace(/[:*?"<>|\\/.'’!&]/g, '') // now includes period, apostrophes, smart quotes, exclamation mark, and ampersand
+      .replace(/\s+/g, ' ') // normalize whitespace
       .trim();
 
   useEffect(() => {

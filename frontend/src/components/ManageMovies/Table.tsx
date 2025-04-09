@@ -1,9 +1,9 @@
-"use client";
-import { useEffect, useState } from "react";
-import { moviesTitle } from "../../types/moviesTitle";
-import { fetchAllMovies, deleteMovie } from "../../api/MovieApi";
-import NewMovieForm from "./NewMovieForm";
-import Pagination from "../Pagination";
+'use client';
+import { useEffect, useState } from 'react';
+import { moviesTitle } from '../../types/moviesTitle';
+import { fetchAllMovies, deleteMovie } from '../../api/MovieApi';
+import NewMovieForm from './NewMovieForm';
+import Pagination from '../Pagination';
 
 const DarkModeDataTable = () => {
   const [allMovies, setAllMovies] = useState<moviesTitle[]>([]);
@@ -14,7 +14,7 @@ const DarkModeDataTable = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     const loadMovies = async () => {
@@ -23,8 +23,8 @@ const DarkModeDataTable = () => {
         const data = await fetchAllMovies();
         setAllMovies(data.movies);
       } catch (err) {
-        console.error("Error loading movies:", err);
-        setError("Failed to load movies.");
+        console.error('Error loading movies:', err);
+        setError('Failed to load movies.');
       } finally {
         setLoading(false);
       }
@@ -40,8 +40,8 @@ const DarkModeDataTable = () => {
       setShowConfirm(false);
       setSelectedShowId(null);
     } catch (err) {
-      console.error("Error deleting movie:", err);
-      setError("Failed to delete movie.");
+      console.error('Error deleting movie:', err);
+      setError('Failed to delete movie.');
     }
   };
 
@@ -73,22 +73,29 @@ const DarkModeDataTable = () => {
             }}
             className="search-input"
           />
-          
-          <button className="utility-button" onClick={() => setShowForm(!showForm)}>
-            {showForm ? "Close Form" : "Add Movie"}
+
+          <button
+            className="utility-button"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? 'Close Form' : 'Add Movie'}
           </button>
         </div>
       </div>
 
       {showForm && (
-        <NewMovieForm
-          onSuccess={async () => {
-            setShowForm(false);
-            const data = await fetchAllMovies();
-            setAllMovies(data.movies);
-          }}
-          onCancel={() => setShowForm(false)}
-        />
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <NewMovieForm
+              onSuccess={async () => {
+                setShowForm(false);
+                const data = await fetchAllMovies();
+                setAllMovies(data.movies);
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          </div>
+        </div>
       )}
 
       <table>
@@ -106,7 +113,9 @@ const DarkModeDataTable = () => {
         <tbody>
           {paginatedMovies.length === 0 ? (
             <tr>
-              <td colSpan={7} style={{ textAlign: "center" }}>No movies found.</td>
+              <td colSpan={7} style={{ textAlign: 'center' }}>
+                No movies found.
+              </td>
             </tr>
           ) : (
             paginatedMovies.map((movie, index) => (
@@ -118,11 +127,19 @@ const DarkModeDataTable = () => {
                 <td>{movie.type}</td>
                 <td>{movie.rating}</td>
                 <td>
-                  <button className="btn btn-success" onClick={() => alert("TODO: Edit")}>Edit</button>
-                  <button className="btn btn-danger" onClick={() => {
-                    setSelectedShowId(movie.showId!);
-                    setShowConfirm(true);
-                  }}>
+                  <button
+                    className="btn btn-success"
+                    onClick={() => alert('TODO: Edit')}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                      setSelectedShowId(movie.showId!);
+                      setShowConfirm(true);
+                    }}
+                  >
                     Delete
                   </button>
                 </td>
@@ -145,8 +162,15 @@ const DarkModeDataTable = () => {
           <div className="modal">
             <p>Are you sure you want to delete this movie?</p>
             <div className="modal-actions">
-              <button className="btn btn-danger" onClick={handleDelete}>Yes, Delete</button>
-              <button className="btn btn-secondary" onClick={() => setShowConfirm(false)}>Cancel</button>
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Yes, Delete
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -193,6 +217,29 @@ const DarkModeDataTable = () => {
           font-size: 14px;
           cursor: pointer;
         }
+
+        .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #1e1e1e;
+  padding: 32px;
+  border-radius: 10px;
+  width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 
         table {
           width: 100%;

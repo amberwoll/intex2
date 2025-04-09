@@ -1,4 +1,5 @@
 export interface moviesTitle {
+  id?: number;
   showId?: string;
   type?: string;
   title?: string;
@@ -41,4 +42,6 @@ export interface moviesTitle {
   tvDramas?: number;
   talkShowsTvComedies?: number;
   thrillers?: number;
+
+  [key: string]: any; // ← Add this to handle genre assignment dynamically
 }

@@ -18,7 +18,10 @@ const genreOptions = [
 ];
 
 const sanitizeFileName = (title: string) =>
-  title.replace(/[:*?"<>|\\/.'’]/g, '').replace(/\s+/g, ' ').trim();
+  title
+    .replace(/[:*?"<>|\\/.'’!&]/g, '') // now includes period, apostrophes, smart quotes, exclamation mark, and ampersand
+    .replace(/\s+/g, ' ') // normalize whitespace
+    .trim();
 
 const MovieGallery = () => {
   const navigate = useNavigate();
@@ -45,9 +48,15 @@ const MovieGallery = () => {
 
   const getFilteredMovies = () => {
     return allMovies.filter((movie) => {
-      const titleMatch = movie.title?.toLowerCase().includes(searchQuery.toLowerCase());
-      const genreMatch = selectedGenre ? movie[selectedGenre as keyof moviesTitle] === 1 : true;
-      const typeMatch = selectedType ? movie.type?.toLowerCase() === selectedType : true;
+      const titleMatch = movie.title
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const genreMatch = selectedGenre
+        ? movie[selectedGenre as keyof moviesTitle] === 1
+        : true;
+      const typeMatch = selectedType
+        ? movie.type?.toLowerCase() === selectedType
+        : true;
       const hasImage = !!movie.title && movie.title.trim() !== '';
       return titleMatch && genreMatch && typeMatch && hasImage;
     });
@@ -80,7 +89,11 @@ const MovieGallery = () => {
     <section className="movie-gallery">
       <div className="controls">
         <div className="left-controls">
-          <button type="button" className="utility-button" onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className="utility-button"
+            onClick={() => navigate(-1)}
+          >
             Back
           </button>
         </div>
@@ -128,7 +141,11 @@ const MovieGallery = () => {
 
           return (
             <div className="image-card" key={movie.showId ?? idx}>
-              <img src={imageUrl} alt={movie.title ?? 'Movie'} className="card-image" />
+              <img
+                src={imageUrl}
+                alt={movie.title ?? 'Movie'}
+                className="card-image"
+              />
               <div className="overlay">
                 <h3>{movie.title}</h3>
                 <p>{movie.rating}</p>

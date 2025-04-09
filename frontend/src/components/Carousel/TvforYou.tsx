@@ -11,7 +11,7 @@ const TvRecs = () => {
 
   const sanitizeFileName = (title: string) =>
     title
-      .replace(/[:*?"<>|\\/.'’]/g, '') // now includes period, apostrophes, and smart quotes
+      .replace(/[:*?"<>|\\/.'’!&]/g, '') // now includes period, apostrophes, smart quotes, exclamation mark, and ampersand
       .replace(/\s+/g, ' ') // normalize whitespace
       .trim();
 
