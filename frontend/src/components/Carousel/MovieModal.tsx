@@ -1,5 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { StarRating } from '../MoviePage/StarRating';
+import RecommenderCarousel from './RecommenderCarousel'; 
+
 
 type Movie = {
   title: string;
@@ -95,6 +98,8 @@ const MovieModal = () => {
               </h2>
 
               <div className="modal-body">
+              <StarRating userId={1234} showId={showId!} />
+
                 <p>
                   <strong>Director:</strong> {movie.director}
                 </p>
@@ -107,6 +112,23 @@ const MovieModal = () => {
                 <p>
                   <strong>Description:</strong> {movie.description}
                 </p>
+
+                <RecommenderCarousel
+                items={[
+                  { title: 'Oppenheimer', showId: '1' },
+                  { title: 'Barbie', showId: '2' },
+                  { title: 'Dune', showId: '3' },
+                  { title: 'Avatar 2', showId: '4' },
+                  { title: 'The Batman', showId: '5' },
+                  { title: 'Oppenheimer', showId: '1' },
+                  { title: 'Barbie', showId: '2' },
+                  { title: 'Dune', showId: '3' },
+                  { title: 'Avatar 2', showId: '4' },
+                  { title: 'The Batman', showId: '5' },
+                ]}
+              />
+
+                
               </div>
             </div>
           </div>

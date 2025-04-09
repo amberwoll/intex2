@@ -55,6 +55,32 @@ namespace intex2.Controllers
             return Ok(movie);
         }
 
+        [HttpPost("Rate")]
+    public IActionResult RateMovie([FromBody] MoviesRating rating)
+    {
+        if (rating == null || string.IsNullOrEmpty(rating.ShowId) || rating.UserId == 0)
+        {
+            return BadRequest("Invalid rating data");
+        }
+
+        // Check if rating exists first
+        var existing = _movieContext.MoviesRatings.FirstOrDefault(r =>
+            r.UserId == rating.UserId && r.ShowId == rating.ShowId);
+
+        if (existing != null)
+        {
+            existing.Rating = rating.Rating;
+        }
+        else
+        {
+            _movieContext.MoviesRatings.Add(rating);
+        }
+
+        _movieContext.SaveChanges();
+        return Ok(new { message = "Rating submitted successfully." });
+    }
+
+
         [HttpGet("GetMovieTypes")]
         public IActionResult GetMovieTypes()
         {
