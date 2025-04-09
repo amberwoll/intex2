@@ -18,6 +18,8 @@ public partial class MoviesContext : DbContext
     public virtual DbSet<MoviesRating> MoviesRatings { get; set; }
     public virtual DbSet<MoviesTitle> MoviesTitles { get; set; }
     public virtual DbSet<MoviesUser> MoviesUsers { get; set; }
+    public DbSet<HighRatedContentRecommendation> HighRatedContentRecommendations { get; set; } = null!;
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

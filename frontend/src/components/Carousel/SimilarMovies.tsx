@@ -1,12 +1,31 @@
-// MovieRecs.tsx
 'use client';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import TrendCard from './TrendCard';
+import { fetchHighRatedRecommendations } from '../../api/HighRatedRecommendationsAPI';
 
-const MovieRecs = () => {
-  const placeholderCards = Array.from({ length: 6 }, (_, i) => ({
-    imageUrl: '',
-    title: `Suggested Movie ${i + 1}`,
-  }));
+const SimilarMovies = () => {
+  const [movies, setMovies] = useState<{ title: string; showId: string }[]>([]);
+  const userId = '1'; // replace or dynamically get this in production
+
+  const sanitizeFileName = (title: string) =>
+    title
+      .replace(/[:*?"<>|\\/.'’]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  useEffect(() => {
+    const fetchRecs = async () => {
+      try {
+        const data = await fetchHighRatedRecommendations(userId);
+        setMovies(data);
+      } catch (error) {
+        console.error('Failed to load similar movies:', error);
+      }
+    };
+
+    fetchRecs();
+  }, []);
 
   return (
     <section
@@ -14,70 +33,21 @@ const MovieRecs = () => {
       role="region"
       aria-label="Suggested Movies"
     >
-      <h2 className="trends-title">Because you loved ___</h2>
+      <h2 className="trends-title">Because you loved something awesome...</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
-          {placeholderCards.map((rec, index) => (
-            <TrendCard key={index} imageUrl={rec.imageUrl} title={rec.title} />
+          {movies.map((movie, index) => (
+            <Link to={`/movies/${movie.showId}`} key={movie.showId}>
+              <TrendCard
+                title={movie.title}
+                imageUrl={`https://intexphotos.blob.core.windows.net/images/Movie%20Posters/${sanitizeFileName(movie.title)}.jpg`}
+              />
+            </Link>
           ))}
         </div>
       </div>
-
-      <style>{`
-        .trends-section {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-start;
-          gap: 22px;
-          width: 100%;
-          background-color: #0a0a0a; /* darker to distinguish */
-          padding: 40px 48px;
-        }
-
-        .trends-title {
-          color: #ffffff;
-          font-size: 40px;
-          font-family: Lato;
-          font-weight: 700;
-        }
-
-        .trends-scroll-container {
-          width: 100%;
-          overflow-x: auto;
-        }
-
-        .trends-grid {
-          display: flex;
-          align-items: center;
-          gap: 32px;
-          min-width: max-content;
-        }
-
-        @media (max-width: 991px) {
-          .trends-section {
-            padding-left: 24px;
-            padding-right: 24px;
-          }
-
-          .trends-title {
-            font-size: 36px;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .trends-section {
-            padding-left: 16px;
-            padding-right: 16px;
-          }
-
-          .trends-title {
-            font-size: 28px;
-          }
-        }
-      `}</style>
     </section>
   );
 };
 
-export default MovieRecs;
+export default SimilarMovies;
