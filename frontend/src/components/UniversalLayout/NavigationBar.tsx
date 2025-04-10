@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../MoviePage/IconButton';
-import { useUser } from '../UserContext';
+import { UserContext } from '../AuthorizeView';
 
 export const NavigationBar: React.FC = () => {
   const location = useLocation();
-  const user = useUser();
   const [isGreetingEnabled, setIsGreetingEnabled] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+  const user = useContext(UserContext);
   const currentUser = 'masterbruce'; // Replace with dynamic user value in real app
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export const NavigationBar: React.FC = () => {
               {showDropdown && (
                 <div className="dropdown-menu">
                   <p>
-                    Signed in as <strong>{currentUser}</strong>
+                    Signed in as <strong>{user?.email}</strong>
                   </p>
                   <button className="signout-button" onClick={handleSignOut}>
                     Sign Out
