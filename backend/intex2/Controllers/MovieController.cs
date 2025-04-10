@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace intex2.Controllers
 {
+    [AllowAnonymous]
     [Route("[controller]")]
     [ApiController]
-    // [Authorize]
     public class MovieController : ControllerBase
     {
         private readonly MoviesContext _movieContext;

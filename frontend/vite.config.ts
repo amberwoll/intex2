@@ -25,7 +25,7 @@ export default defineConfig({
         "frame-src 'self' https://accounts.google.com https://oauth2.googleapis.com;",
     },
     cors: {
-      origin: 'https://localhost:3000',
+      origin: 'https://proud-stone-09439391e.6.azurestaticapps.net',
       credentials: true,
     },
   },
