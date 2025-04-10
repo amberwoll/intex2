@@ -17,9 +17,12 @@ const TopRatedMovies = () => {
   useEffect(() => {
     const fetchTopRatedMovies = async () => {
       try {
-        const res = await fetch('https://localhost:5500/Movie/TopRatedMovies', {
-          credentials: 'include',
-        });
+        const res = await fetch(
+          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/TopRatedMovies',
+          {
+            credentials: 'include',
+          }
+        );
         const data = await res.json();
         setMovies(data); // Expecting [{ title, showId }]
       } catch (error) {
@@ -32,16 +35,15 @@ const TopRatedMovies = () => {
 
   return (
     <section className="trends-section" role="region" aria-label="Top Rated">
-  <div className="top-rated-header">
-    <button
-      className="view-all-button"
-      onClick={() => navigate('/view-movies')}
-    >
-      View All Movies/TV Shows
-    </button>
-    <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
-  </div>
-
+      <div className="top-rated-header">
+        <button
+          className="view-all-button"
+          onClick={() => navigate('/view-movies')}
+        >
+          View All Movies/TV Shows
+        </button>
+        <h2 className="trends-title">Top 10 Rated Movies/TV Shows</h2>
+      </div>
 
       <div className="trends-scroll-container">
         <div className="trends-grid">

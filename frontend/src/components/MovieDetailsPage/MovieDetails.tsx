@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const MovieDetails = () => {
@@ -9,9 +9,12 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://localhost:5500/Movie/${showId}`, {
-          credentials: 'include',
-        });
+        const response = await fetch(
+          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/${showId}`,
+          {
+            credentials: 'include',
+          }
+        );
 
         if (!response.ok) throw new Error('Movie not found');
         const data = await response.json();

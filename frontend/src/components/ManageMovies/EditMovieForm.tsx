@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { moviesTitle } from '../../types/moviesTitle';
 import { updateMovie } from '../../api/MovieApi';
 import countries from '../../assets/countries';
@@ -36,10 +36,14 @@ const determineSelectedGenre = (movie: moviesTitle): string => {
 };
 
 const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
-  const [type, setType] = useState<'Movie' | 'TV Show'>(movie.type as 'Movie' | 'TV Show');
-  const [selectedGenre, setSelectedGenre] = useState<string>(determineSelectedGenre(movie));
+  const [type, setType] = useState<'Movie' | 'TV Show'>(
+    movie.type as 'Movie' | 'TV Show'
+  );
+  const [selectedGenre, setSelectedGenre] = useState<string>(
+    determineSelectedGenre(movie)
+  );
   const [formData, setFormData] = useState<moviesTitle>({
-    ...movie
+    ...movie,
   });
 
   const handleChange = (
@@ -105,8 +109,9 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
     console.log('Updating movie:', movieToUpdate);
 
     try {
-      if (movie.id) {  // Make sure id exists for update
-        await updateMovie(movie.id, movieToUpdate);
+      if (movie.id) {
+        // Make sure id exists for update
+        await updateMovie(movieToUpdate);
         onSuccess();
       } else {
         throw new Error('Movie ID not found');
@@ -251,7 +256,11 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
           <button type="submit" className="btn btn-success">
             Save Changes
           </button>
-          <button type="button" onClick={onCancel} className="btn btn-secondary">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="btn btn-secondary"
+          >
             Cancel
           </button>
         </div>
@@ -270,7 +279,8 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
           font-weight: 500;
         }
 
-        input, select {
+        input,
+        select {
           width: 100%;
           padding: 8px 12px;
           border-radius: 4px;

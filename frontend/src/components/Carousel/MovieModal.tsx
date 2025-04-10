@@ -1,5 +1,4 @@
 'use client';
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { StarRating } from '../MoviePage/StarRating';
@@ -14,7 +13,6 @@ type Movie = {
   releaseYear: number;
   genres: string[];
 };
-
 const MovieModal = () => {
   const { showId } = useParams();
   const navigate = useNavigate();
@@ -24,7 +22,6 @@ const MovieModal = () => {
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // Lock scroll while modal is open
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -32,30 +29,28 @@ const MovieModal = () => {
       document.body.style.overflow = 'auto';
     };
   }, []);
-
   const sanitizeFileName = (title: string) =>
     title
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '')
       .trim();
-
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(`https://localhost:5500/Movie/${showId}`, {
-          credentials: 'include',
-        });
-
+        const res = await fetch(
+          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/${showId}`,
+          {
+            credentials: 'include',
+          }
+        );
         if (!res.ok) throw new Error(`Server responded with ${res.status}`);
         const text = await res.text();
         if (!text) throw new Error('Empty response');
         const data = JSON.parse(text);
-
         const genres = Object.entries(data)
           .filter(([_, value]) => typeof value === 'number' && value === 1)
           .map(([key]) => key);
-
         setMovie({
           title: data.title || '',
           description: data.description || '',
@@ -71,7 +66,6 @@ const MovieModal = () => {
         setLoading(false);
       }
     };
-
     const fetchRecs = async () => {
       try {
         const recs = await fetchHybridRecommendations(showId!);
@@ -80,41 +74,32 @@ const MovieModal = () => {
         console.error('Error fetching recommendations:', err);
       }
     };
-
     if (showId) {
       fetchMovie();
       fetchRecs();
     }
   }, [showId]);
-
   const closeModal = () => navigate(-1);
-
   const imageUrl = movie?.title
     ? `https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(movie.title)}.jpg`
     : '';
-
   return (
     <div className="modal-overlay" onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={closeModal}>
           ✕
         </button>
-
         {loading && <p>Loading...</p>}
-        {error && <p style={{ color: 'red' }}>⚠ {error}</p>}
-
+        {error && <p style={{ color: 'red' }}>:warning: {error}</p>}
         {!loading && !error && movie && (
           <div className="modal-flex">
             <img src={imageUrl} alt={movie.title} className="poster-image" />
-
             <div className="right-column">
               <h2 className="modal-title">
                 {movie.title} ({movie.releaseYear})
               </h2>
-
               <div className="modal-body">
-                <StarRating userId={1234} showId={showId!} />
-
+                <StarRating userId={1} showId={showId!} />
                 <p>
                   <strong>Director:</strong> {movie.director}
                 </p>
@@ -131,12 +116,10 @@ const MovieModal = () => {
             </div>
           </div>
         )}
-
         {recommendations.length > 0 && (
           <RecommenderCarousel items={recommendations} />
         )}
       </div>
-
       <style>{`
         .modal-overlay {
           position: fixed;
@@ -148,7 +131,6 @@ const MovieModal = () => {
           align-items: center;
           z-index: 1000;
         }
-
         .modal-content {
           background: #121212;
           color: white;
@@ -160,13 +142,11 @@ const MovieModal = () => {
           position: relative;
           padding: 2rem;
         }
-
         .modal-flex {
           display: flex;
           flex-wrap: wrap;
           gap: 24px;
         }
-
         .poster-image {
           width: 50%;
           height: 550px;
@@ -174,7 +154,6 @@ const MovieModal = () => {
           border-radius: 12px;
           display: block;
         }
-
         .right-column {
           flex: 1;
           min-width: 250px;
@@ -183,18 +162,15 @@ const MovieModal = () => {
           justify-content: flex-start;
           gap: 1rem;
         }
-
         .modal-title {
           margin-top: 0;
           font-size: 1.5rem;
         }
-
         .modal-body {
           text-align: left;
           font-size: 0.95rem;
           line-height: 1.5;
         }
-
         .close-button {
           position: absolute;
           top: 12px;
@@ -205,13 +181,11 @@ const MovieModal = () => {
           border: none;
           cursor: pointer;
         }
-
         @media (max-width: 768px) {
           .poster-image {
             width: 100%;
             height: auto;
           }
-
           .modal-flex {
             flex-direction: column;
           }
@@ -220,5 +194,4 @@ const MovieModal = () => {
     </div>
   );
 };
-
 export default MovieModal;

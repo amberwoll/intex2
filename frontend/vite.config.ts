@@ -18,14 +18,14 @@ export default defineConfig({
         "img-src 'self' data: https://cdn.builder.io/api/v1/image/assets/TEMP https://cdn.builder.io https://intexphotos.blob.core.windows.net; " +
         "frame-ancestors 'none'; " +
         "font-src 'self' fonts.gstatic.com data:; " +
-        "connect-src 'self' https://localhost:5500 https://accounts.google.com https://oauth2.googleapis.com https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net; " +
+        "connect-src 'self' https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net https://accounts.google.com https://oauth2.googleapis.com https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net; " +
         "object-src 'none'; " +
         "base-uri 'self'; " +
         "form-action 'self'; " +
         "frame-src 'self' https://accounts.google.com https://oauth2.googleapis.com;",
     },
     cors: {
-      origin: 'https://localhost:3000',
+      origin: 'https://proud-stone-09439391e.6.azurestaticapps.net',
       credentials: true,
     },
   },

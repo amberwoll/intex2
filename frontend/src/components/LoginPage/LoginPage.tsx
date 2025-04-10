@@ -39,13 +39,14 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(''); // Clear any previous errors
-
+    console.log(error);
     if (!email || !password) {
       setError('Please fill in all fields.');
       return;
     }
 
-    const loginUrl = 'https://localhost:5500/login?useCookies=true';
+    const loginUrl =
+      'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/login?useCookies=true';
 
     try {
       const response = await fetch(loginUrl, {

@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import TrendCard from './TrendCard';
 import { fetchUserMovieRecommendationById } from '../../api/UserMovieRecommendationsAPI';
 
@@ -28,7 +27,7 @@ const MoviesforYou = () => {
           .map(([_, value]) => value);
 
         const titleResponse = await fetch(
-          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
+          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

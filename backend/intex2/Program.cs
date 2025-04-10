@@ -79,7 +79,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("https://localhost:3000")
+        builder.WithOrigins("https://proud-stone-09439391e.6.azurestaticapps.net")
                .AllowCredentials()
                .AllowAnyMethod()
                .AllowAnyHeader();
@@ -127,16 +127,26 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     return Results.Ok(new { message = "Logout successful" });
 }).RequireAuthorization();
 
-app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
+    Console.WriteLine("========== /pingauth ==========");
+    Console.WriteLine($"Authenticated: {user.Identity?.IsAuthenticated}");
+    Console.WriteLine($"Auth Type: {user.Identity?.AuthenticationType}");
+
+    foreach (var claim in user.Claims)
+    {
+        Console.WriteLine($"Claim: {claim.Type} = {claim.Value}");
+    }
+
     if (!user.Identity?.IsAuthenticated ?? false)
         return Results.Unauthorized();
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    var isAdmin = user.IsInRole("Administrator"); // Check if the user is an administrator
-    var privilegeLevel = isAdmin ? 1 : 0; // Set privilege level based on role
+    var isAdmin = user.IsInRole("Administrator");
+    var privilegeLevel = isAdmin ? 1 : 0;
 
     return Results.Json(new { email, privilegeLevel });
 }).RequireAuthorization();
+
 
 app.Run();

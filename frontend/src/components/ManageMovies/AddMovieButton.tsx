@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AddMovieModal from './AddMovieModal';
 
 const AddMovieButton = ({ onMovieAdded }: { onMovieAdded?: () => void }) => {

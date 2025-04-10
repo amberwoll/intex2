@@ -24,7 +24,7 @@ const TvRecs = () => {
           .map(([_, value]) => value);
 
         const titleResponse = await fetch(
-          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
+          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ const TvRecs = () => {
       <h2 className="trends-title">Today's Top TV Picks for You</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
-          {tvList.map((tv, index) => (
+          {tvList.map((tv) => (
             <TrendCard
               key={tv.showId}
               imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(tv.title)}.jpg`}

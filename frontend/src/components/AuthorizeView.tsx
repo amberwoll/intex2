@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, ReactNode } from 'react';
+import { useState, useEffect, createContext, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 
 const UserContext = createContext<User | null>(null);
@@ -23,10 +23,13 @@ function AuthorizeView({
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch('https://localhost:5500/pingauth', {
-          method: 'GET',
-          credentials: 'include',
-        });
+        const response = await fetch(
+          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/pingauth',
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
           throw new Error('Invalid response format from server');

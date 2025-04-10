@@ -36,7 +36,7 @@ const SimilarMovies = () => {
       <h2 className="trends-title">Because you rated ⭐⭐⭐⭐⭐...</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
-          {movies.map((movie, index) => (
+          {movies.map((movie) => (
             <TrendCard
               key={movie.showId}
               title={movie.title}
