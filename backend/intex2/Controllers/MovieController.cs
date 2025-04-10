@@ -9,7 +9,7 @@ namespace intex2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class MovieController : ControllerBase
     {
         private readonly MoviesContext _movieContext;
@@ -94,6 +94,7 @@ namespace intex2.Controllers
             return Ok(categoryNames);
         }
 
+[Authorize(Roles = "Administrator")]
 [HttpPost("AddMovie")]
 public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 {
@@ -115,7 +116,7 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 
     return Ok(newMovie);
 }
-
+        [Authorize(Roles = "Administrator")]
         [HttpPut("UpdateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
@@ -131,7 +132,7 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 
             return Ok(updatedMovie);
         }
-
+[Authorize(Roles = "Administrator")]
 [HttpDelete("Delete/{showId}")]
 public IActionResult DeleteMovie(string showId)
 {

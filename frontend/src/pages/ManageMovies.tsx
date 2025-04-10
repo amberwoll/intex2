@@ -6,7 +6,7 @@ import { NavigationBar } from '../components/UniversalLayout/NavigationBar';
 const ManageMovies = () => {
   return (
     <>
-      <AuthorizeView>
+      <AuthorizeView requiredPrivilegeLevel={1}>
         <NavigationBar />
         <Table />
         <Footer />

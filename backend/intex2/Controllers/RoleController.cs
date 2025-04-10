@@ -21,7 +21,7 @@ public class RoleController : Controller
         _userManager = userManager;
         _moviesContext = moviesContext;
     }
-    // [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     [HttpPost("AddRole")]
     public async Task<IActionResult> AddRole(string roleName)
     {
@@ -44,7 +44,7 @@ public class RoleController : Controller
 
         return StatusCode(500, "An error occurred while creating the role.");
     }
-    // [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     [HttpPost("AssignRoleToUser")]
     public async Task<IActionResult> AssignRoleToUser(string userEmail, string roleName)
     {
@@ -95,7 +95,7 @@ public class RoleController : Controller
         return Ok($"Role '{roleName}' assigned to user '{userEmail}' in both Identity and Movies databases.");
     }
 
-
+    [Authorize]
     [HttpGet("GetRoles")]
     public async Task<IActionResult> GetRoles()
     {

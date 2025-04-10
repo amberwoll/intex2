@@ -1,4 +1,5 @@
 using intex2.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ namespace intex2.Controllers
         }
 
         // (Optional) GET endpoint for testing
+        [Authorize]
         [HttpGet("All")]
         public IActionResult GetAllUsers()
         {

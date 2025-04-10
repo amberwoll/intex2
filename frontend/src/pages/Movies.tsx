@@ -11,7 +11,7 @@ import { Footer } from '../components/MoviePage/Footer';
 
 export const Movies: React.FC = () => {
   return (
-    <AuthorizeView>
+    <AuthorizeView requiredPrivilegeLevel={0}>
       <main className="layout">
         <link
           href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&display=swap"
