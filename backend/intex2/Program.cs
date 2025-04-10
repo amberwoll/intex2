@@ -72,7 +72,8 @@ builder.Services.ConfigureApplicationCookie(options =>
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
         return Task.CompletedTask;
     };
-});// change to samesitemode.secure
+});
+// change to samesitemode.secure
 
 
 builder.Services.AddCors(options =>
@@ -92,11 +93,10 @@ builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<Identi
 var app = builder.Build();
 
 // Middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 //else
 //{
 //   // Apply HSTS only in production (NOT during local dev)

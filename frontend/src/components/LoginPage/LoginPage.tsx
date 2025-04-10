@@ -8,11 +8,6 @@ const handleSignupClick = (navigate: ReturnType<typeof useNavigate>) => {
   navigate('/create-account');
 };
 
-// Handle button click for Create Account
-const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
-  navigate('/movies');
-};
-
 const LoginPage: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate function
   // state variables for email and passwords
@@ -193,11 +188,7 @@ const LoginPage: React.FC = () => {
               <br />
             </div>
 
-            <button
-              type="submit"
-              className="login-button"
-              onClick={() => handleLoginClick(navigate)}
-            >
+            <button type="submit" className="login-button">
               LOGIN
             </button>
           </form>
