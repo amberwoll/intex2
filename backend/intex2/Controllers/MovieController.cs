@@ -226,5 +226,33 @@ public IActionResult DeleteMovie(string showId)
 
             return Ok(movieTitles);
         }
+
+        [HttpGet("HybridRecommendations/{showId}")]
+public async Task<IActionResult> GetHybridRecommendations(string showId)
+{
+    var rec = await _recsContext.HybridContentRecommendations.FindAsync(showId);
+    if (rec == null)
+    {
+        return NotFound();
+    }
+
+    var recIds = new List<string?>
+    {
+        rec.Recommendation1, rec.Recommendation2, rec.Recommendation3,
+        rec.Recommendation4, rec.Recommendation5, rec.Recommendation6,
+        rec.Recommendation7, rec.Recommendation8, rec.Recommendation9,
+        rec.Recommendation10
+    }
+    .Where(id => !string.IsNullOrWhiteSpace(id))
+    .ToList();
+
+    var movieTitles = await _movieContext.MoviesTitles
+        .Where(m => recIds.Contains(m.ShowId!))
+        .Select(m => new { m.ShowId, m.Title })
+        .ToListAsync();
+
+    return Ok(movieTitles);
+}
+
     }
 }

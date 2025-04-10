@@ -1,8 +1,10 @@
+'use client';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { StarRating } from '../MoviePage/StarRating';
-import RecommenderCarousel from './RecommenderCarousel'; 
-
+import RecommenderCarousel from './RecommenderCarousel';
+import { fetchHybridRecommendations } from '../../api/HybridRecsAPI';
 
 type Movie = {
   title: string;
@@ -17,10 +19,13 @@ const MovieModal = () => {
   const { showId } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState<Movie | null>(null);
+  const [recommendations, setRecommendations] = useState<
+    { title: string; showId: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Lock background scroll
+  // Lock scroll while modal is open
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -43,10 +48,8 @@ const MovieModal = () => {
         });
 
         if (!res.ok) throw new Error(`Server responded with ${res.status}`);
-
         const text = await res.text();
         if (!text) throw new Error('Empty response');
-
         const data = JSON.parse(text);
 
         const genres = Object.entries(data)
@@ -69,7 +72,19 @@ const MovieModal = () => {
       }
     };
 
-    fetchMovie();
+    const fetchRecs = async () => {
+      try {
+        const recs = await fetchHybridRecommendations(showId!);
+        setRecommendations(recs);
+      } catch (err) {
+        console.error('Error fetching recommendations:', err);
+      }
+    };
+
+    if (showId) {
+      fetchMovie();
+      fetchRecs();
+    }
   }, [showId]);
 
   const closeModal = () => navigate(-1);
@@ -98,7 +113,7 @@ const MovieModal = () => {
               </h2>
 
               <div className="modal-body">
-              <StarRating userId={1234} showId={showId!} />
+                <StarRating userId={1234} showId={showId!} />
 
                 <p>
                   <strong>Director:</strong> {movie.director}
@@ -112,26 +127,13 @@ const MovieModal = () => {
                 <p>
                   <strong>Description:</strong> {movie.description}
                 </p>
-
-                <RecommenderCarousel
-                items={[
-                  { title: 'Oppenheimer', showId: '1' },
-                  { title: 'Barbie', showId: '2' },
-                  { title: 'Dune', showId: '3' },
-                  { title: 'Avatar 2', showId: '4' },
-                  { title: 'The Batman', showId: '5' },
-                  { title: 'Oppenheimer', showId: '1' },
-                  { title: 'Barbie', showId: '2' },
-                  { title: 'Dune', showId: '3' },
-                  { title: 'Avatar 2', showId: '4' },
-                  { title: 'The Batman', showId: '5' },
-                ]}
-              />
-
-                
               </div>
             </div>
           </div>
+        )}
+
+        {recommendations.length > 0 && (
+          <RecommenderCarousel items={recommendations} />
         )}
       </div>
 
