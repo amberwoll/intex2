@@ -66,6 +66,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     
     options.LoginPath = "/login"; 
     options.Cookie.SameSite = SameSiteMode.Lax;// required for cross-origin
+    options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;// must use HTTPS
     options.Events.OnRedirectToLogin = context =>
     {
@@ -142,32 +143,12 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
         return Results.Unauthorized();
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
+    var roles = user.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
     var isAdmin = user.IsInRole("Administrator");
     var privilegeLevel = isAdmin ? 1 : 0;
 
     return Results.Json(new { email, privilegeLevel });
 }).RequireAuthorization();
-
-app.MapPost("/login", async (
-    SignInManager<IdentityUser> signInManager,
-    UserManager<IdentityUser> userManager,
-    HttpContext context,
-    LoginDto loginDto) =>
-{
-    var user = await userManager.FindByEmailAsync(loginDto.Email);
-    if (user == null)
-    {
-        return Results.BadRequest(new { message = "Invalid email or password." });
-    }
-
-    var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, true, lockoutOnFailure: false);
-    if (!result.Succeeded)
-    {
-        return Results.BadRequest(new { message = "Invalid email or password." });
-    }
-
-    return Results.Ok();
-});
 
 
 
