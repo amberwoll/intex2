@@ -23,10 +23,13 @@ function AuthorizeView({
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch('https://localhost:5500/pingauth', {
+        const response = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/pingauth', {
           method: 'GET',
-          credentials: 'include',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken') ?? ''}`,
+          },
         });
+        
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
           throw new Error('Invalid response format from server');

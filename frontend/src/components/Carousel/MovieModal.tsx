@@ -39,7 +39,7 @@ const MovieModal = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(`https://localhost:5500/Movie/${showId}`, {
+        const res = await fetch(`https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/${showId}`, {
           credentials: 'include',
         });
         if (!res.ok) throw new Error(`Server responded with ${res.status}`);

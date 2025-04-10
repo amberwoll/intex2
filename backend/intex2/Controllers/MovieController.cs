@@ -94,7 +94,7 @@ namespace intex2.Controllers
             return Ok(categoryNames);
         }
 
-[Authorize(Roles = "Administrator")]
+// [Authorize(Roles = "Administrator")]
 [HttpPost("AddMovie")]
 public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 {
@@ -116,7 +116,7 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 
     return Ok(newMovie);
 }
-        [Authorize(Roles = "Administrator")]
+        // [Authorize(Roles = "Administrator")]
         [HttpPut("UpdateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
@@ -132,7 +132,7 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 
             return Ok(updatedMovie);
         }
-[Authorize(Roles = "Administrator")]
+// [Authorize(Roles = "Administrator")]
 [HttpDelete("DeleteMovie/{showId}")]
 public IActionResult DeleteMovie(string showId)
 {

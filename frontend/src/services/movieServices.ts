@@ -1,7 +1,7 @@
 // src/services/movieService.ts
 export const addMovie = async (movieData: any) => {
   try {
-    const res = await fetch('https://localhost:5500/Movie/AddMovie', {
+    const res = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/AddMovie', {
       credentials: 'include',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -24,7 +24,7 @@ export const addMovie = async (movieData: any) => {
 export const deleteMovie = async (showId: string) => {
   try {
     const response = await fetch(
-      `https://localhost:5500/Movie/DeleteMovie/${showId}`,
+      `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/DeleteMovie/${showId}`,
       {
         method: 'DELETE',
         credentials: 'include',

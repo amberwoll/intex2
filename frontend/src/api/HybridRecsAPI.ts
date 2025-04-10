@@ -1,9 +1,13 @@
-// ✅ HybridRecsAPI.ts
 export const fetchHybridRecommendations = async (showId: string) => {
+  const token = localStorage.getItem('accessToken');
+
   const res = await fetch(
-    `https://localhost:5500/Movie/HybridRecommendations/${showId}`,
+    `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/HybridRecommendations/${showId}`,
     {
-      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+
+      },
     }
   );
 

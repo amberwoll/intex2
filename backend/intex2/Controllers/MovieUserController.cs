@@ -26,7 +26,7 @@ namespace intex2.Controllers
         }
 
         // (Optional) GET endpoint for testing
-        [Authorize]
+        // [Authorize]
         [HttpGet("All")]
         public IActionResult GetAllUsers()
         {

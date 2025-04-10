@@ -17,6 +17,7 @@ import MovieModal from './components/Carousel/MovieModal'; // ⬅️ you'll crea
 import './App.css';
 import { UserProvider } from './components/UserContext';
 import AuthorizeView from './components/AuthorizeView';
+import CookieConsentBanner from './components/CookieConsentBanner';
 
 // Separate inner routing to support modal rendering
 function AppRoutes() {
@@ -25,6 +26,7 @@ function AppRoutes() {
 
   return (
     <>
+    <CookieConsentBanner />
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Home />} />
         <Route path="/create-account" element={<SignupPage />} />
@@ -40,33 +42,33 @@ function AppRoutes() {
         <Route
           path="/movies/:showId"
           element={
-            <AuthorizeView requiredPrivilegeLevel={0}>
+            // <AuthorizeView requiredPrivilegeLevel={0}>
               <MovieDetail />
-            </AuthorizeView>
+            // </AuthorizeView>
           }
         />
         <Route
           path="/privacy"
           element={
-            <AuthorizeView requiredPrivilegeLevel={0}>
+            // <AuthorizeView requiredPrivilegeLevel={0}>
               <Privacy />
-            </AuthorizeView>
+            // </AuthorizeView>
           }
         />
         <Route
           path="/manage-movies"
           element={
-            <AuthorizeView requiredPrivilegeLevel={1}>
+            // <AuthorizeView requiredPrivilegeLevel={1}>
               <ManageMovies />
-            </AuthorizeView>
+            // </AuthorizeView>
           }
         />
         <Route
           path="/view-movies"
           element={
-            <AuthorizeView requiredPrivilegeLevel={0}>
+            // <AuthorizeView requiredPrivilegeLevel={0}>
               <ViewAllMovies />
-            </AuthorizeView>
+            // </AuthorizeView>
           }
         />
         <Route path="*" element={<Navigate to="/login" replace />} />

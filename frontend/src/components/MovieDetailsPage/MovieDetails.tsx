@@ -9,7 +9,7 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://localhost:5500/Movie/${showId}`, {
+        const response = await fetch(`https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/${showId}`, {
           credentials: 'include',
         });
 

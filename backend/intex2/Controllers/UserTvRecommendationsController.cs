@@ -9,7 +9,7 @@ namespace intex2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class UserTvRecommendationsController : ControllerBase
     {
         private readonly RecommendationsContext _context;

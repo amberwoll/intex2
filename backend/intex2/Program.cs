@@ -4,26 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text.Json;
 using intex2.Services;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add HSTS configuration
-//builder.Services.AddHsts(options =>
-//{
-//    options.MaxAge = TimeSpan.FromDays(5);
-//    options.IncludeSubDomains = true;
-//});
+// Add services
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
 
-// Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -35,9 +29,6 @@ builder.Services.AddDbContext<RecommendationsContext>(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
-
-builder.Services.AddAuthorization();
-
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -51,30 +42,9 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 18;
     options.Password.RequiredUniqueChars = 1;
-
-    // Also setting Claims Identity configurations here is good practice
-    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
-    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    
-    options.LoginPath = "/login"; 
-    options.Cookie.SameSite = SameSiteMode.Lax;// required for cross-origin
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;// must use HTTPS
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
-});
-// change to samesitemode.secure
-
 
 builder.Services.AddCors(options =>
 {
@@ -84,60 +54,58 @@ builder.Services.AddCors(options =>
                .AllowCredentials()
                .AllowAnyMethod()
                .AllowAnyHeader();
-               
     });
 });
 
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
-var app = builder.Build();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "yourapp",
+            ValidAudience = "yourapp",
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("super_secret_dev_key_123456789"))
+        };
+    });
 
-// Middleware
+
+builder.Services.AddAuthorization();
+
+var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-//else
-//{
-//   // Apply HSTS only in production (NOT during local dev)
-//    app.UseHsts();
-//}
 
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-// // --- Add the custom CSP middleware here ---
-// app.Use(async (context, next) =>
-// {
-//     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:");
-//     await next();
-// });
-
 app.MapControllers();
-app.MapIdentityApi<IdentityUser>();
 
-// logout + auth check
-app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
-{
-    await signInManager.SignOutAsync();
-    context.Response.Cookies.Delete(".AspNetCore.Identity.Application");
-    return Results.Ok(new { message = "Logout successful" });
-}).RequireAuthorization();
+// app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
+// {
+//     await signInManager.SignOutAsync();
+    
+//     // Ensure authentication cookie is removed
+//     context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
+//     {
+//         HttpOnly = true,
+//         Secure = false,
+//         SameSite = SameSiteMode.None
+//     });
+
+//     return Results.Ok(new { message = "Logout successful" });
+// }).RequireAuthorization();
 
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
-    Console.WriteLine("========== /pingauth ==========");
-    Console.WriteLine($"Authenticated: {user.Identity?.IsAuthenticated}");
-    Console.WriteLine($"Auth Type: {user.Identity?.AuthenticationType}");
-
-    foreach (var claim in user.Claims)
-    {
-        Console.WriteLine($"Claim: {claim.Type} = {claim.Value}");
-    }
-
     if (!user.Identity?.IsAuthenticated ?? false)
         return Results.Unauthorized();
 
@@ -147,8 +115,5 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 
     return Results.Json(new { email, privilegeLevel });
 }).RequireAuthorization();
-
-
-
 
 app.Run();

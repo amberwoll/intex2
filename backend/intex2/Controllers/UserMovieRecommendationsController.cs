@@ -10,7 +10,7 @@ namespace intex2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class UserMovieRecommendationsController : ControllerBase
     {
         private readonly RecommendationsContext _context;

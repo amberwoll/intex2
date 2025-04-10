@@ -5,14 +5,26 @@ interface FetchMoviesResponse {
   totalMovies: number;
 }
 
-const API_URL = `https://localhost:5500/Movie`;
+const API_URL = `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie`;
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('accessToken');
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+
+  };
+};
 
 export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {
     const response = await fetch(
       `${API_URL}/AllMovies?pageHowMany=10000&pageNum=1`,
-      { credentials: 'include' }
+      {
+        headers: getAuthHeaders(),
+      }
     );
+
     if (!response.ok) throw new Error('Failed to fetch movies');
     const result = await response.json();
     return {
@@ -29,11 +41,8 @@ export const addMovie = async (newMovie: moviesTitle): Promise<moviesTitle> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getAuthHeaders(),
       body: JSON.stringify(newMovie),
-      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -51,16 +60,12 @@ export const updateMovie = async (
   updatedMovie: moviesTitle
 ): Promise<moviesTitle> => {
   try {
-    // Use showId from the movie object for the API endpoint
     const response = await fetch(
       `${API_URL}/UpdateMovie/${updatedMovie.showId}`,
       {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(updatedMovie),
-        credentials: 'include',
       }
     );
 
@@ -84,7 +89,7 @@ export const deleteMovie = async (showId: string): Promise<void> => {
       `${API_URL}/DeleteMovie/${encodeURIComponent(showId)}`,
       {
         method: 'DELETE',
-        credentials: 'include',
+        headers: getAuthHeaders(),
       }
     );
 
@@ -95,7 +100,7 @@ export const deleteMovie = async (showId: string): Promise<void> => {
       );
     }
   } catch (error) {
-    console.error('Error deleting movies:', error);
+    console.error('Error deleting movie:', error);
     throw error;
   }
 };

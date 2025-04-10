@@ -86,7 +86,7 @@ const SignupPage: React.FC = () => {
 
     try {
       // STEP 1: Register with Identity
-      const registerResponse = await fetch('https://localhost:5500/register', {
+      const registerResponse = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/register', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -105,7 +105,7 @@ const SignupPage: React.FC = () => {
 
       // STEP 2: Add user details to MoviesUser
       const addDetailsResponse = await fetch(
-        'https://localhost:5500/MoviesUser/AddUserDetails',
+        'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/MoviesUser/AddUserDetails',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

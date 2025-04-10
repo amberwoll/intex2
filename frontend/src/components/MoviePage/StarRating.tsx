@@ -21,7 +21,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
     const fetchUserRating = async () => {
       try {
         const res = await fetch(
-          `https://localhost:5500/Movie/GetUserRating/${userId}/${showId}`,
+          `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/GetUserRating/${userId}/${showId}`,
           {
             credentials: 'include',
           }
@@ -39,7 +39,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
 
   const submitRating = async (newRating: number) => {
     try {
-      const response = await fetch('https://localhost:5500/Movie/Rate', {
+      const response = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/Rate', {
         method: 'POST',
         credentials: 'include',
         headers: {
