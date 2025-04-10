@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using intex2.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace intex2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class UserTvRecommendationsController : ControllerBase
     {
         private readonly RecommendationsContext _context;

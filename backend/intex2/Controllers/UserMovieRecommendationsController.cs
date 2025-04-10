@@ -4,11 +4,13 @@ using intex2.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace intex2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class UserMovieRecommendationsController : ControllerBase
     {
         private readonly RecommendationsContext _context;

@@ -4,7 +4,7 @@ import MostViewGrid from '../components/ViewAllMovies/MostViewGrid';
 
 const ViewAllMovies = () => {
   return (
-    <AuthorizeView>
+    <AuthorizeView requiredPrivilegeLevel={0}>
       <NavigationBar />
       <br></br>
       <br></br>

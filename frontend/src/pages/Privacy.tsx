@@ -4,7 +4,7 @@ import AuthorizeView from '../components/AuthorizeView';
 import { Footer } from '../components/MoviePage/Footer';
 const Privacy: React.FC = () => {
   return (
-    <AuthorizeView>
+    <AuthorizeView requiredPrivilegeLevel={0}>
       <div>
         <NavigationBar />;
         <div className="privacy-wrapper">

@@ -3,7 +3,7 @@ import MovieDetails from '../components/MovieDetailsPage/MovieDetails';
 
 const MovieDetail = () => (
   <>
-    <AuthorizeView>
+    <AuthorizeView requiredPrivilegeLevel={0}>
       <MovieDetails />
     </AuthorizeView>
   </>

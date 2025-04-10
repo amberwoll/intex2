@@ -47,8 +47,17 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 18;
+    options.Password.RequiredUniqueChars = 1;
+
+    // Also setting Claims Identity configurations here is good practice
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
     options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
+    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
@@ -124,7 +133,10 @@ app.MapGet("/pingauth", (ClaimsPrincipal user) =>
         return Results.Unauthorized();
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    return Results.Json(new { email });
+    var isAdmin = user.IsInRole("Administrator"); // Check if the user is an administrator
+    var privilegeLevel = isAdmin ? 1 : 0; // Set privilege level based on role
+
+    return Results.Json(new { email, privilegeLevel });
 }).RequireAuthorization();
 
 app.Run();
