@@ -1,7 +1,17 @@
 'use client';
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const MovieHero: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleMoreInfoClick = () => {
+    navigate(`/movies/s994`, {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <section className="hero-section">
       <div className="hero-content-wrapper">
@@ -10,7 +20,9 @@ export const MovieHero: React.FC = () => {
           <h1 className="movie-title">Shadow and Bone</h1>
           <div className="action-buttons">
             <button className="watch-button">▶ Watch Movie</button>
-            <button className="info-button">More Info →</button>
+            <button className="info-button" onClick={handleMoreInfoClick}>
+              More Info →
+            </button>
           </div>
         </div>
 
