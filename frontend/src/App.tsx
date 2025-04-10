@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -14,6 +15,7 @@ import ManageMovies from './pages/ManageMovies';
 import ViewAllMovies from './pages/ViewAllMovies';
 import MovieModal from './components/Carousel/MovieModal'; // ⬅️ you'll create this if not already
 import './App.css';
+import { UserProvider } from './components/UserContext';
 
 // Separate inner routing to support modal rendering
 function AppRoutes() {
@@ -31,6 +33,7 @@ function AppRoutes() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/manage-movies" element={<ManageMovies />} />
         <Route path="/view-movies" element={<ViewAllMovies />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
 
       {state?.backgroundLocation && (
@@ -45,7 +48,9 @@ function AppRoutes() {
 function App() {
   return (
     <Router>
-      <AppRoutes />
+      <UserProvider>
+        <AppRoutes />
+      </UserProvider>
     </Router>
   );
 }

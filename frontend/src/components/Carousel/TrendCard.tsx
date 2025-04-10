@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 const TrendCard = ({
   imageUrl,
@@ -13,13 +14,13 @@ const TrendCard = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [imgError, setImgError] = useState(false);
 
   const showTitle = title ?? 'Trending';
-  const hasImage = imageUrl && !imageUrl.endsWith('/.jpg');
 
   const handleClick = () => {
     navigate(`/movies/${showId ?? encodeURIComponent(showTitle)}`, {
-      state: { backgroundLocation: location }, // ✅ enables modal routing
+      state: { backgroundLocation: location },
     });
   };
 
@@ -30,12 +31,19 @@ const TrendCard = ({
       style={{ cursor: 'pointer' }}
     >
       {rank && <span className="rank-badge">{rank}</span>}
-      {hasImage ? (
-        <img src={imageUrl} alt={showTitle} className="card-img" />
+      {!imgError ? (
+        <img
+          src={imageUrl}
+          alt={showTitle}
+          className="card-img"
+          onError={() => setImgError(true)}
+        />
       ) : (
         <div className="no-image">
           <span>{showTitle}</span>
-          <small>(no poster available)</small>
+          <small style={{ fontSize: '10px', color: '#888' }}>
+            (no poster available)
+          </small>
         </div>
       )}
 
@@ -47,7 +55,7 @@ const TrendCard = ({
           flex-shrink: 0;
           border-radius: 12px;
           overflow: hidden;
-          background-color: #fff;
+          background-color: #f2f2f2;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -85,11 +93,14 @@ const TrendCard = ({
 
         .no-image {
           padding: 10px;
-          color: #000;
+          color: #333;
+          font-size: 14px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          background: black;
+          color: white;
         }
       `}</style>
     </div>

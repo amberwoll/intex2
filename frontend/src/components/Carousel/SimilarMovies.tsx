@@ -1,11 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import TrendCard from './TrendCard';
 import { fetchHighRatedRecommendations } from '../../api/HighRatedRecommendationsAPI';
+import { UserContext } from '../AuthorizeView'; // Adjust path as needed
 
 const SimilarMovies = () => {
+  const user = useContext(UserContext);
   const [movies, setMovies] = useState<{ title: string; showId: string }[]>([]);
-  const userId = '1'; // replace or dynamically get this in production
 
   const sanitizeFileName = (title: string) =>
     title
@@ -16,16 +17,32 @@ const SimilarMovies = () => {
 
   useEffect(() => {
     const fetchRecs = async () => {
+      if (!user?.email) return;
+
       try {
-        const data = await fetchHighRatedRecommendations(userId);
-        setMovies(data);
+        // Step 1: Get userId by email
+        const encodedEmail = encodeURIComponent(user.email);
+        const res = await fetch(
+          `https://localhost:5500/MoviesUser/ByEmail/${encodedEmail}`,
+          {
+            credentials: 'include',
+          }
+        );
+
+        if (!res.ok) throw new Error('Failed to fetch user ID');
+        const data = await res.json();
+        const userId = data.userId;
+
+        // Step 2: Fetch high-rated recommendations
+        const recs = await fetchHighRatedRecommendations(userId);
+        setMovies(recs);
       } catch (error) {
         console.error('Failed to load similar movies:', error);
       }
     };
 
     fetchRecs();
-  }, []);
+  }, [user?.email]);
 
   return (
     <section

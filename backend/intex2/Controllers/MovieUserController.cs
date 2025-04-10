@@ -33,5 +33,18 @@ namespace intex2.Controllers
             var users = _context.MoviesUsers.ToList();
             return Ok(users);
         }
+
+        [HttpGet("ByEmail/{email}")]
+        public IActionResult GetUserByEmail(string email)
+        {
+            var user = _context.MoviesUsers.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            return Ok(new { userId = user.UserId });
+        }
+
     }
 }

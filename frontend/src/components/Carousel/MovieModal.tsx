@@ -38,12 +38,9 @@ const MovieModal = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(
-          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/${showId}`,
-          {
-            credentials: 'include',
-          }
-        );
+        const res = await fetch(`https://localhost:5500/Movie/${showId}`, {
+          credentials: 'include',
+        });
         if (!res.ok) throw new Error(`Server responded with ${res.status}`);
         const text = await res.text();
         if (!text) throw new Error('Empty response');

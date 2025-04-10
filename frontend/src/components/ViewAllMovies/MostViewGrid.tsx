@@ -1,4 +1,3 @@
-// ✅ MostViewGrid.tsx — with modal overlay navigation and full styling
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -35,6 +34,7 @@ const MovieGallery = () => {
   const [selectedType, setSelectedType] = useState<string>('');
   const [pageSize] = useState<number>(20);
   const [pageNum, setPageNum] = useState<number>(1);
+  const [imgError, setImgError] = useState<{ [key: string]: boolean }>({});
   const loaderRef = useRef(null);
 
   useEffect(() => {
@@ -142,11 +142,12 @@ const MovieGallery = () => {
         {displayedMovies.map((movie, idx) => {
           const sanitizedTitle = sanitizeFileName(movie.title ?? '');
           const imageUrl = `https://intexphotos.blob.core.windows.net/posters/${sanitizedTitle}.jpg`;
+          const id = movie.showId ?? idx;
 
           return (
             <div
               className="image-card"
-              key={movie.showId ?? idx}
+              key={id}
               onClick={() =>
                 navigate(`/movies/${movie.showId}`, {
                   state: { backgroundLocation: location },
@@ -154,11 +155,21 @@ const MovieGallery = () => {
               }
               style={{ cursor: 'pointer' }}
             >
-              <img
-                src={imageUrl}
-                alt={movie.title ?? 'Movie'}
-                className="card-image"
-              />
+              {!imgError[id] ? (
+                <img
+                  src={imageUrl}
+                  alt={movie.title ?? 'Movie'}
+                  className="card-image"
+                  onError={() =>
+                    setImgError((prev) => ({ ...prev, [id]: true }))
+                  }
+                />
+              ) : (
+                <div className="fallback-card">
+                  <h3>{movie.title}</h3>
+                  <p className="fallback-label">(No poster available)</p>
+                </div>
+              )}
               <div className="overlay">
                 <h3>{movie.title}</h3>
                 <p>{movie.rating}</p>
@@ -224,6 +235,10 @@ const MovieGallery = () => {
           overflow: hidden;
           transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
           z-index: 1;
+          background-color: #1a1a1a;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .image-card:hover {
           transform: scale(1.2);
@@ -235,6 +250,15 @@ const MovieGallery = () => {
           height: 100%;
           object-fit: cover;
           display: block;
+        }
+        .fallback-card {
+          padding: 12px;
+          color: white;
+          text-align: center;
+        }
+        .fallback-label {
+          font-size: 11px;
+          color: #bbb;
         }
         .overlay {
           position: absolute;

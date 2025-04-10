@@ -1,20 +1,22 @@
 'use client';
 
 import { Link } from 'react-router-dom';
+import { UserProvider } from '../UserContext';
 
 const Footer = () => {
   return (
-    <footer className="app-footer">
-      <div className="footer-content">
-        <p>
-          &copy; {new Date().getFullYear()} Cine Niche. All rights reserved.
-        </p>
-        <Link to="/privacy" className="footer-link">
-          Privacy Policy
-        </Link>
-      </div>
+    <UserProvider>
+      <footer className="app-footer">
+        <div className="footer-content">
+          <p>
+            &copy; {new Date().getFullYear()} Cine Niche. All rights reserved.
+          </p>
+          <Link to="/privacy" className="footer-link">
+            Privacy Policy
+          </Link>
+        </div>
 
-      <style>{`
+        <style>{`
         .app-footer {
           background-color: #101828;
           color: #d1d5db;
@@ -59,7 +61,8 @@ const Footer = () => {
           }
         }
       `}</style>
-    </footer>
+      </footer>
+    </UserProvider>
   );
 };
 

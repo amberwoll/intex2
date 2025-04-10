@@ -1,14 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, useContext } from 'react';
 import TrendCard from './TrendCard';
 import { fetchUserMovieRecommendationById } from '../../api/UserMovieRecommendationsAPI';
+import { UserContext } from '../AuthorizeView'; // Make sure this is the correct path
 
 const MoviesforYou = () => {
+  const user = useContext(UserContext); // 👈 Access the logged-in user's email
+  const [userId, setUserId] = useState<string | null>(null);
   const [movieImagePaths, setMovieImagePaths] = useState<string[]>([]);
   const [movieList, setMovieList] = useState<
     { title: string; showId: string }[]
   >([]);
-  const userId = '1';
 
   const sanitizeFileName = (title: string) =>
     title
@@ -18,16 +21,33 @@ const MoviesforYou = () => {
       .trim();
 
   useEffect(() => {
-    const fetchRecommendationsAndTitles = async () => {
+    const fetchUserIdAndRecommendations = async () => {
+      if (userId) {
+      }
+      if (!user?.email) return;
+
       try {
-        const recData = await fetchUserMovieRecommendationById(userId);
+        // 🔥 STEP 1: Get userId by email
+        const encodedEmail = encodeURIComponent(user.email);
+        const userRes = await fetch(
+          `https://localhost:5500/MoviesUser/ByEmail/${encodedEmail}`,
+          { credentials: 'include' }
+        );
+
+        if (!userRes.ok) throw new Error('Failed to fetch user ID');
+        const data = await userRes.json();
+        const uid = data.userId;
+        setUserId(uid);
+
+        // 🔥 STEP 2: Fetch recommendations
+        const recData = await fetchUserMovieRecommendationById(uid);
 
         const showIds = Object.entries(recData)
           .filter(([key]) => key.startsWith('recommendation'))
           .map(([_, value]) => value);
 
-        const titleResponse = await fetch(
-          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/GetMovieTitlesByShowIds',
+        const titleRes = await fetch(
+          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -36,8 +56,8 @@ const MoviesforYou = () => {
           }
         );
 
-        if (!titleResponse.ok) throw new Error('Failed to fetch movie titles');
-        const movieList = await titleResponse.json(); // [{ title, showId }, ...]
+        if (!titleRes.ok) throw new Error('Failed to fetch movie titles');
+        const movieList = await titleRes.json();
 
         const paths = movieList
           .filter((movie: { title?: string }) => !!movie.title)
@@ -49,12 +69,12 @@ const MoviesforYou = () => {
         setMovieImagePaths(paths);
         setMovieList(movieList);
       } catch (error) {
-        console.error('Error loading recommendations:', error);
+        console.error('Error loading personalized recommendations:', error);
       }
     };
 
-    fetchRecommendationsAndTitles();
-  }, []);
+    fetchUserIdAndRecommendations();
+  }, [user?.email]);
 
   return (
     <section

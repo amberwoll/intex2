@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../MoviePage/IconButton';
+import { useUser } from '../UserContext';
 
 export const NavigationBar: React.FC = () => {
   const location = useLocation();
-
+  const user = useUser();
   const [isGreetingEnabled, setIsGreetingEnabled] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -78,8 +79,20 @@ export const NavigationBar: React.FC = () => {
                 </Link>
               </li>
             ))}
-          </ul>
 
+            {user?.privilegeLevel === 1 && (
+              <li>
+                <Link
+                  to="/manage-movies"
+                  className={`menu-item ${
+                    location.pathname === '/manage-movies' ? 'active' : ''
+                  }`}
+                >
+                  Manage Movies
+                </Link>
+              </li>
+            )}
+          </ul>
           <div className="actions-group">
             <div className="profile-dropdown">
               <button

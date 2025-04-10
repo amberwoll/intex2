@@ -1,11 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, useContext } from 'react';
 import TrendCard from './TrendCard';
 import { fetchUserTvRecommendationById } from '../../api/UserTvRecommendationsAPI';
+import { UserContext } from '../AuthorizeView'; // Adjust if path differs
 
 const TvRecs = () => {
+  const user = useContext(UserContext);
+  const [userId, setUserId] = useState<null>(null);
   const [tvList, setTvList] = useState<{ title: string; showId: string }[]>([]);
-  const userId = '1';
+  const [imagePaths, setImagePaths] = useState<string[]>([]);
 
   const sanitizeFileName = (title: string) =>
     title
@@ -15,16 +19,32 @@ const TvRecs = () => {
       .trim();
 
   useEffect(() => {
-    const fetchTvRecs = async () => {
+    if (userId) {
+    }
+    const fetchUserIdAndTvRecs = async () => {
+      if (!user?.email) return;
+
       try {
-        const recData = await fetchUserTvRecommendationById(userId);
+        // STEP 1: Get userId by email
+        const emailEncoded = encodeURIComponent(user.email);
+        const userRes = await fetch(
+          `https://localhost:5500/MoviesUser/ByEmail/${emailEncoded}`,
+          { credentials: 'include' }
+        );
+        if (!userRes.ok) throw new Error('Failed to fetch user ID');
+        const userData = await userRes.json();
+        const uid = userData.userId;
+        setUserId(uid);
+
+        // STEP 2: Fetch TV recommendations
+        const recData = await fetchUserTvRecommendationById(uid);
 
         const showIds = Object.entries(recData)
           .filter(([key]) => key.startsWith('recommendation'))
           .map(([_, value]) => value);
 
-        const titleResponse = await fetch(
-          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/GetMovieTitlesByShowIds',
+        const titleRes = await fetch(
+          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -33,33 +53,37 @@ const TvRecs = () => {
           }
         );
 
-        if (!titleResponse.ok)
-          throw new Error('Failed to fetch TV show titles');
+        if (!titleRes.ok) throw new Error('Failed to fetch TV titles');
+        const tvData = await titleRes.json();
 
-        const tvData: { title: string; showId: string }[] =
-          await titleResponse.json();
         setTvList(tvData);
+        setImagePaths(
+          tvData.map(
+            (tv: { title: string }) =>
+              `https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(tv.title)}.jpg`
+          )
+        );
       } catch (error) {
         console.error('Error loading TV recommendations:', error);
       }
     };
 
-    fetchTvRecs();
-  }, []);
+    fetchUserIdAndTvRecs();
+  }, [user?.email]);
 
   return (
     <section
       className="trends-section"
       role="region"
-      aria-label="Trending Content"
+      aria-label="Trending TV Recommendations"
     >
       <h2 className="trends-title">Today's Top TV Picks for You</h2>
       <div className="trends-scroll-container">
         <div className="trends-grid">
-          {tvList.map((tv) => (
+          {tvList.map((tv, index) => (
             <TrendCard
               key={tv.showId}
-              imageUrl={`https://intexphotos.blob.core.windows.net/posters/${sanitizeFileName(tv.title)}.jpg`}
+              imageUrl={imagePaths[index] ?? ''}
               title={tv.title}
               showId={tv.showId}
             />

@@ -27,13 +27,17 @@ namespace intex2.Controllers
             return Ok(recommendationQuery);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserMovieRecommendation>> GetUserMovieRecommendation(string id)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserMovieRecommendation>> GetRecommendationByUserId(string userId)
         {
-            var recommendation = await _context.UserMovieRecommendations.FindAsync(id);
+            var recommendation = await _context.UserMovieRecommendations
+                .FirstOrDefaultAsync(r => r.UserId == userId);
+
             if (recommendation == null)
                 return NotFound();
-            return recommendation;
+
+            return Ok(recommendation);
         }
+
     }
 }
