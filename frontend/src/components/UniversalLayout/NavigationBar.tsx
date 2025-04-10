@@ -1,82 +1,77 @@
 'use client';
-
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../MoviePage/IconButton';
-import { UserContext } from '../AuthorizeView';
-
+import { useUser } from '../UserContext';
 export const NavigationBar: React.FC = () => {
   const location = useLocation();
+  const user = useUser();
   const [isGreetingEnabled, setIsGreetingEnabled] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
-<<<<<<< HEAD
-
-  const currentUser = user?.email ?? 'Guest'; // ✅ CHANGED
-=======
-  const user = useContext(UserContext);
-  const currentUser = 'masterbruce'; // Replace with dynamic user value in real app
->>>>>>> 77b1553674d6702aff1e91c0b1eaffbefd08f51d
-
+  const currentUser = user?.email ?? 'Guest'; // :white_check_mark: CHANGED
   useEffect(() => {
-    const greetingKey = `${currentUser}_greetingEnabled`; // ✅ CHANGED
-    const greetingExpirationKey = `${currentUser}_greetingExpiration`; // ✅ CHANGED
-
-    const greetingSetting = localStorage.getItem(greetingKey); // ✅ CHANGED
-    const greetingExpiration = localStorage.getItem(greetingExpirationKey); // ✅ CHANGED
-
+    const greetingKey = `${currentUser}_greetingEnabled`; // :white_check_mark: CHANGED
+    const greetingExpirationKey = `${currentUser}_greetingExpiration`; // :white_check_mark: CHANGED
+    const greetingSetting = localStorage.getItem(greetingKey); // :white_check_mark: CHANGED
+    const greetingExpiration = localStorage.getItem(greetingExpirationKey); // :white_check_mark: CHANGED
     if (greetingSetting === 'true' && greetingExpiration) {
       const currentTime = new Date().getTime();
       if (currentTime < parseInt(greetingExpiration)) {
         setIsGreetingEnabled(true);
       }
     }
-
     const expirationTime = parseInt(
       localStorage.getItem(greetingExpirationKey) || '0'
-    ); // ✅ CHANGED
+    ); // :white_check_mark: CHANGED
     const timePassed = new Date().getTime() - expirationTime;
     if (timePassed > 20 * 60 * 1000) {
       setIsButtonVisible(true);
     }
-  }, [currentUser]); // ✅ CHANGED
-
+  }, [currentUser]); // :white_check_mark: CHANGED
   const handleGreetingToggle = () => {
     const newGreetingState = !isGreetingEnabled;
     setIsGreetingEnabled(newGreetingState);
     const expirationTime = new Date().getTime() + 20 * 60 * 1000;
-
-    const greetingKey = `${currentUser}_greetingEnabled`; // ✅ CHANGED
-    const greetingExpirationKey = `${currentUser}_greetingExpiration`; // ✅ CHANGED
-
-    localStorage.setItem(greetingKey, newGreetingState.toString()); // ✅ CHANGED
-    localStorage.setItem(greetingExpirationKey, expirationTime.toString()); // ✅ CHANGED
-
+    const greetingKey = `${currentUser}_greetingEnabled`; // :white_check_mark: CHANGED
+    const greetingExpirationKey = `${currentUser}_greetingExpiration`; // :white_check_mark: CHANGED
+    localStorage.setItem(greetingKey, newGreetingState.toString()); // :white_check_mark: CHANGED
+    localStorage.setItem(greetingExpirationKey, expirationTime.toString()); // :white_check_mark: CHANGED
     if (!newGreetingState) {
       setIsButtonVisible(false);
+    }
+  };
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch('https://localhost:5500/logout', {
+        method: 'POST',
+        credentials: 'include', // send cookies
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+
+      // Clear user context if needed
+      localStorage.removeItem('user'); // Or however you're storing it
+      window.location.href = '/'; // Redirect to home/login
+    } catch (err) {
+      console.error('Error logging out:', err);
     }
   };
 
   const greetingMessage = isGreetingEnabled
     ? `Welcome back, ${currentUser}!`
     : '';
-
   const menuItems = [
     { label: 'Home', path: '/movies' },
     { label: 'All Movies', path: '/view-movies' },
     { label: 'Privacy Policy', path: '/privacy' },
   ];
-
-  const handleSignOut = () => {
-    console.log('Signing out...');
-    // Add your sign-out logic here
-  };
-
   return (
     <header className="header-wrapper">
       <nav className="navbar">
         <img src="/logo/cinelogo.png" alt="Cine Niche Logo" className="logo" />
-
         <div className="nav-right">
           <ul className="menu-list">
             {menuItems.map((item) => (
@@ -91,7 +86,6 @@ export const NavigationBar: React.FC = () => {
                 </Link>
               </li>
             ))}
-
             {user?.privilegeLevel === 1 && (
               <li>
                 <Link
@@ -116,7 +110,7 @@ export const NavigationBar: React.FC = () => {
               {showDropdown && (
                 <div className="dropdown-menu">
                   <p>
-                    Signed in as <strong>{user?.email}</strong>
+                    Signed in as <strong>{currentUser}</strong>
                   </p>
                   <button className="signout-button" onClick={handleSignOut}>
                     Sign Out
@@ -124,7 +118,6 @@ export const NavigationBar: React.FC = () => {
                 </div>
               )}
             </div>
-
             {isButtonVisible && (
               <div className="toggle-container">
                 <label className="switch">
@@ -140,7 +133,6 @@ export const NavigationBar: React.FC = () => {
           </div>
         </div>
       </nav>
-
       {greetingMessage && (
         <div
           className={`greeting-message ${isGreetingEnabled ? 'visible' : ''}`}
@@ -148,10 +140,9 @@ export const NavigationBar: React.FC = () => {
           {greetingMessage}
         </div>
       )}
-
       <style>{`
         body {
-          padding-top: 0px;
+          padding-top: 60px;
         }
         .header-wrapper {
           width: 100%;
@@ -187,7 +178,7 @@ export const NavigationBar: React.FC = () => {
         }
         .menu-item {
           text-decoration: none;
-          color: #ebfaff;
+          color: #EBFAFF;
           font-size: 14px;
           cursor: pointer;
           padding: 4px 8px;
@@ -195,10 +186,10 @@ export const NavigationBar: React.FC = () => {
           transition: background 0.2s ease, color 0.2s ease;
         }
         .menu-item:hover {
-          background-color: #1a2b3c;
+          background-color: #1A2B3C;
         }
         .menu-item.active {
-          background-color: #1f3b50;
+          background-color: #1F3B50;
           font-weight: 600;
         }
         .actions-group {
@@ -208,7 +199,7 @@ export const NavigationBar: React.FC = () => {
         .greeting-message {
           padding: 5px;
           color: #fff;
-          background: linear-gradient(135deg, #228ee5, #1a7fb1);
+          background: linear-gradient(135deg, #228EE5, #1A7FB1);
           font-size: 18px;
           width: 60%;
           max-width: 300px;
@@ -267,7 +258,7 @@ export const NavigationBar: React.FC = () => {
           transition: 0.4s;
         }
         input:checked + .slider {
-          background-color: #4caf50;
+          background-color: #4CAF50;
         }
         input:checked + .slider:before {
           transform: translateX(14px);
@@ -285,7 +276,7 @@ export const NavigationBar: React.FC = () => {
           position: absolute;
           top: 36px;
           right: 0;
-          background: #1f3b50;
+          background: #1F3B50;
           padding: 12px;
           border-radius: 8px;
           min-width: 180px;
@@ -294,7 +285,7 @@ export const NavigationBar: React.FC = () => {
           box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .signout-button {
-          background: #e74c3c;
+          background: #E74C3C;
           color: white;
           border: none;
           padding: 6px 12px;
@@ -304,7 +295,7 @@ export const NavigationBar: React.FC = () => {
           width: 100%;
         }
         .signout-button:hover {
-          background: #c0392b;
+          background: #C0392B;
         }
       `}</style>
     </header>
