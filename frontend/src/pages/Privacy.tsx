@@ -1,10 +1,9 @@
 import './Privacy.css';
 import { NavigationBar } from '../components/UniversalLayout/NavigationBar';
-import AuthorizeView from '../components/AuthorizeView';
 import { Footer } from '../components/MoviePage/Footer';
 const Privacy: React.FC = () => {
   return (
-    <AuthorizeView requiredPrivilegeLevel={0}>
+    <>
       <div>
         <NavigationBar />;
         <div className="privacy-wrapper">
@@ -267,7 +266,7 @@ const Privacy: React.FC = () => {
         </div>
       </div>
       <Footer />
-    </AuthorizeView>
+    </>
   );
 };
 

@@ -16,6 +16,7 @@ import ViewAllMovies from './pages/ViewAllMovies';
 import MovieModal from './components/Carousel/MovieModal'; // ⬅️ you'll create this if not already
 import './App.css';
 import { UserProvider } from './components/UserContext';
+import AuthorizeView from './components/AuthorizeView';
 
 // Separate inner routing to support modal rendering
 function AppRoutes() {
@@ -28,11 +29,46 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/create-account" element={<SignupPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/movies/:showId" element={<MovieDetail />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/manage-movies" element={<ManageMovies />} />
-        <Route path="/view-movies" element={<ViewAllMovies />} />
+        <Route
+          path="/movies"
+          element={
+            <AuthorizeView requiredPrivilegeLevel={0}>
+              <Movies />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/movies/:showId"
+          element={
+            <AuthorizeView requiredPrivilegeLevel={0}>
+              <MovieDetail />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/privacy"
+          element={
+            <AuthorizeView requiredPrivilegeLevel={0}>
+              <Privacy />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/manage-movies"
+          element={
+            <AuthorizeView requiredPrivilegeLevel={1}>
+              <ManageMovies />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/view-movies"
+          element={
+            <AuthorizeView requiredPrivilegeLevel={0}>
+              <ViewAllMovies />
+            </AuthorizeView>
+          }
+        />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
 
@@ -47,11 +83,11 @@ function AppRoutes() {
 
 function App() {
   return (
-    <Router>
-      <UserProvider>
+    <UserProvider>
+      <Router>
         <AppRoutes />
-      </UserProvider>
-    </Router>
+      </Router>
+    </UserProvider>
   );
 }
 

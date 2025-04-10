@@ -46,8 +46,7 @@ const LoginPage: React.FC = () => {
     }
 
     const loginUrl =
-      'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/login?useCookies=true';
-
+      'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/login?useCookies=true&useSessionCookies=false';
     try {
       const response = await fetch(loginUrl, {
         method: 'POST',
