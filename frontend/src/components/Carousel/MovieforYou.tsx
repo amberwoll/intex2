@@ -3,10 +3,10 @@
 import { useEffect, useState, useContext } from 'react';
 import TrendCard from './TrendCard';
 import { fetchUserMovieRecommendationById } from '../../api/UserMovieRecommendationsAPI';
-import { UserContext } from '../AuthorizeView'; // Make sure this is the correct path
+import { useUser } from '../UserContext'; // ✅ Use the shared hook
 
 const MoviesforYou = () => {
-  const user = useContext(UserContext); // 👈 Access the logged-in user's email
+  const user = useUser(); // 👈 Access the logged-in user's email
   const [userId, setUserId] = useState<string | null>(null);
   const [movieImagePaths, setMovieImagePaths] = useState<string[]>([]);
   const [movieList, setMovieList] = useState<

@@ -83,11 +83,11 @@ function AppRoutes() {
 
 function App() {
   return (
-    <UserProvider>
-      <Router>
+    <Router>
+      <UserProvider>
         <AppRoutes />
-      </Router>
-    </UserProvider>
+      </UserProvider>
+    </Router>
   );
 }
 

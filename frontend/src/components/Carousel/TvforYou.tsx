@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import TrendCard from './TrendCard';
 import { fetchUserTvRecommendationById } from '../../api/UserTvRecommendationsAPI';
-import { UserContext } from '../AuthorizeView'; // Adjust if path differs
+import { useUser } from '../UserContext'; // ✅ Use the shared hook
 
 const TvRecs = () => {
-  const user = useContext(UserContext);
-  const [userId, setUserId] = useState<null>(null);
+  const user = useUser(); // ✅ Proper hook usage
+  const [userId, setUserId] = useState<string | null>(null);
   const [tvList, setTvList] = useState<{ title: string; showId: string }[]>([]);
   const [imagePaths, setImagePaths] = useState<string[]>([]);
 
@@ -19,29 +19,24 @@ const TvRecs = () => {
       .trim();
 
   useEffect(() => {
-    if (userId) {
-    }
     const fetchUserIdAndTvRecs = async () => {
       if (!user?.email) return;
 
       try {
-        // STEP 1: Get userId by email
         const emailEncoded = encodeURIComponent(user.email);
         const userRes = await fetch(
           `https://localhost:5500/MoviesUser/ByEmail/${emailEncoded}`,
           { credentials: 'include' }
         );
+
         if (!userRes.ok) throw new Error('Failed to fetch user ID');
+
         const userData = await userRes.json();
         const uid = userData.userId;
         setUserId(uid);
 
-        // STEP 2: Fetch TV recommendations
         const recData = await fetchUserTvRecommendationById(uid);
-
-        const showIds = Object.entries(recData)
-          .filter(([key]) => key.startsWith('recommendation'))
-          .map(([_, value]) => value);
+        const showIds = Object.values(recData).filter(Boolean);
 
         const titleRes = await fetch(
           'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
@@ -54,9 +49,10 @@ const TvRecs = () => {
         );
 
         if (!titleRes.ok) throw new Error('Failed to fetch TV titles');
-        const tvData = await titleRes.json();
 
+        const tvData = await titleRes.json();
         setTvList(tvData);
+
         setImagePaths(
           tvData.map(
             (tv: { title: string }) =>
@@ -70,6 +66,8 @@ const TvRecs = () => {
 
     fetchUserIdAndTvRecs();
   }, [user?.email]);
+
+  if (!user) return null; // Or show a loading state
 
   return (
     <section

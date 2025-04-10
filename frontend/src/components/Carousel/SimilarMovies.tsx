@@ -2,10 +2,10 @@
 import { useEffect, useState, useContext } from 'react';
 import TrendCard from './TrendCard';
 import { fetchHighRatedRecommendations } from '../../api/HighRatedRecommendationsAPI';
-import { UserContext } from '../AuthorizeView'; // Adjust path as needed
+import { useUser } from '../UserContext'; // Adjust path as needed
 
 const SimilarMovies = () => {
-  const user = useContext(UserContext);
+  const user = useUser();
   const [movies, setMovies] = useState<{ title: string; showId: string }[]>([]);
 
   const sanitizeFileName = (title: string) =>
