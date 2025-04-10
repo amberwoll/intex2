@@ -29,6 +29,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MoviesContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MovieConnection")));
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddDbContext<RecommendationsContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("RecommendationConnection")));
 
@@ -65,7 +67,8 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUser
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // must use HTTPS
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;// must use HTTPS
+    options.LoginPath = "/login"; 
     options.Cookie.SameSite = SameSiteMode.None; // required for cross-origin
     options.Events.OnRedirectToLogin = context =>
     {

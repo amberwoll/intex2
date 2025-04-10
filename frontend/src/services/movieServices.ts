@@ -1,11 +1,15 @@
 // src/services/movieService.ts
 export const addMovie = async (movieData: any) => {
   try {
-    const res = await fetch('https://localhost:5500/Movie/AddMovie', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(movieData),
-    });
+    const res = await fetch(
+      'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/AddMovie',
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(movieData),
+      }
+    );
 
     if (!res.ok) {
       const message = await res.text();
@@ -23,7 +27,7 @@ export const addMovie = async (movieData: any) => {
 export const deleteMovie = async (showId: string) => {
   try {
     const response = await fetch(
-      `https://localhost:5500/Movie/Delete/${showId}`,
+      `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/Delete/${showId}`,
       {
         method: 'DELETE',
         credentials: 'include',

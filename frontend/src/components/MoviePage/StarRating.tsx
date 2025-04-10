@@ -18,17 +18,21 @@ export const StarRating: React.FC<StarRatingProps> = ({
 
   const submitRating = async (newRating: number) => {
     try {
-      const response = await fetch('https://localhost:5500/Movie/Rate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          showId,
-          rating: newRating,
-        }),
-      });
+      const response = await fetch(
+        'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/Rate',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId,
+            showId,
+            rating: newRating,
+          }),
+        }
+      );
 
       if (!response.ok) throw new Error('Failed to submit rating');
       console.log('Rating submitted successfully');

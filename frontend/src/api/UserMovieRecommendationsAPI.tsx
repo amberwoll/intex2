@@ -1,6 +1,7 @@
 import { userMovieRecommendation } from '../types/userMovieRecommendation';
 
-const API_URL = 'https://localhost:5500';
+const API_URL =
+  'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net';
 
 export const fetchUserMovieRecommendationById = async (
   id: string
