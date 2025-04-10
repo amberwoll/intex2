@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { StarRating } from '../MoviePage/StarRating';
 import RecommenderCarousel from './RecommenderCarousel';
+import { MovieControls } from '../MovieDetailsPage/MovieControls';
 import { fetchHybridRecommendations } from '../../api/HybridRecsAPI';
 
 type Movie = {
@@ -38,12 +39,9 @@ const MovieModal = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(
-          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/${showId}`,
-          {
-            credentials: 'include',
-          }
-        );
+        const res = await fetch(`https://localhost:5500/Movie/${showId}`, {
+          credentials: 'include',
+        });
         if (!res.ok) throw new Error(`Server responded with ${res.status}`);
         const text = await res.text();
         if (!text) throw new Error('Empty response');
@@ -100,6 +98,9 @@ const MovieModal = () => {
               </h2>
               <div className="modal-body">
                 <StarRating userId={1} showId={showId!} />
+                <br></br>
+                <MovieControls />
+
                 <p>
                   <strong>Director:</strong> {movie.director}
                 </p>

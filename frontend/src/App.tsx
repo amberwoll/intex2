@@ -32,9 +32,9 @@ function AppRoutes() {
         <Route
           path="/movies"
           element={
-            <AuthorizeView requiredPrivilegeLevel={0}>
-              <Movies />
-            </AuthorizeView>
+            // <AuthorizeView requiredPrivilegeLevel={0}>
+            <Movies />
+            // </AuthorizeView>
           }
         />
         <Route

@@ -28,7 +28,7 @@ const TvRecs = () => {
         // STEP 1: Get userId by email
         const emailEncoded = encodeURIComponent(user.email);
         const userRes = await fetch(
-          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/MoviesUser/ByEmail/${emailEncoded}`,
+          `https://localhost:5500/MoviesUser/ByEmail/${emailEncoded}`,
           { credentials: 'include' }
         );
         if (!userRes.ok) throw new Error('Failed to fetch user ID');
@@ -44,7 +44,7 @@ const TvRecs = () => {
           .map(([_, value]) => value);
 
         const titleRes = await fetch(
-          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/GetMovieTitlesByShowIds',
+          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

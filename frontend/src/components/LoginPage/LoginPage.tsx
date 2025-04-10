@@ -8,11 +8,6 @@ const handleSignupClick = (navigate: ReturnType<typeof useNavigate>) => {
   navigate('/create-account');
 };
 
-// Handle button click for Create Account
-const handleLoginClick = (navigate: ReturnType<typeof useNavigate>) => {
-  navigate('/movies');
-};
-
 const LoginPage: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate function
   // state variables for email and passwords
@@ -46,7 +41,7 @@ const LoginPage: React.FC = () => {
     }
 
     const loginUrl =
-      'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/login?useCookies=true&useSessionCookies=false';
+      'https://localhost:5500/login?useCookies=true&useSessionCookies=false';
     try {
       const response = await fetch(loginUrl, {
         method: 'POST',
@@ -193,11 +188,7 @@ const LoginPage: React.FC = () => {
               <br />
             </div>
 
-            <button
-              type="submit"
-              className="login-button"
-              onClick={() => handleLoginClick(navigate)}
-            >
+            <button type="submit" className="login-button">
               LOGIN
             </button>
           </form>

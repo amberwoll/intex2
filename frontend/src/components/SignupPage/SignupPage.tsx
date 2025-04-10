@@ -86,19 +86,16 @@ const SignupPage: React.FC = () => {
 
     try {
       // STEP 1: Register with Identity
-      const registerResponse = await fetch(
-        'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/register',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            password,
-            confirmPassword, // ← REQUIRED for the default Identity /register route
-          }),
-        }
-      );
+      const registerResponse = await fetch('https://localhost:5500/register', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          confirmPassword, // ← REQUIRED for the default Identity /register route
+        }),
+      });
 
       if (!registerResponse.ok) {
         return setError(
@@ -108,7 +105,7 @@ const SignupPage: React.FC = () => {
 
       // STEP 2: Add user details to MoviesUser
       const addDetailsResponse = await fetch(
-        'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/MoviesUser/AddUserDetails',
+        'https://localhost:5500/MoviesUser/AddUserDetails',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

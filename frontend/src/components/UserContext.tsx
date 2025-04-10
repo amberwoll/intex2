@@ -22,12 +22,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(
-          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/pingauth',
-          {
-            credentials: 'include',
-          }
-        );
+        const res = await fetch('https://localhost:5500/pingauth', {
+          credentials: 'include',
+        });
         if (res.ok) {
           const data = await res.json();
           if (data?.email && data?.privilegeLevel !== undefined) {

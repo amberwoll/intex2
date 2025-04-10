@@ -21,7 +21,7 @@ const sanitizeFileName = (title: string) =>
   title
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[&:\u2013\u2014'"!?@#$%^*(){}\[\]<>.,.|\\/`~+=\-]/g, '')
+    .replace(/[&:–—'"!?@#$%^*(){}\[\]<>,.|\\/`~+=\-]/g, '')
     .trim();
 
 const MovieGallery = () => {
@@ -46,6 +46,7 @@ const MovieGallery = () => {
         console.error('Failed to fetch movies:', err);
       }
     };
+
     loadMovies();
   }, []);
 
@@ -60,8 +61,7 @@ const MovieGallery = () => {
       const typeMatch = selectedType
         ? movie.type?.toLowerCase() === selectedType
         : true;
-      const hasImage = !!movie.title && movie.title.trim() !== '';
-      return titleMatch && genreMatch && typeMatch && hasImage;
+      return titleMatch && genreMatch && typeMatch;
     });
   };
 
@@ -172,7 +172,7 @@ const MovieGallery = () => {
               )}
               <div className="overlay">
                 <h3>{movie.title}</h3>
-                <p>{movie.rating}</p>
+                <h3>{movie.rating}</h3>
               </div>
             </div>
           );

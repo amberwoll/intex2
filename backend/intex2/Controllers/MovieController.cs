@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace intex2.Controllers
 {
+    [AllowAnonymous]
     [Route("[controller]")]
     [ApiController]
-    // [Authorize]
     public class MovieController : ControllerBase
     {
         private readonly MoviesContext _movieContext;
@@ -254,6 +254,19 @@ public async Task<IActionResult> GetHybridRecommendations(string showId)
 
     return Ok(movieTitles);
 }
+
+[HttpGet("GetUserRating/{userId}/{showId}")]
+public IActionResult GetUserRating(int userId, string showId)
+{
+    var rating = _movieContext.MoviesRatings
+        .FirstOrDefault(r => r.UserId == userId && r.ShowId == showId);
+
+    if (rating == null)
+        return Ok(0); // No rating yet
+
+    return Ok(rating.Rating);
+}
+
 
     }
 }

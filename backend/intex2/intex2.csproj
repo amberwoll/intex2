@@ -25,13 +25,13 @@
 
   <ItemGroup>
     <Content Include="Movies.db">
-      <CopyToOutputDirectory>PreserveNewes</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="recommendations.db">
-      <CopyToOutputDirectory>PreserveNewes</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Identity.sqlite">
-      <CopyToOutputDirectory>PreserveNewes</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

@@ -30,7 +30,7 @@ const MoviesforYou = () => {
         // 🔥 STEP 1: Get userId by email
         const encodedEmail = encodeURIComponent(user.email);
         const userRes = await fetch(
-          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/MoviesUser/ByEmail/${encodedEmail}`,
+          `https://localhost:5500/MoviesUser/ByEmail/${encodedEmail}`,
           { credentials: 'include' }
         );
 
@@ -47,7 +47,7 @@ const MoviesforYou = () => {
           .map(([_, value]) => value);
 
         const titleRes = await fetch(
-          'https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/Movie/GetMovieTitlesByShowIds',
+          'https://localhost:5500/Movie/GetMovieTitlesByShowIds',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

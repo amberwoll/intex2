@@ -23,7 +23,7 @@ const SimilarMovies = () => {
         // Step 1: Get userId by email
         const encodedEmail = encodeURIComponent(user.email);
         const res = await fetch(
-          `https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net/MoviesUser/ByEmail/${encodedEmail}`,
+          `https://localhost:5500/MoviesUser/ByEmail/${encodedEmail}`,
           {
             credentials: 'include',
           }
