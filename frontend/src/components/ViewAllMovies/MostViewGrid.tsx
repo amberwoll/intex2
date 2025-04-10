@@ -185,7 +185,7 @@ const MovieGallery = () => {
         .movie-gallery {
           background: #121212;
           color: white;
-          padding: 32px;
+          padding: 96px 32px 32px;
           min-height: 100vh;
           font-family: Inter, sans-serif;
         }

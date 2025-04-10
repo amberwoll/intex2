@@ -139,7 +139,7 @@ export const NavigationBar: React.FC = () => {
 
       <style>{`
         body {
-          padding-top: 60px;
+          padding-top: 0px;
         }
         .header-wrapper {
           width: 100%;

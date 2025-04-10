@@ -6,6 +6,9 @@ const Privacy: React.FC = () => {
     <>
       <div>
         <NavigationBar />;
+        <br />
+        <br />
+        <br />
         <div className="privacy-wrapper">
           <h1 className="text-3xl font-bold mb-4">CineNiche Privacy Policy</h1>
           <p className="text-sm text-gray-600 mb-6">

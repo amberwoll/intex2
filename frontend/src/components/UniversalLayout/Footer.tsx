@@ -37,7 +37,7 @@ const Footer = () => {
   margin: 0 auto;
   flex-wrap: wrap;
   align-items: center;
-  padding: 0 20px; /* Add horizontal padding */
+  padding: 0 22px; /* Add horizontal padding */
 }
 
 
@@ -45,6 +45,7 @@ const Footer = () => {
           color: #93c5fd;
           text-decoration: none;
           font-weight: 500;
+          margin-right: -8px;
 
         }
 
