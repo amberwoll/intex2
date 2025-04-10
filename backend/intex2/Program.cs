@@ -65,7 +65,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     
     options.LoginPath = "/login"; 
-    options.Cookie.SameSite = SameSiteMode.None;// required for cross-origin
+    options.Cookie.SameSite = SameSiteMode.Lax;// required for cross-origin
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;// must use HTTPS
     options.Events.OnRedirectToLogin = context =>
     {
@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("https://localhost:3000")
+        builder.WithOrigins("https://proud-stone-09439391e.6.azurestaticapps.net")
                .AllowCredentials()
                .AllowAnyMethod()
                .AllowAnyHeader();
