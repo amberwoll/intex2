@@ -11,11 +11,15 @@ export const NavigationBar: React.FC = () => {
   const [isGreetingEnabled, setIsGreetingEnabled] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
-  const currentUser = 'masterbruce'; // Replace with dynamic user value in real app
+
+  const currentUser = user?.email ?? 'Guest'; // ✅ CHANGED
 
   useEffect(() => {
-    const greetingSetting = localStorage.getItem('greetingEnabled');
-    const greetingExpiration = localStorage.getItem('greetingExpiration');
+    const greetingKey = `${currentUser}_greetingEnabled`; // ✅ CHANGED
+    const greetingExpirationKey = `${currentUser}_greetingExpiration`; // ✅ CHANGED
+
+    const greetingSetting = localStorage.getItem(greetingKey); // ✅ CHANGED
+    const greetingExpiration = localStorage.getItem(greetingExpirationKey); // ✅ CHANGED
 
     if (greetingSetting === 'true' && greetingExpiration) {
       const currentTime = new Date().getTime();
@@ -25,20 +29,24 @@ export const NavigationBar: React.FC = () => {
     }
 
     const expirationTime = parseInt(
-      localStorage.getItem('greetingExpiration') || '0'
-    );
+      localStorage.getItem(greetingExpirationKey) || '0'
+    ); // ✅ CHANGED
     const timePassed = new Date().getTime() - expirationTime;
     if (timePassed > 20 * 60 * 1000) {
       setIsButtonVisible(true);
     }
-  }, []);
+  }, [currentUser]); // ✅ CHANGED
 
   const handleGreetingToggle = () => {
     const newGreetingState = !isGreetingEnabled;
     setIsGreetingEnabled(newGreetingState);
     const expirationTime = new Date().getTime() + 20 * 60 * 1000;
-    localStorage.setItem('greetingEnabled', newGreetingState.toString());
-    localStorage.setItem('greetingExpiration', expirationTime.toString());
+
+    const greetingKey = `${currentUser}_greetingEnabled`; // ✅ CHANGED
+    const greetingExpirationKey = `${currentUser}_greetingExpiration`; // ✅ CHANGED
+
+    localStorage.setItem(greetingKey, newGreetingState.toString()); // ✅ CHANGED
+    localStorage.setItem(greetingExpirationKey, expirationTime.toString()); // ✅ CHANGED
 
     if (!newGreetingState) {
       setIsButtonVisible(false);
