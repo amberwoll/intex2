@@ -1,18 +1,22 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../MoviePage/IconButton';
-import { useUser } from '../UserContext';
+import { UserContext } from '../AuthorizeView';
 
 export const NavigationBar: React.FC = () => {
   const location = useLocation();
-  const user = useUser();
   const [isGreetingEnabled, setIsGreetingEnabled] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+<<<<<<< HEAD
 
   const currentUser = user?.email ?? 'Guest'; // ✅ CHANGED
+=======
+  const user = useContext(UserContext);
+  const currentUser = 'masterbruce'; // Replace with dynamic user value in real app
+>>>>>>> 77b1553674d6702aff1e91c0b1eaffbefd08f51d
 
   useEffect(() => {
     const greetingKey = `${currentUser}_greetingEnabled`; // ✅ CHANGED
@@ -112,7 +116,7 @@ export const NavigationBar: React.FC = () => {
               {showDropdown && (
                 <div className="dropdown-menu">
                   <p>
-                    Signed in as <strong>{currentUser}</strong>
+                    Signed in as <strong>{user?.email}</strong>
                   </p>
                   <button className="signout-button" onClick={handleSignOut}>
                     Sign Out
@@ -147,7 +151,7 @@ export const NavigationBar: React.FC = () => {
 
       <style>{`
         body {
-          padding-top: 60px;
+          padding-top: 0px;
         }
         .header-wrapper {
           width: 100%;

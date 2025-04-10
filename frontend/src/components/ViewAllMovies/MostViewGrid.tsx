@@ -182,20 +182,109 @@ const MovieGallery = () => {
       <div ref={loaderRef} style={{ height: '1px' }}></div>
 
       <style>{`
-        .movie-gallery { background: #121212; color: white; padding: 32px; min-height: 100vh; font-family: Inter, sans-serif; }
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; flex-wrap: wrap; position: relative; }
-        .left-controls { flex: 0 0 auto; }
-        .right-controls { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
-        .utility-button, input, select { padding: 14px 18px; border-radius: 8px; background: #2a2a2a; color: white; border: 1px solid #444; font-size: 16px; font-weight: 500; }
-        .grid-container { margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; justify-items: center; }
-        .image-card { position: relative; width: 160px; height: 240px; border-radius: 12px; overflow: hidden; transition: transform 0.25s ease-out, box-shadow 0.25s ease-out; z-index: 1; background-color: #1a1a1a; display: flex; align-items: center; justify-content: center; }
-        .image-card:hover { transform: scale(1.2); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6); z-index: 20; }
-        .card-image { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .fallback-card { padding: 12px; color: white; text-align: center; }
-        .fallback-label { font-size: 11px; color: #bbb; }
-        .overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0.8); color: white; padding: 12px 8px; text-align: center; opacity: 0; transition: opacity 0.25s ease-in; pointer-events: none; z-index: 5; }
-        .image-card:hover .overlay { opacity: 1; }
-        .overlay h3 { margin: 0; font-size: 16px; font-weight: 600; }
+        .movie-gallery {
+          background: #121212;
+          color: white;
+          padding: 96px 32px 32px;
+          min-height: 100vh;
+          font-family: Inter, sans-serif;
+        }
+        .controls {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 48px;
+          flex-wrap: wrap;
+          position: relative;
+        }
+        .left-controls {
+          flex: 0 0 auto;
+        }
+        .right-controls {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 24px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .utility-button,
+        input,
+        select {
+          padding: 14px 18px;
+          border-radius: 8px;
+          background: #2a2a2a;
+          color: white;
+          border: 1px solid #444;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        .grid-container {
+          margin-top: 48px;
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          gap: 24px;
+          justify-items: center;
+        }
+        .image-card {
+          position: relative;
+          width: 160px;
+          height: 240px;
+          border-radius: 12px;
+          overflow: hidden;
+          transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+          z-index: 1;
+          background-color: #1a1a1a;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .image-card:hover {
+          transform: scale(1.2);
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+          z-index: 20;
+        }
+        .card-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        .fallback-card {
+          padding: 12px;
+          color: white;
+          text-align: center;
+        }
+        .fallback-label {
+          font-size: 11px;
+          color: #bbb;
+        }
+        .overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          padding: 12px 8px;
+          text-align: center;
+          opacity: 0;
+          transition: opacity 0.25s ease-in;
+        }
+        .image-card:hover .overlay {
+          opacity: 1;
+        }
+        .overlay h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 600;
+        }
+        .overlay p {
+          margin: 4px 0 0;
+          font-size: 13px;
+          opacity: 0.85;
+        }
       `}</style>
     </section>
   );

@@ -133,7 +133,7 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
             return Ok(updatedMovie);
         }
 [Authorize(Roles = "Administrator")]
-[HttpDelete("Delete/{showId}")]
+[HttpDelete("DeleteMovie/{showId}")]
 public IActionResult DeleteMovie(string showId)
 {
     var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);

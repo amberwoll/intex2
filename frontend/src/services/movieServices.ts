@@ -24,7 +24,7 @@ export const addMovie = async (movieData: any) => {
 export const deleteMovie = async (showId: string) => {
   try {
     const response = await fetch(
-      `https://localhost:5500/Movie/Delete/${showId}`,
+      `https://localhost:5500/Movie/DeleteMovie/${showId}`,
       {
         method: 'DELETE',
         credentials: 'include',

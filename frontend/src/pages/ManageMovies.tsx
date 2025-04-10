@@ -6,6 +6,9 @@ const ManageMovies = () => {
   return (
     <>
       <NavigationBar />
+      <br />
+      <br />
+      <br />
       <Table />
       <Footer />
     </>
