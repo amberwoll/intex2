@@ -43,10 +43,13 @@ export const NavigationBar: React.FC = () => {
   };
   const handleSignOut = async () => {
     try {
-      const response = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/logout', {
-        method: 'POST',
-        credentials: 'include', // send cookies
-      });
+      const response = await fetch(
+        'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/logout',
+        {
+          method: 'POST',
+          credentials: 'include', // send cookies
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Logout failed');
@@ -71,7 +74,11 @@ export const NavigationBar: React.FC = () => {
   return (
     <header className="header-wrapper">
       <nav className="navbar">
-        <img src="/logo/cinelogo.png" alt="Cine Niche Logo" className="logo" />
+        <img
+          src="https://intexphotos.blob.core.windows.net/posters/cinelogo.png"
+          alt="Cine Niche Logo"
+          className="logo"
+        />
         <div className="nav-right">
           <ul className="menu-list">
             {menuItems.map((item) => (

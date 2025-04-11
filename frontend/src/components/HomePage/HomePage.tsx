@@ -111,7 +111,7 @@ const HomePage: React.FC = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          background-image: url('/dist/assets/Home.png');
+          background-image: url('https://intexphotos.blob.core.windows.net/posters/Home.png');
           background-size: cover;
           background-position: center;
           background-color: rgba(0, 0, 0, 0.2); /* dark overlay */
