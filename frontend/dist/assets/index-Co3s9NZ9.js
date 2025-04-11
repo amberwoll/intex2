@@ -1493,4 +1493,37 @@ Please change the parent <Route path="${G}"> to <Route path="${G==="/"?"*":`${G}
             flex-direction: column;
           }
         }
-      `})]})},fv=S.createContext(null);function eu({children:c,requiredPrivilegeLevel:o}){const[d,s]=S.useState(null),[h,p]=S.useState(!0);return S.useEffect(()=>{async function j(){try{const b=await fetch("https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/pingauth",{method:"GET",credentials:"include"}),g=b.headers.get("content-type");if(!g||!g.includes("application/json"))throw new Error("Invalid response format from server");const m=await b.json();if(m.email&&m.privilegeLevel!==void 0)s({email:m.email,privilegeLevel:m.privilegeLevel});else throw new Error("Invalid user session")}catch{s(null)}finally{p(!1)}}j()},[]),h?u.jsx("p",{children:"Loading..."}):(console.log("user",d==null?void 0:d.privilegeLevel,d==null?void 0:d.email,"required",o),!d||d.privilegeLevel<o?(d?d.privilegeLevel<o&&console.log("i'm in a bad spot"):console.log("i'm in a worse spot"),u.jsx(fh,{to:"/login"})):u.jsx(fv.Provider,{value:d,children:c}))}function dv(){const c=ft(),o=c.state;return u.jsxs(u.Fragment,{children:[u.jsxs(Pd,{location:(o==null?void 0:o.backgroundLocation)||c,children:[u.jsx(Et,{path:"/",element:u.jsx(bg,{})}),u.jsx(Et,{path:"/create-account",element:u.jsx(Yg,{})}),u.jsx(Et,{path:"/login",element:u.jsx(wg,{})}),u.jsx(Et,{path:"/movies",element:u.jsx(Hg,{})}),u.jsx(Et,{path:"/movies/:showId",element:u.jsx(eu,{requiredPrivilegeLevel:0,children:u.jsx(Lg,{})})}),u.jsx(Et,{path:"/privacy",element:u.jsx(eu,{requiredPrivilegeLevel:0,children:u.jsx(qg,{})})}),u.jsx(Et,{path:"/manage-movies",element:u.jsx(eu,{requiredPrivilegeLevel:1,children:u.jsx(ev,{})})}),u.jsx(Et,{path:"/view-movies",element:u.jsx(eu,{requiredPrivilegeLevel:0,children:u.jsx(nv,{})})}),u.jsx(Et,{path:"*",element:u.jsx(fh,{to:"/login",replace:!0})})]}),(o==null?void 0:o.backgroundLocation)&&u.jsx(Pd,{children:u.jsx(Et,{path:"/movies/:showId",element:u.jsx(sv,{})})})]})}function hv(){return u.jsx(og,{children:u.jsx(Ng,{children:u.jsx(dv,{})})})}Wp.createRoot(document.getElementById("root")).render(u.jsx(S.StrictMode,{children:u.jsx(hv,{})}));
+      `})]})},fv=S.createContext(null);function eu({children:c,requiredPrivilegeLevel:o}){const[d,s]=S.useState(null),[h,p]=S.useState(!0);return S.useEffect(()=>{async function j(){try{const b=await fetch("https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/pingauth",{method:"GET",credentials:"include"}),g=b.headers.get("content-type");if(!g||!g.includes("application/json"))throw new Error("Invalid response format from server");const m=await b.json();if(m.email&&m.privilegeLevel!==void 0)s({email:m.email,privilegeLevel:m.privilegeLevel});else throw new Error("Invalid user session")}catch{s(null)}finally{p(!1)}}j()},[]),h?u.jsx("p",{children:"Loading..."}):(console.log("user",d==null?void 0:d.privilegeLevel,d==null?void 0:d.email,"required",o),!d||d.privilegeLevel<o?(d?d.privilegeLevel<o&&console.log("i'm in a bad spot"):console.log("i'm in a worse spot"),u.jsx(fh,{to:"/login"})):u.jsx(fv.Provider,{value:d,children:c}))}function dv(){const c=ft(),o=c.state;return u.jsxs(u.Fragment,{children:[u.jsxs(Pd,{location:(o==null?void 0:o.backgroundLocation)||c,children:[u.jsx(Et,{path:"/",element:u.jsx(bg,{})}),u.jsx(Et,{path:"/create-account",element:u.jsx(Yg,{})}),u.jsx(Et,{path:"/login",element:u.jsx(wg,{})}),u.jsx(Et,{path:"/movies",element:u.jsx(Hg,{})}),u.jsx(Et,{path:"/movies/:showId",element:u.jsx(eu,{requiredPrivilegeLevel:0,children:u.jsx(Lg,{})})}),u.jsx(Et,{path:"/privacy",element:u.jsx(eu,{requiredPrivilegeLevel:0,children:u.jsx(qg,{})})}),u.jsx(Et,{path:"/manage-movies",element:u.jsx(eu,{requiredPrivilegeLevel:1,children:u.jsx(ev,{})})}),u.jsx(Et,{path:"/view-movies",element:u.jsx(eu,{requiredPrivilegeLevel:0,children:u.jsx(nv,{})})}),u.jsx(Et,{path:"*",element:u.jsx(fh,{to:"/login",replace:!0})})]}),(o==null?void 0:o.backgroundLocation)&&u.jsx(Pd,{children:u.jsx(Et,{path:"/movies/:showId",element:u.jsx(sv,{})})})]})}function hv(){return u.jsxs("div",{className:"app-root",children:[u.jsx(og,{children:u.jsx(Ng,{children:u.jsx(dv,{})})}),u.jsx("style",{children:`
+        /* GLOBAL STYLES */
+        * {
+          box-sizing: border-box;
+        }
+
+        *::before,
+        *::after {
+          box-sizing: inherit;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
+          font-family: 'Lato', sans-serif;
+          background-color: #0a0a0a;
+        }
+
+        .app-root {
+          width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
+        }
+
+        .container {
+          max-width: 1200px;
+          width: 100%;
+          margin: 0 auto;
+          padding: 0 16px;
+        }
+      `})]})}Wp.createRoot(document.getElementById("root")).render(u.jsx(S.StrictMode,{children:u.jsx(hv,{})}));

@@ -13,12 +13,11 @@ import Privacy from './pages/Privacy';
 import SignupPage from './components/SignupPage/SignupPage';
 import ManageMovies from './pages/ManageMovies';
 import ViewAllMovies from './pages/ViewAllMovies';
-import MovieModal from './components/Carousel/MovieModal'; // ⬅️ you'll create this if not already
+import MovieModal from './components/Carousel/MovieModal';
 import './App.css';
 import { UserProvider } from './components/UserContext';
 import AuthorizeView from './components/AuthorizeView';
 
-// Separate inner routing to support modal rendering
 function AppRoutes() {
   const location = useLocation();
   const state = location.state as { backgroundLocation?: Location };
@@ -29,14 +28,7 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/create-account" element={<SignupPage />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/movies"
-          element={
-            // <AuthorizeView requiredPrivilegeLevel={0}>
-            <Movies />
-            // </AuthorizeView>
-          }
-        />
+        <Route path="/movies" element={<Movies />} />
         <Route
           path="/movies/:showId"
           element={
@@ -83,11 +75,48 @@ function AppRoutes() {
 
 function App() {
   return (
-    <Router>
-      <UserProvider>
-        <AppRoutes />
-      </UserProvider>
-    </Router>
+    <div className="app-root">
+      <Router>
+        <UserProvider>
+          <AppRoutes />
+        </UserProvider>
+      </Router>
+
+      <style>{`
+        /* GLOBAL STYLES */
+        * {
+          box-sizing: border-box;
+        }
+
+        *::before,
+        *::after {
+          box-sizing: inherit;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
+          font-family: 'Lato', sans-serif;
+          background-color: #0a0a0a;
+        }
+
+        .app-root {
+          width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
+        }
+
+        .container {
+          max-width: 1200px;
+          width: 100%;
+          margin: 0 auto;
+          padding: 0 16px;
+        }
+      `}</style>
+    </div>
   );
 }
 
