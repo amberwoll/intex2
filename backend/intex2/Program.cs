@@ -63,9 +63,7 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUser
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    
-    options.LoginPath = "/login"; 
-    options.Cookie.SameSite = SameSiteMode.Lax;// required for cross-origin
+    options.Cookie.SameSite = SameSiteMode.None;// required for cross-origin
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;// must use HTTPS
     options.Events.OnRedirectToLogin = context =>
     {
@@ -80,7 +78,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("https://localhost:3000")
+        builder.WithOrigins("https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net", "https://localhost:3000")
                .AllowCredentials()
                .AllowAnyMethod()
                .AllowAnyHeader();
@@ -125,7 +123,7 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     await signInManager.SignOutAsync();
     context.Response.Cookies.Delete(".AspNetCore.Identity.Application");
     return Results.Ok(new { message = "Logout successful" });
-}).RequireAuthorization();
+});
 
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
@@ -143,6 +141,7 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
     var isAdmin = user.IsInRole("Administrator");
+    
     var privilegeLevel = isAdmin ? 1 : 0;
 
     return Results.Json(new { email, privilegeLevel });

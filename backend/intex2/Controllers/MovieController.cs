@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace intex2.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class MovieController : ControllerBase
@@ -132,6 +132,7 @@ public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
 
             return Ok(updatedMovie);
         }
+
 [Authorize(Roles = "Administrator")]
 [HttpDelete("DeleteMovie/{showId}")]
 public IActionResult DeleteMovie(string showId)
