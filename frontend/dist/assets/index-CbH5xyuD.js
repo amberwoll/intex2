@@ -214,10 +214,13 @@ Please change the parent <Route path="${G}"> to <Route path="${G==="/"?"*":`${G}
 
         .content-wrapper {
           display: flex;
-          min-height: 100vh;
+          justify-content: center; /* centers horizontally */
+          align-items: center;     /* centers vertically */
+          height: 100vh;           /* full height for vertical centering */
           padding: 20px;
           position: relative;
         }
+
 
         .login-section {
           padding: 87px 28px;
