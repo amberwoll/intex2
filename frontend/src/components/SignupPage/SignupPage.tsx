@@ -307,6 +307,10 @@ const SignupPage: React.FC = () => {
               SIGN UP
             </button>
 
+            <br />
+            <br />
+            <br />
+
             {error && (
               <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>
             )}
