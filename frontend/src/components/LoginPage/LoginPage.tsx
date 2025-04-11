@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <main className="signup-container">
+    <main className="login-container">
             
       <div className="content-wrapper">
                 
