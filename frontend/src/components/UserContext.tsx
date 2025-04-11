@@ -22,7 +22,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('https://localhost:5500/pingauth', {
+        const res = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/pingauth', {
           credentials: 'include',
         });
         if (res.ok) {

@@ -5,7 +5,7 @@ interface FetchMoviesResponse {
   totalMovies: number;
 }
 
-const API_URL = `https://localhost:5500/Movie`;
+const API_URL = `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie`;
 
 export const fetchAllMovies = async (): Promise<FetchMoviesResponse> => {
   try {

@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    const loginUrl = 'https://localhost:5500/login?useCookies=true';
+    const loginUrl = 'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/login?useCookies=true';
     try {
       const response = await fetch(loginUrl, {
         method: 'POST',

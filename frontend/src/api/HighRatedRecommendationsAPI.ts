@@ -1,6 +1,6 @@
 export const fetchHighRatedRecommendations = async (userId: string) => {
   const res = await fetch(
-    `https://localhost:5500/Movie/HighRatedRecs/${userId}`,
+    `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/HighRatedRecs/${userId}`,
     {
       credentials: 'include',
     }

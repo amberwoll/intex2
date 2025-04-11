@@ -7,7 +7,7 @@ interface FetchUserTvRecommendationsResponse {
   // additional metadata (if needed)
 }
 
-const API_URL = 'https://localhost:5500';
+const API_URL = 'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net';
 
 export const fetchUserTvRecommendations =
   async (): Promise<FetchUserTvRecommendationsResponse> => {

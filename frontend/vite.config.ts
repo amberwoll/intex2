@@ -18,7 +18,7 @@ export default defineConfig({
         "img-src 'self' data: https://cdn.builder.io/api/v1/image/assets/TEMP https://cdn.builder.io https://intexphotos.blob.core.windows.net; " +
         "frame-ancestors 'none'; " +
         "font-src 'self' fonts.gstatic.com data:; " +
-        "connect-src 'self' https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net https://accounts.google.com https://oauth2.googleapis.com https://localhost:5500; " +
+        "connect-src 'self' https://intex-2-1-backend-brh0g6hbeqhybcb4.eastus-01.azurewebsites.net https://accounts.google.com https://oauth2.googleapis.com https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net;" +
         "object-src 'none'; " +
         "base-uri 'self'; " +
         "form-action 'self'; " +

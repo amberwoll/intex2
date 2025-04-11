@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:5500;http://localhost:4500",
+      "applicationUrl": "https://localhost:5500;http://localhost:4500;https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

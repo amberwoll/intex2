@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import TrendCard from './TrendCard';
 import { fetchHighRatedRecommendations } from '../../api/HighRatedRecommendationsAPI';
 import { useUser } from '../UserContext'; // Adjust path as needed
@@ -23,7 +23,7 @@ const SimilarMovies = () => {
         // Step 1: Get userId by email
         const encodedEmail = encodeURIComponent(user.email);
         const res = await fetch(
-          `https://localhost:5500/MoviesUser/ByEmail/${encodedEmail}`,
+          `https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/MoviesUser/ByEmail/${encodedEmail}`,
           {
             credentials: 'include',
           }

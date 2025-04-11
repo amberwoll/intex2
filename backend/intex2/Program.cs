@@ -100,9 +100,9 @@ app.UseSwaggerUI();
 //   // Apply HSTS only in production (NOT during local dev)
 //    app.UseHsts();
 //}
-
-app.UseCors("AllowAll");
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -118,11 +118,17 @@ app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
 
 // logout + auth check
-app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
+app.MapGet("/logout", (HttpContext context) =>
 {
-    await signInManager.SignOutAsync();
-    context.Response.Cookies.Delete(".AspNetCore.Identity.Application");
-    return Results.Ok(new { message = "Logout successful" });
+    context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
+    {
+        HttpOnly = true,
+        Secure = true,
+        SameSite = SameSiteMode.None,
+        Path = "/"
+    });
+
+    return Results.Ok(new { message = "Logged out" });
 });
 
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
@@ -141,7 +147,7 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
     var isAdmin = user.IsInRole("Administrator");
-    
+
     var privilegeLevel = isAdmin ? 1 : 0;
 
     return Results.Json(new { email, privilegeLevel });

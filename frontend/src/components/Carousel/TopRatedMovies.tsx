@@ -17,7 +17,7 @@ const TopRatedMovies = () => {
   useEffect(() => {
     const fetchTopRatedMovies = async () => {
       try {
-        const res = await fetch('https://localhost:5500/Movie/TopRatedMovies', {
+        const res = await fetch('https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/Movie/TopRatedMovies', {
           credentials: 'include',
         });
         const data = await res.json();
