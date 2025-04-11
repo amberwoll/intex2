@@ -1,179 +1,468 @@
 'use client';
-import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-const handleSignupClick = (navigate: ReturnType<typeof useNavigate>) => {
-  navigate('/create-account');
-};
-const LoginPage: React.FC = () => {
+const SignupPage: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [rememberme, setRememberme] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string>('');
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, checked, value } = e.target;
-    if (type === 'checkbox') {
-      setRememberme(checked);
-    } else if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
+  const [formData, setFormData] = useState({
+    name: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    age: '',
+    gender: '',
+    phone: '',
+    city: '',
+    state: '',
+    zip: '',
+    streamingServices: [] as string[],
+  });
+  const [error, setError] = useState('');
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
+      const { checked } = e.target;
+      setFormData((prev) => {
+        const newServices = checked
+          ? [...prev.streamingServices, value]
+          : prev.streamingServices.filter((s) => s !== value);
+        return { ...prev, streamingServices: newServices };
+      });
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    if (!email || !password) {
-      setError('Please fill in all fields.');
-      return;
+    const {
+      email,
+      password,
+      confirmPassword,
+      name,
+      age,
+      gender,
+      phone,
+      city,
+      state,
+      zip,
+      streamingServices,
+    } = formData;
+    if (
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !name ||
+      !age ||
+      !gender ||
+      !phone ||
+      !city ||
+      !state ||
+      !zip
+    ) {
+      return setError('Please fill in all fields.');
     }
-    const loginUrl =
-      'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/login?useCookies=true';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return setError('Please enter a valid email address.');
+    }
+    if (password.length <= 18) {
+      return setError('Password must be longer than 18 characters.');
+    }
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match.');
+    }
+    if (!/^\d{1,3}$/.test(age)) {
+      return setError('Age must be a number with up to 3 digits.');
+    }
+    if (!/^\d+$/.test(zip)) {
+      return setError('Zip must be a numeric value.');
+    }
     try {
-      const response = await fetch(loginUrl, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      let data = null;
-      const contentLength = response.headers.get('content-length');
-      if (contentLength && parseInt(contentLength, 10) > 0) {
-        data = await response.json();
+      const registerResponse = await fetch(
+        'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/register',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            password,
+            confirmPassword,
+          }),
+        }
+      );
+      if (!registerResponse.ok) {
+        return setError(
+          'Failed to register user. Email might already be taken.'
+        );
       }
-      if (!response.ok) {
-        throw new Error(data?.message || 'Invalid email or password.');
+      const addDetailsResponse = await fetch(
+        'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/MoviesUser/AddUserDetails',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            age: parseInt(age, 10) || null,
+            gender,
+            city,
+            state,
+            zip: parseInt(zip, 10) || null,
+            privilegeLevel: 0,
+            netflix: streamingServices.includes('Netflix') ? 1 : 0,
+            hulu: streamingServices.includes('Hulu') ? 1 : 0,
+            disney: streamingServices.includes('Disney+') ? 1 : 0,
+            amazonPrime: streamingServices.includes('Prime Video') ? 1 : 0,
+            max: streamingServices.includes('HBO Max') ? 1 : 0,
+            appleTv: streamingServices.includes('Apple TV+') ? 1 : 0,
+            peacock: streamingServices.includes('Peacock') ? 1 : 0,
+            paramount: streamingServices.includes('Paramount+') ? 1 : 0,
+          }),
+        }
+      );
+      if (!addDetailsResponse.ok) {
+        return setError('User registered but details failed to save.');
       }
-      navigate('/movies');
-    } catch (error: any) {
-      setError(error.message || 'Error logging in.');
-      console.error('Fetch attempt failed:', error);
+      setError('');
+      alert('Registration successful! Redirecting to login...');
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+      setError('Network error. Please try again later.');
     }
   };
   return (
-    <main className="login-container">
+    <main className="signup-container">
       <div className="content-wrapper">
-        <section className="login-section" aria-label="Login form">
+        <section className="signup-section" aria-label="Signup form">
           <header className="welcome-header">
-            <h1 className="welcome-title">Welcome</h1>
+            <h1 className="welcome-title">Create Account</h1>
           </header>
           <nav className="auth-tabs" aria-label="Authentication options">
-            <div className="tab-item active">
+            <div className="tab-item" onClick={handleLoginClick}>
               <span className="tab-text">LOGIN</span>
+            </div>
+            <div className="tab-item active">
+              <span className="tab-text">SIGNUP</span>
               <div className="active-indicator" aria-hidden="true" />
             </div>
-            <div
-              className="tab-item"
-              onClick={() => handleSignupClick(navigate)}
-            >
-              <span className="tab-text">SIGNUP</span>
-            </div>
           </nav>
-          {error && (
-            <div className="error-message" role="alert">
-              {error}
+          <form className="signup-form" onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  className="input-field"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  className="input-field"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  className="input-field"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  className="input-field"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="number"
+                  placeholder="Age"
+                  name="age"
+                  className="input-field"
+                  value={formData.age}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <select
+                  name="gender"
+                  className="input-field"
+                  value={formData.gender}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>
+                    Gender
+                  </option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="Phone"
+                  name="phone"
+                  className="input-field"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="City"
+                  name="city"
+                  className="input-field"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="State"
+                  name="state"
+                  className="input-field"
+                  value={formData.state}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <input
+                  type="text"
+                  placeholder="Zip"
+                  name="zip"
+                  className="input-field"
+                  value={formData.zip}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-          )}
-          <form
-            className="login-form"
-            aria-label="Login form"
-            onSubmit={handleSubmit}
-          >
-            <div className="form-field">
-              <input
-                type="text"
-                placeholder="Email"
-                className="input-field"
-                aria-label="Email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-field">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                className="input-field"
-                aria-label="Password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={handleChange}
-              />
-              <span
-                className="field-icon toggle-password"
-                onClick={() => setShowPassword((prev) => !prev)}
-                style={{ cursor: 'pointer' }}
-                title={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? (
-                  <svg
-                    className="field-icon"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
-                      fill="#EBFAFF"
+            <div className="checkbox-section">
+              <p className="disclaimer">
+                We are collecting this info to ensure we are giving you unique
+                value compared to other streaming services.
+              </p>
+              <div className="checkbox-grid">
+                {[
+                  'Netflix',
+                  'Hulu',
+                  'Disney+',
+                  'Prime Video',
+                  'HBO Max',
+                  'Apple TV+',
+                ].map((service) => (
+                  <label key={service} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="streamingServices"
+                      value={service}
+                      checked={formData.streamingServices.includes(service)}
+                      onChange={handleChange}
                     />
-                    <circle cx="12" cy="12" r="2.5" fill="#030A1B" />
-                  </svg>
-                ) : (
-                  <svg
-                    className="field-icon"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2.39 1.73 1.11 3l2.73 2.73A11.66 11.66 0 0 0 1 12c1.73 3.89 6 7 11 7 2.05 0 3.98-.5 5.69-1.39L20.73 22l1.27-1.27L2.39 1.73zM12 17c-3.31 0-6.31-2-7.87-5 .73-1.42 1.88-2.6 3.27-3.4l1.47 1.47A3 3 0 0 0 12 15c.52 0 1-.13 1.45-.35l1.44 1.44c-.91.57-1.97.91-3.14.91zM17.12 14.53l-1.45-1.45c.21-.45.33-.95.33-1.48a3 3 0 0 0-3-3c-.53 0-1.03.12-1.48.33L8.47 7.12C9.31 6.83 10.13 6.67 11 6.6c3.31 0 6.31 2 7.87 5-.53 1.13-1.31 2.13-2.25 2.93z"
-                      fill="#EBFAFF"
-                    />
-                  </svg>
-                )}
-              </span>
+                    {service}
+                  </label>
+                ))}
+              </div>
             </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="rememberme"
-                name="rememberme"
-                checked={rememberme}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="rememberme">
-                Remember me?
-              </label>
-              <br />
-              <br />
-            </div>
-            <button type="submit" className="login-button">
-              LOGIN
+            <button type="submit" className="signup-button">
+              SIGN UP
             </button>
+            {error && (
+              <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>
+            )}
           </form>
         </section>
-        <div className="background-wrapper" aria-hidden="true">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/64695fe3963cca30d781a469a70a792e374a17d3"
-            alt="Login background"
-            className="background-image"
-          />
-        </div>
       </div>
-      <style>{`/* your original full CSS styling goes here */`}</style>
+      <style>{`
+        .login-container {
+          width: 100vw;
+          height: 100vh;
+          background: linear-gradient(249deg, #030A1B 68.64%, #9747FF 206.69%);
+          position: relative;
+          font-family: "Lato", sans-serif;
+          overflow: hidden;
+        }
+        .back-button {
+          position: absolute;
+          top: 13px;
+          left: 21px;
+          z-index: 10;
+        }
+        .back-arrow {
+          width: 27px;
+          height: 27px;
+           background-color: #002244;
+          transform: rotate(90deg);
+        }
+        .content-wrapper {
+          display: flex;
+          min-height: 100vh;
+          padding: 20px;
+          position: relative;
+        }
+        .login-section {
+          padding: 87px 28px;
+          width: 100%;
+          max-width: 500px;
+          margin: 0 auto;
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .welcome-header {
+          width: 100%;
+          text-align: center;
+          margin-bottom: 26px;
+        }
+        .welcome-title {
+          color: #EBFAFF;
+          font-size: 72px;
+          font-weight: 700;
+          margin: 0;
+        }
+        .auth-tabs {
+          display: flex;
+          justify-content: center;
+          gap: 108px;
+          margin-bottom: 85px;
+        }
+        .tab-item {
+          position: relative;
+          cursor: pointer;
+        }
+        .tab-text {
+          color: #EBFAFF;
+          font-size: 24px;
+          font-weight: 700;
+        }
+        .active-indicator {
+          width: 100%;
+          height: 4px;
+          border-radius: 50px;
+          filter: blur(3px);
+          margin-top: 5px;
+          position: absolute;
+          background-color: #228EE5;
+        }
+        .login-form {
+          width: 100%;
+        }
+        .form-field {
+          position: relative;
+          margin-bottom: 48px;
+        }
+        .input-field {
+          width: 100%;
+          padding: 22px 20px;
+          background: transparent;
+          border: 1px solid #EBFAFF;
+          border-radius: 12px;
+          color: #EBFAFF;
+          font-size: 18px;
+        }
+        .field-icon {
+          position: absolute;
+          right: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 16px;
+          height: 16px;
+        }
+        .forgot-password {
+          color: #B1B7BA;
+          font-size: 16px;
+          text-align: center;
+          width: 100%;
+          margin: 26px 0 44px;
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+        .login-button {
+          width: 160px;
+          height: 48px;
+          border: 1px solid #fff;
+          border-radius: 12px;
+          color: #EBFAFF;
+          font-size: 16px;
+          margin: 0 auto;
+          cursor: pointer;
+          background-color: #228EE5;
+          display: block;
+        }
+        .background-wrapper {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0.3;
+          z-index: 1;
+        }
+        .background-image {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+        }
+        @media (max-width: 991px) {
+          .login-container {
+            max-width: 991px;
+          }
+          .content-wrapper {
+            flex-direction: column;
+          }
+          .login-section {
+            width: 100%;
+            padding: 40px 20px;
+          }
+        }
+        @media (max-width: 640px) {
+          .login-container {
+            max-width: 640px;
+          }
+          .welcome-title {
+            font-size: 48px;
+          }
+          .auth-tabs {
+            gap: 60px;
+          }
+          .tab-text {
+            font-size: 20px;
+          }
+          .login-button {
+            width: 100%;
+          }
+          .background-wrapper {
+            display: none;
+          }
+        }
+      `}</style>
     </main>
   );
 };
-export default LoginPage;
+export default SignupPage;

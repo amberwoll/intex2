@@ -52,17 +52,20 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
       ...prev,
       [name]: inputType === 'number' ? Number(value) : value,
     }));
-    setFormErrors((prev) => ({ ...prev, [name]: '' })); // Clear error when fixed
+    setFormErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
-
     if (!formData.title) errors.title = 'Title is required';
+    if (!formData.director) errors.director = 'Director is required';
+    if (!formData.cast) errors.cast = 'Cast is required';
     if (!formData.country) errors.country = 'Country is required';
+    if (!formData.releaseYear) errors.releaseYear = 'Release Year is required';
     if (!formData.rating) errors.rating = 'Rating is required';
+    if (!formData.duration) errors.duration = 'Duration is required';
+    if (!formData.description) errors.description = 'Description is required';
     if (!selectedGenre) errors.genre = 'Genre is required';
-
     return errors;
   };
 
@@ -181,7 +184,12 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
             name="director"
             value={formData.director}
             onChange={handleChange}
+            required
           />
+                    
+          {formErrors.director && (
+            <p className="error">{formErrors.director}</p>
+          )}
                   
         </div>
                 
@@ -193,7 +201,10 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
             name="cast"
             value={formData.cast}
             onChange={handleChange}
+            required
           />
+                    
+          {formErrors.cast && <p className="error">{formErrors.cast}</p>}
                   
         </div>
                 
@@ -229,7 +240,12 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
             name="releaseYear"
             value={formData.releaseYear ?? ''}
             onChange={handleChange}
+            required
           />
+                    
+          {formErrors.releaseYear && (
+            <p className="error">{formErrors.releaseYear}</p>
+          )}
                   
         </div>
                 
@@ -266,7 +282,12 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
             name="duration"
             value={formData.duration}
             onChange={handleChange}
+            required
           />
+                    
+          {formErrors.duration && (
+            <p className="error">{formErrors.duration}</p>
+          )}
                   
         </div>
                 
@@ -278,7 +299,12 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
             name="description"
             value={formData.description}
             onChange={handleChange}
+            required
           />
+                    
+          {formErrors.description && (
+            <p className="error">{formErrors.description}</p>
+          )}
                   
         </div>
                 
