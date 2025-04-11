@@ -46,7 +46,7 @@ export const NavigationBar: React.FC = () => {
       const response = await fetch(
         'https://intex21-cza7e5hfc3e5evg3.eastus-01.azurewebsites.net/logout',
         {
-          method: 'POST',
+          method: 'GET',
           credentials: 'include', // send cookies
         }
       );

@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Authentication;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add HSTS configuration
-//builder.Services.AddHsts(options =>
-//{
-//    options.MaxAge = TimeSpan.FromDays(5);
-//    options.IncludeSubDomains = true;
-//});
+builder.Services.AddHsts(options =>
+{
+   options.MaxAge = TimeSpan.FromDays(5);
+   options.IncludeSubDomains = true;
+});
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -92,13 +92,13 @@ var app = builder.Build();
 
 // Middleware
 
-app.UseSwagger();
-app.UseSwaggerUI();
+// app.UseSwagger();
+// app.UseSwaggerUI();
 
 //else
 //{
 //   // Apply HSTS only in production (NOT during local dev)
-//    app.UseHsts();
+app.UseHsts();
 //}
 app.UseHttpsRedirection();
 app.UseRouting();
