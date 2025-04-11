@@ -25,7 +25,6 @@ const genreOptions = [
   { label: 'Thrillers', key: 'thrillers' },
 ];
 
-// Helper function to determine which genre is selected for the movie
 const determineSelectedGenre = (movie: moviesTitle): string => {
   for (const genre of genreOptions) {
     if (movie[genre.key as keyof moviesTitle] === 1) {
@@ -42,9 +41,8 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
   const [selectedGenre, setSelectedGenre] = useState<string>(
     determineSelectedGenre(movie)
   );
-  const [formData, setFormData] = useState<moviesTitle>({
-    ...movie,
-  });
+  const [formData, setFormData] = useState<moviesTitle>({ ...movie });
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -54,12 +52,29 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
       ...prev,
       [name]: inputType === 'number' ? Number(value) : value,
     }));
+    setFormErrors((prev) => ({ ...prev, [name]: '' })); // Clear error when fixed
+  };
+
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+
+    if (!formData.title) errors.title = 'Title is required';
+    if (!formData.country) errors.country = 'Country is required';
+    if (!formData.rating) errors.rating = 'Rating is required';
+    if (!selectedGenre) errors.genre = 'Genre is required';
+
+    return errors;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // All genre keys → default 0, only selectedGenre = 1
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
     const allGenreKeys = [
       'action',
       'adventure',
@@ -106,11 +121,8 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
       ...genreField,
     };
 
-    console.log('Updating movie:', movieToUpdate);
-
     try {
       if (movie.id) {
-        // Make sure id exists for update
         await updateMovie(movieToUpdate);
         onSuccess();
       } else {
@@ -126,23 +138,29 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
 
   return (
     <div>
-      <h2>Edit Movie</h2>
+            <h2>Edit Movie</h2>
+            
       <form onSubmit={handleSubmit}>
+                
         <div>
-          <label>Type</label>
+                    <label>Type</label>
+                    
           <select
             name="type"
             value={type}
             onChange={(e) => setType(e.target.value as 'Movie' | 'TV Show')}
             required
           >
-            <option value="Movie">Movie</option>
-            <option value="TV Show">TV Show</option>
+                        <option value="Movie">Movie</option>
+                        <option value="TV Show">TV Show</option>
+                      
           </select>
+                  
         </div>
-
+                
         <div>
-          <label>Title</label>
+                    <label>Title</label>
+                    
           <input
             type="text"
             name="title"
@@ -150,153 +168,199 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
             onChange={handleChange}
             required
           />
+                    
+          {formErrors.title && <p className="error">{formErrors.title}</p>}
+                  
         </div>
-
+                
         <div>
-          <label>Director</label>
+                    <label>Director</label>
+                    
           <input
             type="text"
             name="director"
             value={formData.director}
             onChange={handleChange}
           />
+                  
         </div>
-
+                
         <div>
-          <label>Cast</label>
+                    <label>Cast</label>
+                    
           <input
             type="text"
             name="cast"
             value={formData.cast}
             onChange={handleChange}
           />
+                  
         </div>
-
+                
         <div>
-          <label>Country</label>
+                    <label>Country</label>
+                    
           <select
             name="country"
             value={formData.country}
             onChange={handleChange}
             required
           >
-            <option value="">-- Select --</option>
+                        <option value="">-- Select --</option>
+                        
             {countries.map((c) => (
               <option key={c} value={c}>
-                {c}
+                                {c}
+                              
               </option>
             ))}
+                      
           </select>
+                    
+          {formErrors.country && <p className="error">{formErrors.country}</p>}
+                  
         </div>
-
+                
         <div>
-          <label>Release Year</label>
+                    <label>Release Year</label>
+                    
           <input
             type="number"
             name="releaseYear"
             value={formData.releaseYear ?? ''}
             onChange={handleChange}
           />
+                  
         </div>
-
+                
         <div>
-          <label>Rating</label>
+                    <label>Rating</label>
+                    
           <select
             name="rating"
             value={formData.rating}
             onChange={handleChange}
             required
           >
-            <option value="">-- Select Rating --</option>
+                        <option value="">-- Select Rating --</option>
+                        
             {ratingOptions.map((r) => (
               <option key={r} value={r}>
-                {r}
+                                {r}
+                              
               </option>
             ))}
+                      
           </select>
+                    
+          {formErrors.rating && <p className="error">{formErrors.rating}</p>}
+                  
         </div>
-
+                
         <div>
+                    
           <label>{type === 'Movie' ? 'Duration (minutes)' : 'Seasons'}</label>
+                    
           <input
             type="text"
             name="duration"
             value={formData.duration}
             onChange={handleChange}
           />
+                  
         </div>
-
+                
         <div>
-          <label>Description</label>
+                    <label>Description</label>
+                    
           <input
             type="text"
             name="description"
             value={formData.description}
             onChange={handleChange}
           />
+                  
         </div>
-
+                
         <div>
-          <label>Genre</label>
+                    <label>Genre</label>
+                    
           <select
             value={selectedGenre}
             onChange={(e) => setSelectedGenre(e.target.value)}
             required
           >
-            <option value="">-- Choose a genre --</option>
+                        <option value="">-- Choose a genre --</option>
+                        
             {genreOptions.map((genre) => (
               <option key={genre.key} value={genre.key}>
-                {genre.label}
+                                {genre.label}
+                              
               </option>
             ))}
+                      
           </select>
+                    
+          {formErrors.genre && <p className="error">{formErrors.genre}</p>}
+                  
         </div>
-
+                
         <div className="form-buttons">
+                    
           <button type="submit" className="btn btn-success">
-            Save Changes
+                        Save Changes           
           </button>
+                    
           <button
             type="button"
             onClick={onCancel}
             className="btn btn-secondary"
           >
-            Cancel
+                        Cancel           
           </button>
+                  
         </div>
+              
       </form>
-
+            
       <style jsx>{`
-        form {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
 
-        label {
-          display: block;
-          margin-bottom: 6px;
-          font-weight: 500;
-        }
+        label {
+          display: block;
+          margin-bottom: 6px;
+          font-weight: 500;
+        }
 
-        input,
-        select {
-          width: 100%;
-          padding: 8px 12px;
-          border-radius: 4px;
-          border: 1px solid #444;
-          background-color: #2a2a2a;
-          color: white;
-          font-size: 14px;
-        }
+        input,
+        select {
+          width: 100%;
+          padding: 8px 12px;
+          border-radius: 4px;
+          border: 1px solid #444;
+          background-color: #2a2a2a;
+          color: white;
+          font-size: 14px;
+        }
 
-        .form-buttons {
-          display: flex;
-          justify-content: flex-end;
-          gap: 12px;
-          margin-top: 8px;
-        }
-      `}</style>
+        .form-buttons {
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
+          margin-top: 8px;
+        }
+
+        .error {
+          color: #ff6b6b;
+          font-size: 13px;
+          margin-top: 4px;
+        }
+      `}</style>
+          
     </div>
   );
 };
