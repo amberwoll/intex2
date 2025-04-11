@@ -8,7 +8,6 @@ const ManageMovies = () => {
       <NavigationBar />
       <br />
       <br />
-      <br />
       <Table />
       <Footer />
     </>
