@@ -25,7 +25,7 @@ export default defineConfig({
         "frame-src 'self' https://accounts.google.com https://oauth2.googleapis.com;",
     },
     cors: {
-      origin: 'https://localhost:3000',
+      origin: 'https://orange-pond-0ec2a6b1e.6.azurestaticapps.net',
       credentials: true,
     },
   },
